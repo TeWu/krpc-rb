@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |s|
   s.name          = "krpc"
-  s.version       = "0.0.0"
+  s.version       = "0.1.0"
   s.authors       = ["Tomasz Więch"]
   s.email         = ["tewu.dev@gmail.com"]
   
