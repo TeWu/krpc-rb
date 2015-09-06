@@ -1,4 +1,4 @@
-require "./doc"
+require 'krpc/doc'
 
 module KRPC
   module REPLTools

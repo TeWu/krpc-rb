@@ -1,4 +1,4 @@
-require "./error"
+require 'krpc/error'
 
 module KRPC
   module Attributes

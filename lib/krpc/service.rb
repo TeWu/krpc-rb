@@ -1,6 +1,6 @@
-require "./gen"
-require "./attributes"
-require "./doc"
+require 'krpc/gen'
+require 'krpc/attributes'
+require 'krpc/doc'
 
 module KRPC
   module Services

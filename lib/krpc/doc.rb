@@ -1,5 +1,5 @@
-require "./core_extensions"
-require "colorize"
+require 'krpc/core_extensions'
+require 'colorize'
 
 #TODO: Pry's show-doc integration ?
 

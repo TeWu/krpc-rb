@@ -1,11 +1,11 @@
-require "./connection"
-require "./service"
-require "./types"
-require "./encoder"
-require "./decoder"
-require "./error"
-require "./core_extensions"
-require "./KRPC.pb"
+require 'krpc/connection'
+require 'krpc/service'
+require 'krpc/types'
+require 'krpc/encoder'
+require 'krpc/decoder'
+require 'krpc/error'
+require 'krpc/core_extensions'
+require 'krpc/KRPC.pb'
 
 module KRPC
   class Client

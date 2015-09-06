@@ -1,4 +1,4 @@
-require "./KRPC.pb"
+require 'krpc/KRPC.pb'
 
 module KRPC
   module ProtobufUtils

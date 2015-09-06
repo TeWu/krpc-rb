@@ -1,4 +1,4 @@
-require "./protobuf_utils"
+require 'krpc/protobuf_utils'
 
 module KRPC
   module Encoder
@@ -8,7 +8,7 @@ module KRPC
     
     class << self
       
-      ## Given a type object, and ruby object, encode the ruby object
+      # Given a type object, and ruby object, encode the ruby object
       def encode(obj, type, type_store)
         if type.is_a?(Types::MessageType) then obj.serialize_to_string
         elsif type.is_a?(Types::ValueType) then encode_value(obj, type)

@@ -1,5 +1,5 @@
-require "./protobuf_utils"
-require "set"
+require 'krpc/protobuf_utils'
+require 'set'
 
 module KRPC
   module Decoder
@@ -9,7 +9,7 @@ module KRPC
     
     class << self
     
-      ## Given a type object, and serialized data, decode the ruby value/object
+      # Given a type object, and serialized data, decode the ruby value/object
       def decode(data, type, type_store)
         if type.is_a?(Types::MessageType) then decode_message(data, type)
         elsif type.is_a?(Types::ValueType) then decode_value(data, type)

@@ -1,9 +1,9 @@
-require "./gen"
-require "./attributes"
-require "./protobuf_utils"
-require "./error"
-require "./core_extensions"
-require "set"
+require 'krpc/gen'
+require 'krpc/attributes'
+require 'krpc/protobuf_utils'
+require 'krpc/error'
+require 'krpc/core_extensions'
+require 'set'
 
 module KRPC
   module Types

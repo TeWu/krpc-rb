@@ -1,6 +1,6 @@
-require "./encoder"
-require "./decoder"
-require "socket"
+require 'krpc/encoder'
+require 'krpc/decoder'
+require 'socket'
 
 module KRPC
 

@@ -1,5 +1,5 @@
-require "./doc"
-require "./core_extensions"
+require 'krpc/doc'
+require 'krpc/core_extensions'
 
 module KRPC
   module Gen
