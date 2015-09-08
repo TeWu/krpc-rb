@@ -31,6 +31,9 @@
         </h1>
         <ol class='paths'>
           <li>
+            <a target="docwin" href="../files/lib/krpc_rb.html">lib/krpc.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/krpc/KRPC_pb_rb.html">lib/krpc/KRPC.pb.rb</a>
           </li>
           <li class='other'>
@@ -77,6 +80,13 @@
       <div id='content'>
         <div id='text'>
           <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-connect">connect</a></li>
+            </ol>
+          </div>
           <div id='context'>
           </div>
           <div id='class-list'>
@@ -104,6 +114,29 @@
             </ol>
           </div>
           <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-connect'>
+                <a name='method-c-connect'></a>
+                <div class='synopsis'>
+                  <span class='name'>connect</span>
+                  <span class='arguments'>(name = DEFAULT_NAME, host = Connection::DEFAULT_SERVER_HOST, rpc_port = Connection::DEFAULT_SERVER_RPC_PORT, stream_port = Connection::DEFAULT_SERVER_STREAM_PORT, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Connect to a kRPC server, generate services API and return <a
+                  href="KRPC/Client.html">Client</a> object. If the block is given, then
+                  it&#39;s called passing <a href="KRPC/Client.html">Client</a> object and
+                  the connection to kRPC server is closed at the end of the block.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-connect-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-connect-source'><span class="ruby-comment"># File lib/krpc.rb, line 9</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">connect</span>(<span class="ruby-identifier">name</span> = <span class="ruby-constant">DEFAULT_NAME</span>, <span class="ruby-identifier">host</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_HOST</span>, <span class="ruby-identifier">rpc_port</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_RPC_PORT</span>, <span class="ruby-identifier">stream_port</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_STREAM_PORT</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">host</span>, <span class="ruby-identifier">rpc_port</span>, <span class="ruby-identifier">stream_port</span>).<span class="ruby-identifier">connect!</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">begin</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">client</span>) <span class="ruby-keyword">ensure</span> <span class="ruby-identifier">client</span>.<span class="ruby-identifier">close</span> <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">client</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

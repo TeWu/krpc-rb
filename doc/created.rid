@@ -1,6 +1,6 @@
-Tue, 08 Sep 2015 16:29:42 +0200
+Tue, 08 Sep 2015 16:32:15 +0200
 lib/krpc.rb~	Tue, 08 Sep 2015 16:13:06 +0200
-lib/krpc.rb	Tue, 08 Sep 2015 16:27:12 +0200
+lib/krpc.rb	Tue, 08 Sep 2015 16:13:22 +0200
 lib/krpc/core_extensions.rb	Sat, 05 Sep 2015 21:07:43 +0200
 lib/krpc/repl_tools.rb	Sun, 06 Sep 2015 15:08:35 +0200
 lib/krpc/decoder.rb	Sun, 06 Sep 2015 15:11:52 +0200
@@ -10,7 +10,7 @@ lib/krpc/error.rb	Sat, 05 Sep 2015 22:22:11 +0200
 lib/krpc/service.rb	Tue, 08 Sep 2015 14:07:21 +0200
 lib/krpc/attributes.rb	Sun, 06 Sep 2015 15:04:57 +0200
 lib/krpc/connection.rb~	Tue, 08 Sep 2015 02:57:46 +0200
-lib/krpc/client.rb	Tue, 08 Sep 2015 16:27:12 +0200
+lib/krpc/client.rb	Tue, 08 Sep 2015 16:20:26 +0200
 lib/krpc/protobuf_utils.rb	Sun, 06 Sep 2015 15:08:19 +0200
 lib/krpc/connection.rb	Tue, 08 Sep 2015 14:27:28 +0200
 lib/krpc/gen.rb	Tue, 08 Sep 2015 03:08:44 +0200
