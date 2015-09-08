@@ -57,17 +57,21 @@ Data structures mapping
 kRPC server (and KSP itself) is written in C#. This means that during communication with the server there must be some data structure mapping being done. Most of the mappings are pretty obvious: numbers are mapped to `Float`s and `Integer`s, Strings to `String`s, Lists to `Array`s, Dictionaries to `Hash`es etc.
 
 It may be less obvious that Enum values are mapped to `Symbol`s:
+
 ```ruby
 client.space_center.active_vessel.situation # => :orbiting
 client.space_center.active_vessel.control.sas_mode = :prograde
 ```
+
 To see all values for enum, you can call method that expects enum argument or returns enum value with `_doc` suffix.
 Alternatively you can print the hash representing given enum:
+
 ```ruby
 puts KRPC::Gen::SpaceCenter::SASMode # => {:stability_assist=>0, :maneuver=>1, :prograde=>2, :retrograde=>3, :normal=>4, :anti_normal=>5, :radial=>6, :anti_radial=>7, :target=>8, :anti_target=>9}
 ```
 
 Tuples are mapped to `Array`s:
+
 ```ruby
 client.space_center.active_vessel.flight.center_of_mass # => [-0.0015846538639403215, 0.0005474663704413168, 0.000849766220449432]
 ```
@@ -76,6 +80,7 @@ Get yours fingers dirty
 -------
 The best way to explore the API is to run REPL and try what each method does for yourself.
 I highly recommend using [Pry](https://github.com/pry/pry) as REPL. This way you can `ls` any object you receive and see what methods you can call on it. When you want to know more about specific method, then just stuck `_doc` at the end of it's name and press enter:
+
 ```ruby
 [29] pry(main)> cl.space_center.transform_position_doc
 SpaceCenter.transform_position(
@@ -85,10 +90,12 @@ SpaceCenter.transform_position(
 ) :Array[Float, Float, Float]
 => nil
 ```
+
 I recommend ending the line with `;` to suppress printing return value (the `=> nil` line at the end).
 If you want doc for method whose name ends with a `=` sign, you can put `_doc` before the `=`. Alternatively use `Object#send`, like in: `client.space_center.send "active_vessel=_doc"`.
 
 Combination of `ls`s and `_doc`s should teach you API in no time (also don't be surprised if you'll have a lot of fun with it too :))
+
 ```ruby
 [31] pry(main)> sc = client.space_center;
 [32] pry(main)> ls sc
