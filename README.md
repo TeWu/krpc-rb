@@ -5,10 +5,12 @@ kRPC-rb is a Ruby client library for [kRPC](http://forum.kerbalspaceprogram.com/
 
 Installation
 -------
+
     gem install krpc
 
 Basic usage
 -------
+
 ```ruby
 require 'krpc'
 client = KRPC.connect("client name here")
@@ -31,11 +33,13 @@ The rest of this file describes few differences there are between Ruby and Pytho
 Connecting and disconnecting
 -------
 When you are in REPL, you can connect to kRPC server in this way:
+
 ```ruby
 client = KRPC.connect({name for client}, {host}, {rpc_port}, {stream_port})
 # use client here...
 client.close
 ```
+
 All of the `KRPC.connect`'s arguments are optional, so `client = KRPC.connect` might be enough for you.
 Alternatively you can be more explicit (yet still obtain the same result):
 
@@ -44,6 +48,7 @@ client = KRPC::Client.new({name for client}, {host}, {rpc_port}, {stream_port}).
 # use client here...
 client.close
 ```
+
 If you are writing a script, you can pass a block into `KRPC.connect`, `Client#connect` or `Client#connect!` methods. Connection to kRPC server is closed at the end of the block.
 
 ```ruby
@@ -64,7 +69,7 @@ client.space_center.active_vessel.control.sas_mode = :prograde
 ```
 
 To see all values for enum, you can call method that expects enum argument or returns enum value with `_doc` suffix.
-Alternatively you can print the hash representing given enum:
+Alternatively you can print the hash that represents given enum:
 
 ```ruby
 puts KRPC::Gen::SpaceCenter::SASMode # => {:stability_assist=>0, :maneuver=>1, :prograde=>2, :retrograde=>3, :normal=>4, :anti_normal=>5, :radial=>6, :anti_radial=>7, :target=>8, :anti_target=>9}
@@ -76,7 +81,7 @@ Tuples are mapped to `Array`s:
 client.space_center.active_vessel.flight.center_of_mass # => [-0.0015846538639403215, 0.0005474663704413168, 0.000849766220449432]
 ```
 
-Get yours fingers dirty
+Get your fingers dirty
 -------
 The best way to explore the API is to run REPL and try what each method does for yourself.
 I highly recommend using [Pry](https://github.com/pry/pry) as REPL. This way you can `ls` any object you receive and see what methods you can call on it. When you want to know more about specific method, then just stuck `_doc` at the end of it's name and press enter:
