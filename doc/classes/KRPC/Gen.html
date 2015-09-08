@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>KRPC::Gen</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          KRPC::Gen
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../files/lib/krpc/gen_rb.html">lib/krpc/gen.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../../files/lib/krpc/types_rb.html">lib/krpc/types.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-add_rpc_method">add_rpc_method</a></li>
+              <li><a target="docwin" href="#method-c-generate_class">generate_class</a></li>
+              <li><a target="docwin" href="#method-c-generate_enum">generate_enum</a></li>
+              <li><a target="docwin" href="#method-c-service_gen_module">service_gen_module</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="Gen/AvailableToClassAndInstanceMethodsHandler.html">KRPC::Gen::AvailableToClassAndInstanceMethodsHandler</a></li>
+              <li><a target="docwin" href="Gen/RPCMethodGenerator.html">KRPC::Gen::RPCMethodGenerator</a></li>
+              <li><a target="docwin" href="Gen/ClassBase.html">KRPC::Gen::ClassBase</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>AvailableToClassAndInstanceModuleName</td>
+                    <td>=</td>
+                    <td class='context-item-value'>"AvailableToClassAndInstance"</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-add_rpc_method'>
+                <a name='method-c-add_rpc_method'></a>
+                <div class='synopsis'>
+                  <span class='name'>add_rpc_method</span>
+                  <span class='arguments'>(cls, method_name, service_name, proc, client, *options)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-add_rpc_method-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-add_rpc_method-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_rpc_method</span>(<span class="ruby-identifier">cls</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">service_name</span>, <span class="ruby-identifier">proc</span>, <span class="ruby-identifier">client</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">options</span>)&#x000A;  <span class="ruby-identifier">is_static</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">include?</span> <span class="ruby-value">:static</span>&#x000A;  <span class="ruby-identifier">prepend_self_to_args</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">include?</span> <span class="ruby-value">:prepend_self_to_args</span>&#x000A;  <span class="ruby-identifier">target_module</span> = <span class="ruby-identifier">is_static</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">cls</span>.<span class="ruby-identifier">const_get_or_create</span>(<span class="ruby-constant">AvailableToClassAndInstanceModuleName</span>, <span class="ruby-constant">Module</span>.<span class="ruby-identifier">new</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">cls</span>&#x000A;  <span class="ruby-identifier">param_names</span>, <span class="ruby-identifier">param_types</span>, <span class="ruby-identifier">required_params_count</span>, <span class="ruby-identifier">param_default</span>, <span class="ruby-identifier">return_type</span> = <span class="ruby-identifier">parse_procedure</span>(<span class="ruby-identifier">proc</span>, <span class="ruby-identifier">client</span>)&#x000A;  <span class="ruby-identifier">method_name</span> = <span class="ruby-identifier">method_name</span>.<span class="ruby-identifier">underscore</span>&#x000A;          &#x000A;  <span class="ruby-identifier">target_module</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">define_method</span> <span class="ruby-identifier">method_name</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">**</span><span class="ruby-identifier">kwargs</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">begin</span>&#x000A;        <span class="ruby-identifier">args</span> = [<span class="ruby-keyword">self</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">args</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">prepend_self_to_args</span>&#x000A;        <span class="ruby-identifier">client</span>.<span class="ruby-identifier">rpc</span>(<span class="ruby-identifier">service_name</span>, <span class="ruby-identifier">proc</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">kwargs</span>, <span class="ruby-identifier">param_names</span>, <span class="ruby-identifier">param_types</span>, <span class="ruby-identifier">required_params_count</span>, <span class="ruby-identifier">param_default</span>, <span class="ruby-identifier">return_type</span><span class="ruby-operator">:</span> <span class="ruby-identifier">return_type</span>)&#x000A;      <span class="ruby-keyword">rescue</span> <span class="ruby-constant">ArgumentsNumberErrorSig</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">err</span>&#x000A;        <span class="ruby-identifier">sig</span> = <span class="ruby-constant">Doc</span>.<span class="ruby-identifier">docstring_for_method</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">method_name</span>)&#x000A;        <span class="ruby-keyword">if</span> <span class="ruby-identifier">prepend_self_to_args</span> <span class="ruby-keyword">then</span> <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentsNumberErrorSig</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">err</span>.<span class="ruby-identifier">args_count</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>, (<span class="ruby-identifier">err</span>.<span class="ruby-identifier">valid_params_count_range</span>.<span class="ruby-identifier">min</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)<span class="ruby-operator">..</span>(<span class="ruby-identifier">err</span>.<span class="ruby-identifier">valid_params_count_range</span>.<span class="ruby-identifier">max</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>), <span class="ruby-identifier">sig</span>)&#x000A;        <span class="ruby-keyword">else</span> <span class="ruby-identifier">raise</span> <span class="ruby-identifier">err</span>.<span class="ruby-identifier">with_signature</span>(<span class="ruby-identifier">sig</span>) <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">rescue</span> <span class="ruby-constant">ArgumentErrorSig</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">err</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-identifier">err</span>.<span class="ruby-identifier">with_signature</span>(<span class="ruby-constant">Doc</span>.<span class="ruby-identifier">docstring_for_method</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">method_name</span>))&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-constant">Doc</span>.<span class="ruby-identifier">add_docstring_info</span>(<span class="ruby-identifier">is_static</span>, <span class="ruby-identifier">cls</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">service_name</span>, <span class="ruby-identifier">proc</span>, <span class="ruby-identifier">param_names</span>, <span class="ruby-identifier">param_types</span>, <span class="ruby-identifier">param_default</span>, <span class="ruby-identifier">return_type</span><span class="ruby-operator">:</span> <span class="ruby-identifier">return_type</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-generate_class'>
+                <a name='method-c-generate_class'></a>
+                <div class='synopsis'>
+                  <span class='name'>generate_class</span>
+                  <span class='arguments'>(service_name, class_name)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-generate_class-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-generate_class-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 13</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_class</span>(<span class="ruby-identifier">service_name</span>, <span class="ruby-identifier">class_name</span>)&#x000A;  <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">service_gen_module</span>(<span class="ruby-identifier">service_name</span>)&#x000A;  <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">const_get_or_create</span>(<span class="ruby-identifier">class_name</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">ClassBase</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">attr_reader</span> <span class="ruby-value">:service_name</span>&#x000A;      <span class="ruby-ivar">@service_name</span> = <span class="ruby-identifier">service_name</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-generate_enum'>
+                <a name='method-c-generate_enum'></a>
+                <div class='synopsis'>
+                  <span class='name'>generate_enum</span>
+                  <span class='arguments'>(service_name, enum_name, values)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-generate_enum-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-generate_enum-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 23</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_enum</span>(<span class="ruby-identifier">service_name</span>, <span class="ruby-identifier">enum_name</span>, <span class="ruby-identifier">values</span>)&#x000A;  <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">service_gen_module</span>(<span class="ruby-identifier">service_name</span>)&#x000A;  <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">const_get_or_create</span>(<span class="ruby-identifier">enum_name</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">values</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ev</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">ev</span>.<span class="ruby-identifier">value</span>]}.<span class="ruby-identifier">to_h</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-service_gen_module'>
+                <a name='method-c-service_gen_module'></a>
+                <div class='synopsis'>
+                  <span class='name'>service_gen_module</span>
+                  <span class='arguments'>(service_name)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-service_gen_module-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-service_gen_module-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 9</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">service_gen_module</span>(<span class="ruby-identifier">service_name</span>) &#x000A;  <span class="ruby-identifier">const_get_or_create</span>(<span class="ruby-identifier">service_name</span>, <span class="ruby-constant">Module</span>.<span class="ruby-identifier">new</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

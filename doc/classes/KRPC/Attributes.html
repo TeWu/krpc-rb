@@ -1,0 +1,346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>KRPC::Attributes</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          KRPC::Attributes
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../files/lib/krpc/attributes_rb.html">lib/krpc/attributes.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-get_class_method_or_property_name">get_class_method_or_property_name</a></li>
+              <li><a target="docwin" href="#method-c-get_class_name">get_class_name</a></li>
+              <li><a target="docwin" href="#method-c-get_parameter_type_attrs">get_parameter_type_attrs</a></li>
+              <li><a target="docwin" href="#method-c-get_property_name">get_property_name</a></li>
+              <li><a target="docwin" href="#method-c-get_return_type_attrs">get_return_type_attrs</a></li>
+              <li><a target="docwin" href="#method-c-get_service_name">get_service_name</a></li>
+              <li><a target="docwin" href="#method-c-is_a_class_method">is_a_class_method</a></li>
+              <li><a target="docwin" href="#method-c-is_a_class_method_or_property_accessor">is_a_class_method_or_property_accessor</a></li>
+              <li><a target="docwin" href="#method-c-is_a_class_property_accessor">is_a_class_property_accessor</a></li>
+              <li><a target="docwin" href="#method-c-is_a_class_property_getter">is_a_class_property_getter</a></li>
+              <li><a target="docwin" href="#method-c-is_a_class_property_setter">is_a_class_property_setter</a></li>
+              <li><a target="docwin" href="#method-c-is_a_class_static_method">is_a_class_static_method</a></li>
+              <li><a target="docwin" href="#method-c-is_a_property_accessor">is_a_property_accessor</a></li>
+              <li><a target="docwin" href="#method-c-is_a_property_getter">is_a_property_getter</a></li>
+              <li><a target="docwin" href="#method-c-is_a_property_setter">is_a_property_setter</a></li>
+              <li><a target="docwin" href="#method-c-is_any_start_with-3F">is_any_start_with?</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='aliases-list'>
+              <h2>Public Class Aliases</h2>
+              <div class='name-list'>
+                <table summary='Public Class Aliases'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>asw?</td>
+                    <td>-&gt;</td>
+                    <td class='context-item-value'><a target="docwin" href="#method-c-is_any_start_with-3F">is_any_start_with?</a></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-get_class_method_or_property_name'>
+                <a name='method-c-get_class_method_or_property_name'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_class_method_or_property_name</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-get_class_method_or_property_name-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-get_class_method_or_property_name-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 57</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_class_method_or_property_name</span>(<span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_a_class_method</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">is_a_class_static_method</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">is_a_class_property_accessor</span>(<span class="ruby-identifier">attrs</span>)&#x000A;    <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-node">$1</span> <span class="ruby-keyword">if</span> <span class="ruby-regexp">/^Class\.(?:(?:Static)?Method|Property\.(?:Get|Set))\([^,]+,([^,]+)\)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-string">&quot;Procedure attributes are not a class method or class property accessor&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-get_class_name'>
+                <a name='method-c-get_class_name'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_class_name</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-get_class_name-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-get_class_name-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_class_name</span>(<span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_a_class_method</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">is_a_class_static_method</span>(<span class="ruby-identifier">attrs</span>)&#x000A;    <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-node">$1</span> <span class="ruby-keyword">if</span> <span class="ruby-regexp">/^Class\.(?:Static)?Method\([^,\.]+\.([^,\.]+),[^,]+\)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">is_a_class_property_accessor</span>(<span class="ruby-identifier">attrs</span>)&#x000A;    <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-node">$1</span> <span class="ruby-keyword">if</span> <span class="ruby-regexp">/^Class\.Property.(?:Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-string">&quot;Procedure attributes are not a class method or property accessor&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-get_parameter_type_attrs'>
+                <a name='method-c-get_parameter_type_attrs'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_parameter_type_attrs</span>
+                  <span class='arguments'>(pos, attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-get_parameter_type_attrs-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-get_parameter_type_attrs-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 66</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_parameter_type_attrs</span>(<span class="ruby-identifier">pos</span>, <span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;    (<span class="ruby-node">/^ParameterType\(#{pos}\).(.+)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>) <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>&#x000A;  <span class="ruby-keyword">end</span>.<span class="ruby-identifier">compact</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-get_property_name'>
+                <a name='method-c-get_property_name'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_property_name</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-get_property_name-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-get_property_name-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 48</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_property_name</span>(<span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_a_property_accessor</span>(<span class="ruby-identifier">attrs</span>)&#x000A;    <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-node">$1</span> <span class="ruby-keyword">if</span> <span class="ruby-regexp">/^Property\.(?:Get|Set)\((.+)\)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-string">&quot;Procedure attributes are not a property accessor&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-get_return_type_attrs'>
+                <a name='method-c-get_return_type_attrs'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_return_type_attrs</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-get_return_type_attrs-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-get_return_type_attrs-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 72</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_return_type_attrs</span>(<span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;    (<span class="ruby-regexp">/^ReturnType.(.+)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>) <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>&#x000A;  <span class="ruby-keyword">end</span>.<span class="ruby-identifier">compact</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-get_service_name'>
+                <a name='method-c-get_service_name'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_service_name</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-get_service_name-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-get_service_name-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 22</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_service_name</span>(<span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_a_class_method</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">is_a_class_static_method</span>(<span class="ruby-identifier">attrs</span>)&#x000A;    <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-node">$1</span> <span class="ruby-keyword">if</span> <span class="ruby-regexp">/^Class\.(?:Static)?Method\(([^,\.]+)\.[^,]+,[^,]+\)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">is_a_class_property_accessor</span>(<span class="ruby-identifier">attrs</span>)&#x000A;    <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-node">$1</span> <span class="ruby-keyword">if</span> <span class="ruby-regexp">/^Class\.Property.(?:Get|Set)\(([^,\.]+)\.[^,]+,[^,]+\)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">a</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-string">&quot;Procedure attributes are not a class method or property accessor&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_class_method'>
+                <a name='method-c-is_a_class_method'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_class_method</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_class_method-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_class_method-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 16</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_class_method</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Class.Method(&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_class_method_or_property_accessor'>
+                <a name='method-c-is_a_class_method_or_property_accessor'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_class_method_or_property_accessor</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_class_method_or_property_accessor-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_class_method_or_property_accessor-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 15</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_class_method_or_property_accessor</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Class.&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_class_property_accessor'>
+                <a name='method-c-is_a_class_property_accessor'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_class_property_accessor</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_class_property_accessor-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_class_property_accessor-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 18</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_class_property_accessor</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Class.Property.&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_class_property_getter'>
+                <a name='method-c-is_a_class_property_getter'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_class_property_getter</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_class_property_getter-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_class_property_getter-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 19</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_class_property_getter</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Class.Property.Get(&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_class_property_setter'>
+                <a name='method-c-is_a_class_property_setter'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_class_property_setter</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_class_property_setter-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_class_property_setter-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 20</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_class_property_setter</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Class.Property.Set(&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_class_static_method'>
+                <a name='method-c-is_a_class_static_method'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_class_static_method</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_class_static_method-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_class_static_method-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 17</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_class_static_method</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Class.StaticMethod(&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_property_accessor'>
+                <a name='method-c-is_a_property_accessor'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_property_accessor</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_property_accessor-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_property_accessor-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 12</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_property_accessor</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Property.&quot;</span>)  <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_property_getter'>
+                <a name='method-c-is_a_property_getter'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_property_getter</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_property_getter-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_property_getter-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 13</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_property_getter</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Property.Get(&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_a_property_setter'>
+                <a name='method-c-is_a_property_setter'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_a_property_setter</span>
+                  <span class='arguments'>(attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_a_property_setter-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_a_property_setter-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 14</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_a_property_setter</span>(<span class="ruby-identifier">attrs</span>) <span class="ruby-identifier">asw?</span>(<span class="ruby-identifier">attrs</span>,<span class="ruby-string">&quot;Property.Set(&quot;</span>) <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-is_any_start_with-3F'>
+                <a name='method-c-is_any_start_with-3F'></a>
+                <div class='synopsis'>
+                  <span class='name'>is_any_start_with?</span>
+                  <span class='arguments'>(attrs, prefix)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-is_any_start_with-3F-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-is_any_start_with-3F-source'><span class="ruby-comment"># File lib/krpc/attributes.rb, line 7</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_any_start_with?</span>(<span class="ruby-identifier">attrs</span>, <span class="ruby-identifier">prefix</span>)&#x000A;  <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">any?</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-identifier">prefix</span> }&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

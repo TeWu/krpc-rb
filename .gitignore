@@ -1,4 +1,5 @@
 *.*~
+doc/**/*~.html
 
 *.gem
 Gemfile.lock

@@ -1,8 +1,6 @@
 require 'krpc/core_extensions'
 require 'colorize'
 
-#TODO: Pry's show-doc integration ?
-
 module KRPC
   module Doc
     class << self

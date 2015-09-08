@@ -6,6 +6,7 @@ module KRPC
   module Services
     class << self
     
+      # Generate classes and methods for the service - see documentation for Client#generate_services_api!
       def create_service(service_msg, client)
         service_name = service_msg.name
         
@@ -65,6 +66,8 @@ module KRPC
       
     end
     
+    ##
+    # Base class for service objects, created at runtime using information received from the server.
     class ServiceBase
       extend Gen::AvailableToClassAndInstanceMethodsHandler
       include Doc::SuffixMethods
@@ -76,6 +79,8 @@ module KRPC
       end
     end
     
+    ##
+    # Core kRPC service, e.g. for querying for the available services.
     class KRPC < ServiceBase
       include Gen::RPCMethodGenerator
     

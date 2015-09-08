@@ -89,6 +89,8 @@ module KRPC
       end
     end
     
+    ##
+    # Base class for service-defined class types.
     class ClassBase
       extend AvailableToClassAndInstanceMethodsHandler
       include Doc::SuffixMethods

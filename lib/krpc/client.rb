@@ -8,6 +8,24 @@ require 'krpc/core_extensions'
 require 'krpc/KRPC.pb'
 
 module KRPC
+  
+  ##
+  # A kRPC client, through which all Remote Procedure Calls are made. To make RPC calls client 
+  # must first connect to server. This can be achieved by calling Client#connect or Client#connect!
+  # methods. Client object can connect and disconnect from the server many times during it's 
+  # lifetime. RPCs can be made by calling Client#rpc method. After generating services API (with
+  # Client#generate_services_api! call), RPCs can be also made using
+  # `client.service_name.procedure_name(parameter, ...)`
+  #
+  # ### Example:
+  #     client = KRPC::Client.new("my client").connect!
+  #     ctrl = client.space_center.active_vessel.control
+  #     ctrl.activate_next_stage
+  #     ctrl.throttle = 1 # Full ahead!
+  #     client.close # Gracefully disconnect - and allow the spacecraft to crash ;)
+  #     client.connect # Connect to server again
+  #     client.space_center.active_vessel.control.throttle = 0 # Save the spacecraft from imminent destruction ;)
+  #     client.close
   class Client
     DEFAULT_NAME = ""
 
@@ -15,6 +33,8 @@ module KRPC
 
     attr_reader :name, :rpc_connection, :stream_connection, :type_store, :krpc
     
+    # Create new Client object, optionally specifying IP address and port numbers on witch kRPC 
+    # server is listening and the name for this client (up to 32 bytes of UTF-8 encoded text).
     def initialize(name = DEFAULT_NAME, host = Connection::DEFAULT_SERVER_HOST, rpc_port = Connection::DEFAULT_SERVER_RPC_PORT, stream_port = Connection::DEFAULT_SERVER_STREAM_PORT)
       @name = name
       @rpc_connection = RPCConncetion.new(name, host, rpc_port)
@@ -24,27 +44,58 @@ module KRPC
       Doc.add_docstring_info(false, self.class, "krpc", return_type: @krpc.class)
     end
     
+    # Connect to a kRPC server on the IP address and port numbers specified during this client
+    # object creation and return `self`. Calling this method while the client is already connected
+    # will raise an exception.
     def connect
       rpc_connection.connect
       stream_connection.connect
       self
     end
     
+    # Connect to a kRPC server, generate services API and return `self`. Shorthand for calling 
+    # Client#connect and Client#generate_services_api! subsequently. 
     def connect!
       connect
       generate_services_api!
       self
     end
     
+    # Close connection to kRPC server. Returns `true` if the connection has closed or `false` if 
+    # the client had been already disconnected.
     def close
       stream_connection.close
       rpc_connection.close
     end
 
+    # Returns `true` if the client is connected to a server, `false` otherwise.
     def connected?
       rpc_connection.connected?
     end
-        
+      
+    # Interrogates the server to find out what functionality it provides and dynamically creates 
+    # all of the classes and methods that form services API. For each service that server provides:
+    # 
+    # 1. Class `KRPC::Services::{service name here}`, and module `KRPC::Gen::{service name here}`
+    #    are created.
+    # 2. `KRPC::Gen::{service name here}` module is filled with dynamically created classes.
+    # 3. Those classes in turn are filled with dynamically created methods, that form API for 
+    #    this service.
+    # 4. Instance method `{service name here}` is created in this client object that returns 
+    #    `KRPC::Services::{service name here}` object. This object is entry point for accessing
+    #    functionality provided by `{service name here}` service.
+    #
+    # Returns `self`. Invoking this method the second and subsequent times doesn't regenerate API.
+    # To regenerate API create new Client object and call #generate_services_api! on it.
+    #
+    # ### Example
+    #       client = KRPC::Client.new("my client").connect # Notice that it is #connect being called, not #connect!
+    #       sc = client.space_center # => Exception (undefined method "space_center")
+    #       client.generate_services_api!
+    #       sc = client.space_center # => KRPC::Services::SpaceCenter object
+    #       v  = sc.active_vessel    # => KRPC::Gen::SpaceCenter::Vessel object
+    #       v.mass                   # => {some number here}
+    #       client.close
     def generate_services_api!
       return self if services_api_generated?
       raise(Exception, "Can't generate services API while not connected to server -- call Client#connect! to connect to server and generate services API in one call") if not connected?
@@ -62,10 +113,12 @@ module KRPC
       self
     end
     
+    # Returns `true` if services API has been already generated, `false` otherwise.
     def services_api_generated?
       respond_to? :space_center
     end
     
+    # Execute an RPC.
     def rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], required_params_count=0, param_default=[], return_type: nil)
       # Send request
       req = build_request(service, procedure, args, kwargs, param_names, param_types, required_params_count, param_default)
@@ -90,6 +143,7 @@ module KRPC
     
     protected #----------------------------------
 
+    # Build a PB::Request object.
     def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], required_params_count=0, param_default=[])
       begin
         raise(ArgumentError, "param_names and param_types should be equal length\n\tparam_names = #{param_names}\n\tparam_types = #{param_types}") unless param_names.size == param_types.size

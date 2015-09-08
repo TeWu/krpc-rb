@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>KRPC::Types::TypeStore</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>class</span>
+          KRPC::Types::TypeStore
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/krpc/types_rb.html">lib/krpc/types.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Superclass:
+          <strong><a target="docwin" href="../../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-new">new</a></li>
+            </ol>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-as_type">as_type</a></li>
+              <li><a target="docwin" href="#method-i-coerce_to">coerce_to</a></li>
+              <li><a target="docwin" href="#method-i-get_parameter_type">get_parameter_type</a></li>
+              <li><a target="docwin" href="#method-i-get_return_type">get_return_type</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/krpc/types.rb, line 27</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-ivar">@cache</span> = {}&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-as_type'>
+                <a name='method-i-as_type'></a>
+                <div class='synopsis'>
+                  <span class='name'>as_type</span>
+                  <span class='arguments'>(type_string)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-as_type-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-as_type-source'><span class="ruby-comment"># File lib/krpc/types.rb, line 31</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">as_type</span>(<span class="ruby-identifier">type_string</span>)&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@cache</span>[<span class="ruby-identifier">type_string</span>] <span class="ruby-keyword">if</span> <span class="ruby-ivar">@cache</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">type_string</span>&#x000A;  &#x000A;  <span class="ruby-identifier">type</span> =&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-constant">PROTOBUF_VALUE_TYPES</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">type_string</span> <span class="ruby-keyword">then</span> <span class="ruby-constant">ValueType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>)&#x000A;    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">type_string</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-string">&quot;Class(&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">type_string</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Class&quot;</span> <span class="ruby-keyword">then</span> <span class="ruby-constant">ClassType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>)&#x000A;    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">type_string</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-string">&quot;Enum(&quot;</span>  <span class="ruby-operator">||</span> <span class="ruby-identifier">type_string</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Enum&quot;</span>  <span class="ruby-keyword">then</span> <span class="ruby-constant">EnumType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>)&#x000A;    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">type_string</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-string">&quot;List(&quot;</span>  <span class="ruby-operator">||</span> <span class="ruby-identifier">type_string</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;List&quot;</span>  <span class="ruby-keyword">then</span> <span class="ruby-constant">ListType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>, <span class="ruby-keyword">self</span>)&#x000A;    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">type_string</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-string">&quot;Dictionary(&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">type_string</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Dictionary&quot;</span> <span class="ruby-keyword">then</span> <span class="ruby-constant">DictionaryType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>, <span class="ruby-keyword">self</span>)&#x000A;    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">type_string</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-string">&quot;Set(&quot;</span>   <span class="ruby-operator">||</span> <span class="ruby-identifier">type_string</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Set&quot;</span>   <span class="ruby-keyword">then</span> <span class="ruby-constant">SetType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>, <span class="ruby-keyword">self</span>)&#x000A;    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">type_string</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-string">&quot;Tuple(&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">type_string</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Tuple&quot;</span> <span class="ruby-keyword">then</span> <span class="ruby-constant">TupleType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>, <span class="ruby-keyword">self</span>)&#x000A;    <span class="ruby-keyword">else</span> <span class="ruby-comment"># A message type (eg. type_string = &quot;KRPC.List&quot; or &quot;KRPC.Services&quot;)</span>&#x000A;      <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-node">&quot;\&quot;#{type_string}\&quot; is not a valid type string&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-regexp">/^[A-Za-z0-9_\.]+$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">type_string</span>&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-constant">PROTOBUF_TO_MESSAGE_TYPE</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-identifier">type_string</span>&#x000A;        <span class="ruby-constant">MessageType</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">type_string</span>)&#x000A;      <span class="ruby-keyword">else</span>&#x000A;        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-node">&quot;\&quot;#{type_string}\&quot; is not a valid type string&quot;</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-ivar">@cache</span>[<span class="ruby-identifier">type_string</span>] = <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-identifier">type</span>      &#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-coerce_to'>
+                <a name='method-i-coerce_to'></a>
+                <div class='synopsis'>
+                  <span class='name'>coerce_to</span>
+                  <span class='arguments'>(value, type)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-coerce_to-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-coerce_to-source'><span class="ruby-comment"># File lib/krpc/types.rb, line 77</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">coerce_to</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-identifier">value</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">EnumType</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Symbol</span> <span class="ruby-comment"># Enum handling</span>&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-identifier">value</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span>)&#x000A;  <span class="ruby-comment"># A NilClass can be coerced to a ClassType</span>&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ClassType</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>&#x000A;  <span class="ruby-comment"># Coerce identical class types from different client connections</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ClassType</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Gen</span><span class="ruby-operator">::</span><span class="ruby-constant">ClassBase</span>) <span class="ruby-operator">&amp;&amp;</span> &#x000A;     <span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span>.<span class="ruby-identifier">service_name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">service_name</span> <span class="ruby-operator">&amp;&amp;</span> &#x000A;     <span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-keyword">return</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">remote_oid</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># -- Collection types --</span>&#x000A;  <span class="ruby-keyword">begin</span>&#x000A;    <span class="ruby-comment"># coerce &quot;list&quot; to array</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ListType</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:map</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:to_a</span>)&#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">coerce_to</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">type</span>.<span class="ruby-identifier">value_type</span>) }.<span class="ruby-identifier">to_a</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-comment"># coerce &quot;tuple&quot; to array + check elements count</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">TupleType</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:map</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:to_a</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:size</span>)&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ValueError</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">value_types</span>.<span class="ruby-identifier">size</span>&#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">map</span>.<span class="ruby-identifier">with_index</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">coerce_to</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">type</span>.<span class="ruby-identifier">value_types</span>[<span class="ruby-identifier">i</span>]) }.<span class="ruby-identifier">to_a</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">ValueError</span>&#x000A;    <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-node">&quot;Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># Numeric types</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Float</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:to_f</span>)&#x000A;    <span class="ruby-keyword">return</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_f</span>&#x000A;  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">ruby_type</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Integer</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:to_i</span>)&#x000A;    <span class="ruby-keyword">return</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_i</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-node">&quot;Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-get_parameter_type'>
+                <a name='method-i-get_parameter_type'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_parameter_type</span>
+                  <span class='arguments'>(pos, type, attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-get_parameter_type-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-get_parameter_type-source'><span class="ruby-comment"># File lib/krpc/types.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_parameter_type</span>(<span class="ruby-identifier">pos</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-identifier">type_attrs</span> = <span class="ruby-constant">Attributes</span>.<span class="ruby-identifier">get_parameter_type_attrs</span>(<span class="ruby-identifier">pos</span>, <span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-identifier">type_attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ta</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">begin</span>&#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-identifier">as_type</span>(<span class="ruby-identifier">ta</span>)&#x000A;    <span class="ruby-keyword">rescue</span> <span class="ruby-constant">ValueError</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">as_type</span>(<span class="ruby-identifier">type</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-get_return_type'>
+                <a name='method-i-get_return_type'></a>
+                <div class='synopsis'>
+                  <span class='name'>get_return_type</span>
+                  <span class='arguments'>(type, attrs)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-get_return_type-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-get_return_type-source'><span class="ruby-comment"># File lib/krpc/types.rb, line 66</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_return_type</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-identifier">type_attrs</span> = <span class="ruby-constant">Attributes</span>.<span class="ruby-identifier">get_return_type_attrs</span>(<span class="ruby-identifier">attrs</span>)&#x000A;  <span class="ruby-identifier">type_attrs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ta</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">begin</span>&#x000A;      <span class="ruby-keyword">return</span> <span class="ruby-identifier">as_type</span>(<span class="ruby-identifier">ta</span>)&#x000A;    <span class="ruby-keyword">rescue</span> <span class="ruby-constant">ValueError</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">as_type</span>(<span class="ruby-identifier">type</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
