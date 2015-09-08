@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
                     "--format" << "hanna" <<
                     "--main"   << "README.md"
   
-  s.required_ruby_version = '>= 2.2.3'
+  s.required_ruby_version = '>= 2.1.0'
 
   s.add_runtime_dependency "ruby_protobuf", "~> 0.4"
   s.add_runtime_dependency "colorize", "~> 0.7"
