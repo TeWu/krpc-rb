@@ -23,9 +23,9 @@ module KRPC
   #     ctrl.activate_next_stage
   #     ctrl.throttle = 1 # Full ahead!
   #     client.close # Gracefully disconnect - and allow the spacecraft to crash ;)
-  #     client.connect # Connect to server again
-  #     client.space_center.active_vessel.control.throttle = 0 # Save the spacecraft from imminent destruction ;)
-  #     client.close
+  #     client.connect do # Connect to server again
+  #       client.space_center.active_vessel.control.throttle = 0 # Save the spacecraft from imminent destruction ;)
+  #     end # Gracefully disconnect
   class Client
     DEFAULT_NAME = ""
 
@@ -46,18 +46,22 @@ module KRPC
     
     # Connect to a kRPC server on the IP address and port numbers specified during this client
     # object creation and return `self`. Calling this method while the client is already connected
-    # will raise an exception.
-    def connect
+    # will raise an exception. If the block is given, then it's called passing `self` and the 
+    # connection to kRPC server is closed at the end of the block.
+    def connect(&block)
       rpc_connection.connect
       stream_connection.connect
+      call_block_and_close(block) if block_given?
       self
     end
     
     # Connect to a kRPC server, generate services API and return `self`. Shorthand for calling 
-    # Client#connect and Client#generate_services_api! subsequently. 
-    def connect!
+    # Client#connect and Client#generate_services_api! subsequently. If the block is given, then 
+    # it's called passing `self` and the connection to kRPC server is closed at the end of the block.
+    def connect!(&block)
       connect
       generate_services_api!
+      call_block_and_close(block) if block_given?
       self
     end
     
@@ -142,6 +146,10 @@ module KRPC
     end
     
     protected #----------------------------------
+    
+    def call_block_and_close(block)
+      begin block.call(self) ensure close end
+    end
 
     # Build a PB::Request object.
     def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], required_params_count=0, param_default=[])
