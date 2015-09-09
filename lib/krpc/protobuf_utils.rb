@@ -30,7 +30,6 @@ module KRPC
           shift = 0
           loop do
             byte = bytes[pos].ord  # <-- replace ".ord" with ".bytes[0]" if ".ord" start to cause problems again
-            binding.pry if byte > 130
             pos += 1
             result |= (byte & 0b0111_1111) << shift
             return [result, pos] if (byte & 0b1000_0000) == 0
@@ -59,7 +58,7 @@ module KRPC
         def decode_bool(bytes)
           decode_varint(bytes) != 0
         end
-        def decode_string(bytes)  #TODO: String encoding should be utf-8
+        def decode_string(bytes)
           size, pos = decode_varint_pos(bytes)
           bytes[pos..(pos+size)]
         end
