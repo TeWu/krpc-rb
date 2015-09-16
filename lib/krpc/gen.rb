@@ -40,15 +40,15 @@ module KRPC
               args = [self] + args if prepend_self_to_args
               client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, required_params_count, param_default, return_type: return_type)
             rescue ArgumentsNumberErrorSig => err
-              sig = Doc.docstring_for_method(self, method_name)
+              sig = Doc.docstring_for_method(self, method_name, false)
               if prepend_self_to_args then raise ArgumentsNumberErrorSig.new(err.args_count - 1, (err.valid_params_count_range.min-1)..(err.valid_params_count_range.max-1), sig)
               else raise err.with_signature(sig) end
             rescue ArgumentErrorSig => err
-              raise err.with_signature(Doc.docstring_for_method(self, method_name))
+              raise err.with_signature(Doc.docstring_for_method(self, method_name, false))
             end
           end
         end
-        Doc.add_docstring_info(is_static, cls, method_name, service_name, proc, param_names, param_types, param_default, return_type: return_type)
+        Doc.add_docstring_info(is_static, cls, method_name, service_name, proc.name, param_names, param_types, param_default, return_type: return_type, xmldoc: proc.documentation)
       end
       
       private #----------------------------------
@@ -75,8 +75,8 @@ module KRPC
     end
     
     module RPCMethodGenerator
-      def include_rpc_method(method_name, service_name, procedure_name, return_type: nil)
-        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, return_type: return_type), client)
+      def include_rpc_method(method_name, service_name, procedure_name, return_type: nil, xmldoc: "")
+        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, return_type: return_type, documentation: xmldoc), client)
       end
     end
     

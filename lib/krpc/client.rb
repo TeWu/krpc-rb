@@ -41,7 +41,7 @@ module KRPC
       @stream_connection = StreamConncetion.new(rpc_connection, host, stream_port)
       @type_store = Types::TypeStore.new
       @krpc = Services::KRPC.new(self)
-      Doc.add_docstring_info(false, self.class, "krpc", return_type: @krpc.class)
+      Doc.add_docstring_info(false, self.class, "krpc", return_type: @krpc.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code.</summary></doc>")
     end
     
     # Connect to a kRPC server on the IP address and port numbers specified during this client
@@ -112,7 +112,7 @@ module KRPC
         self.class.instance_eval do
           define_method method_name do service end
         end
-        Doc.add_docstring_info(false, self.class, method_name, return_type: service.class)
+        Doc.add_docstring_info(false, self.class, method_name, return_type: service.class, xmldoc: service_msg.documentation)
       end
       self
     end
@@ -182,7 +182,7 @@ module KRPC
         end.compact
         raise ArgumentErrorSig.new("keyword arguments for non existing parameters: #{(kwargs.keys - param_names_symbols).join(", ")}") unless kwargs_remaining == 0
       rescue ArgumentErrorSig => err
-        raise err.with_signature(Doc.docstring_for_procedure(service, procedure))
+        raise err.with_signature(Doc.docstring_for_procedure(service, procedure, false))
       end
       PB::Request.new(service: service, procedure: procedure, arguments: req_args)
     end

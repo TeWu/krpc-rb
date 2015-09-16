@@ -83,12 +83,12 @@ module KRPC
     # Core kRPC service, e.g. for querying for the available services.
     class KRPC < ServiceBase
       include Gen::RPCMethodGenerator
-    
+
       def initialize(client)
         super(client)
         unless respond_to? :get_status
-          include_rpc_method("get_status", "KRPC", "GetStatus", return_type: "KRPC.Status")
-          include_rpc_method("get_services", "KRPC", "GetServices", return_type: "KRPC.Services")
+          include_rpc_method("get_status", "KRPC", "GetStatus", return_type: "KRPC.Status", xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>")
+          include_rpc_method("get_services", "KRPC", "GetServices", return_type: "KRPC.Services", xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>")
           # TODO: implement me:
           # include_rpc_method("add_stream", "KRPC", "AddStream", ...)
           # include_rpc_method("remove_stream", "KRPC", "RemoveStream", ...)
