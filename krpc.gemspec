@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.md"]
   s.rdoc_options << "--markup" << "markdown" <<
                     "--format" << "hanna" <<
+                    "--title"  << "kRPC-rb API Docs" <<
                     "--main"   << "README.md"
   
   s.required_ruby_version = '>= 2.1.0'
@@ -28,5 +29,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "nokogiri", "~> 1.6"
   s.add_development_dependency "bundler", "~> 1.10"
   s.add_development_dependency "pry", "~> 0.10"
+  s.add_development_dependency "hanna-nouveau", "~> 0.4"
 end
 
