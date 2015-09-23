@@ -28,8 +28,6 @@ Most of the API is *very* similar to what can be found in (official) Python clie
 So official documentation at http://djungelorm.github.io/krpc/docs/ is definitely a good read.
 The rest of this file describes few differences there are between Ruby and Python client libraries.
 
-**NOTE:** Streaming is not supported in the current version of kRPC-rb.
-
 Connecting and disconnecting
 -------
 When you are in REPL, you can connect to kRPC server in this way:
@@ -87,12 +85,14 @@ The best way to explore the API is to run REPL and try what each method does for
 I highly recommend using [Pry](https://github.com/pry/pry) as REPL. This way you can `ls` any object you receive and see what methods you can call on it. When you want to know more about specific method, then just stuck `_doc` at the end of it's name and press enter:
 
 ```ruby
-[29] pry(main)> cl.space_center.transform_position_doc
+[29] pry(main)> client.space_center.transform_position_doc
 SpaceCenter.transform_position(
-	position :Array[Float, Float, Float],
-	from :ReferenceFrame,
-	to :ReferenceFrame
-) :Array[Float, Float, Float]
+	position :Array[Float, Float, Float], - Position vector in reference frame from.
+	from :ReferenceFrame, - The reference frame that the position vector is in.
+	to :ReferenceFrame - The reference frame to covert the position vector to.
+) :Array[Float, Float, Float] - The corresponding position vector in reference frame to.
+
+ Converts a position vector from one reference frame to another. 
 => nil
 ```
 
@@ -104,22 +104,47 @@ Combination of `ls`s and `_doc`s should teach you API in no time (also don't be 
 ```ruby
 [31] pry(main)> sc = client.space_center;
 [32] pry(main)> ls sc
-KRPC::Doc::SuffixMethods#methods: method_missing
-KRPC::Services::ServiceBase#methods: client
+...
 KRPC::Services::SpaceCenter::AvailableToClassAndInstance#methods: 
   can_rails_warp_at  clear_target    draw_line               launch_vessel_from_vab  transform_position  transform_velocity
   clear_drawing      draw_direction  launch_vessel_from_sph  transform_direction     transform_rotation  warp_to           
 KRPC::Services::SpaceCenter#methods: 
   active_vessel   far_available              physics_warp_factor   rails_warp_factor=     target_body=          target_vessel   vessels      warp_rate
   active_vessel=  g                          physics_warp_factor=  remote_tech_available  target_docking_port   target_vessel=  warp_factor
-  bodies          maximum_rails_warp_factor  rails_warp_factor     target_body            target_docking_port=  ut              warp_mode  
-instance variables: @client
+  bodies          maximum_rails_warp_factor  rails_warp_factor     target_body            target_docking_port=  ut              warp_mode
 [33] pry(main)> sc.warp_to_doc;
 SpaceCenter.warp_to(
-	ut :Float,
-	max_rails_rate :Float = 100000.0,
-	max_physics_rate :Float = 2.0
-) :nil
+	ut :Float, - The universal time to warp to, in seconds.
+	max_rails_rate :Float = 100000.0, - The maximum warp rate in regular "on-rails" time warp.
+	max_physics_rate :Float = 2.0 - The maximum warp rate in physical time warp.
+) :nil - When the time warp is complete.
+
+ Uses time acceleration to warp forward to a time in the future, specified by universal time ut. This call blocks until the desired time is reached. Uses regular "on-rails" or physical time warp as appropriate. For example, physical time warp is used when the active vessel is traveling through an atmosphere. When using regular "on-rails" time warp, the warp rate is limited by max_rails_rate, and when using physical time warp, the warp rate is limited by max_physics_rate.
+```
+
+Streaming
+-------
+A stream repeatedly executes a function on the server, with a fixed set of argument values. It provides a more efficient way of repeatedly getting the result of calling function on the server, without having to invoke it directly – which incurs communication overheads.
+
+To create a stream, call a method with `_stream` suffix. This will return `KRPC::Streaming::Stream` instance. You can call `get` (or `value`) on the `Stream` instance to get the recent value received by this stream. To deactivate the stream call `remove` (or `close`) on the `Stream` instance.
+
+Example without streaming:
+```ruby
+vessel = client.space_center.active_vessel
+refframe = vessel.orbit.body.reference_frame
+loop do
+  puts vessel.position(refframe)
+end
+```
+Equivalent example with streaming:
+```ruby
+vessel = client.space_center.active_vessel
+refframe = vessel.orbit.body.reference_frame
+pos_stream = vessel.position_stream(refframe)
+loop do
+  puts pos_stream.get
+end
+pos_stream.remove #note: dead code - just as an example
 ```
 
 Want to know more?
