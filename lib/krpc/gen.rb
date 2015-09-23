@@ -35,8 +35,9 @@ module KRPC
         method_name = method_name.underscore
                 
         target_module.instance_eval do
-          define_method method_name do |*args, **kwargs|
+          define_method method_name do |*args|
             begin
+              kwargs = args.extract_kwargs!
               args = [self] + args if prepend_self_to_args
               client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, required_params_count, param_default, return_type: return_type)
             rescue ArgumentsNumberErrorSig => err
