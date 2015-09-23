@@ -3,6 +3,7 @@ require 'krpc/service'
 require 'krpc/types'
 require 'krpc/encoder'
 require 'krpc/decoder'
+require 'krpc/streaming'
 require 'krpc/error'
 require 'krpc/core_extensions'
 require 'krpc/KRPC.pb'
@@ -31,7 +32,7 @@ module KRPC
 
     include Doc::SuffixMethods
 
-    attr_reader :name, :rpc_connection, :stream_connection, :type_store, :krpc
+    attr_reader :name, :rpc_connection, :stream_connection, :type_store, :streams_manager, :krpc
     
     # Create new Client object, optionally specifying IP address and port numbers on witch kRPC 
     # server is listening and the name for this client (up to 32 bytes of UTF-8 encoded text).
@@ -40,6 +41,7 @@ module KRPC
       @rpc_connection = RPCConncetion.new(name, host, rpc_port)
       @stream_connection = StreamConncetion.new(rpc_connection, host, stream_port)
       @type_store = Types::TypeStore.new
+      @streams_manager = Streaming::StreamsManager.new(self)
       @krpc = Services::KRPC.new(self)
       Doc.add_docstring_info(false, self.class, "krpc", return_type: @krpc.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code.</summary></doc>")
     end
@@ -51,6 +53,7 @@ module KRPC
     def connect(&block)
       rpc_connection.connect
       stream_connection.connect
+      streams_manager.start_streaming_thread
       call_block_and_close(block) if block_given?
       self
     end
@@ -68,6 +71,7 @@ module KRPC
     # Close connection to kRPC server. Returns `true` if the connection has closed or `false` if 
     # the client had been already disconnected.
     def close
+      streams_manager.stop_streaming_thread
       stream_connection.close
       rpc_connection.close
     end
@@ -145,12 +149,6 @@ module KRPC
       raise e
     end
     
-    protected #----------------------------------
-    
-    def call_block_and_close(block)
-      begin block.call(self) ensure close end
-    end
-
     # Build a PB::Request object.
     def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], required_params_count=0, param_default=[])
       begin
@@ -185,6 +183,12 @@ module KRPC
         raise err.with_signature(Doc.docstring_for_procedure(service, procedure, false))
       end
       PB::Request.new(service: service, procedure: procedure, arguments: req_args)
+    end
+    
+    protected #----------------------------------
+    
+    def call_block_and_close(block)
+      begin block.call(self) ensure close end
     end
     
   end

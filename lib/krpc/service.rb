@@ -1,6 +1,7 @@
 require 'krpc/gen'
 require 'krpc/attributes'
 require 'krpc/doc'
+require 'krpc/streaming'
 
 module KRPC
   module Services
@@ -35,7 +36,7 @@ module KRPC
               if Attributes.is_a_class_property_getter(proc.attributes)
                 Gen.add_rpc_method(class_cls, method_name, service_name, proc, client, :prepend_self_to_args)
               else
-                Gen.add_rpc_method(class_cls, method_name + '=', service_name, proc, client, :prepend_self_to_args)
+                Gen.add_rpc_method(class_cls, method_name + '=', service_name, proc, client, :prepend_self_to_args, :no_stream)
               end
             elsif Attributes.is_a_class_method(proc.attributes)  # service' class method
               Gen.add_rpc_method(class_cls, method_name, service_name, proc, client, :prepend_self_to_args)
@@ -47,7 +48,7 @@ module KRPC
             if Attributes.is_a_property_getter(proc.attributes)
               Gen.add_rpc_method(service_class, property_name, service_name, proc, client)
             elsif Attributes.is_a_property_setter(proc.attributes)
-              Gen.add_rpc_method(service_class, property_name + '=', service_name, proc, client)
+              Gen.add_rpc_method(service_class, property_name + '=', service_name, proc, client, :no_stream)
             end
           else  # plain procedure = method available to service class and its instance
             Gen.add_rpc_method(service_class, proc.name, service_name, proc, client, :static)
@@ -71,6 +72,7 @@ module KRPC
     class ServiceBase
       extend Gen::AvailableToClassAndInstanceMethodsHandler
       include Doc::SuffixMethods
+      include Streaming::StreamConstructors
       
       attr_reader :client
   
@@ -87,11 +89,10 @@ module KRPC
       def initialize(client)
         super(client)
         unless respond_to? :get_status
-          include_rpc_method("get_status", "KRPC", "GetStatus", return_type: "KRPC.Status", xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>")
-          include_rpc_method("get_services", "KRPC", "GetServices", return_type: "KRPC.Services", xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>")
-          # TODO: implement me:
-          # include_rpc_method("add_stream", "KRPC", "AddStream", ...)
-          # include_rpc_method("remove_stream", "KRPC", "RemoveStream", ...)
+          include_rpc_method("get_status", "KRPC", "GetStatus", return_type: "KRPC.Status", xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>", options: :no_stream)
+          include_rpc_method("get_services", "KRPC", "GetServices", return_type: "KRPC.Services", xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>", options: :no_stream)
+          include_rpc_method("add_stream", "KRPC", "AddStream", params: [PB::Parameter.new(name: "request", type: "KRPC.Request")], return_type: "uint32", xmldoc: "<doc><summary>Add a streaming request. Returns it's identifier.</summary></doc>", options: :no_stream)
+          include_rpc_method("remove_stream", "KRPC", "RemoveStream", params: [PB::Parameter.new(name: "id", type: "uint32")], xmldoc: "<doc><summary>Remove a streaming request</summary></doc>", options: :no_stream)
         end
       end
     end

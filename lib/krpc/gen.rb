@@ -1,4 +1,5 @@
 require 'krpc/doc'
+require 'krpc/streaming'
 require 'krpc/core_extensions'
 
 module KRPC
@@ -14,8 +15,8 @@ module KRPC
         mod = service_gen_module(service_name)
         mod.const_get_or_create(class_name) do
           Class.new(ClassBase) do
-            attr_reader :service_name
             @service_name = service_name
+            class << self; attr_reader :service_name end
           end
         end
       end
@@ -33,7 +34,8 @@ module KRPC
         target_module = is_static ? cls.const_get_or_create(AvailableToClassAndInstanceModuleName, Module.new) : cls
         param_names, param_types, required_params_count, param_default, return_type = parse_procedure(proc, client)
         method_name = method_name.underscore
-                
+        
+        # Define method
         target_module.instance_eval do
           define_method method_name do |*args|
             begin
@@ -49,6 +51,15 @@ module KRPC
             end
           end
         end
+        # Add stream-constructing Proc
+        unless options.include? :no_stream
+          cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
+            req_args = prepend_self_to_args ? [this] + args : args
+            request  = client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, required_params_count, param_default)
+            client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
+          end
+        end
+        # Add docstring info
         Doc.add_docstring_info(is_static, cls, method_name, service_name, proc.name, param_names, param_types, param_default, return_type: return_type, xmldoc: proc.documentation)
       end
       
@@ -76,8 +87,8 @@ module KRPC
     end
     
     module RPCMethodGenerator
-      def include_rpc_method(method_name, service_name, procedure_name, return_type: nil, xmldoc: "")
-        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, return_type: return_type, documentation: xmldoc), client)
+      def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, xmldoc: "", options: [])
+        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, return_type: return_type, documentation: xmldoc), client, options)
       end
     end
     
@@ -95,6 +106,7 @@ module KRPC
     class ClassBase
       extend AvailableToClassAndInstanceMethodsHandler
       include Doc::SuffixMethods
+      include Streaming::StreamConstructors
       
       attr_reader :remote_oid
       
