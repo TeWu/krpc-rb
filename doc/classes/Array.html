@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>KRPC::Gen::AvailableToClassAndInstanceMethodsHandler</title>
+    <title>Array</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
         function popupCode(url) {
@@ -26,14 +26,18 @@
     <div class='class' id='wrapper'>
       <div class='header'>
         <h1 class='name'>
-          <span class='type'>module</span>
-          KRPC::Gen::AvailableToClassAndInstanceMethodsHandler
+          <span class='type'>class</span>
+          Array
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/krpc/gen_rb.html">lib/krpc/gen.rb</a>
+            <a target="docwin" href="../files/lib/krpc/core_extensions_rb.html">lib/krpc/core_extensions.rb</a>
           </li>
         </ol>
+        <div class='parent'>
+          Superclass:
+          <strong><a target="docwin" href="Object.html">Object</a></strong>
+        </div>
       </div>
       <div id='content'>
         <div id='text'>
@@ -42,7 +46,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-add_methods_available_to_class_and_instance">add_methods_available_to_class_and_instance</a></li>
+              <li><a target="docwin" href="#method-i-extract_kwargs-21">extract_kwargs!</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -50,20 +54,20 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-add_methods_available_to_class_and_instance'>
-                <a name='method-i-add_methods_available_to_class_and_instance'></a>
+              <div class='method public-instance' id='method-method-i-extract_kwargs-21'>
+                <a name='method-i-extract_kwargs-21'></a>
                 <div class='synopsis'>
-                  <span class='name'>add_methods_available_to_class_and_instance</span>
+                  <span class='name'>extract_kwargs!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-add_methods_available_to_class_and_instance-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-extract_kwargs-21-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-add_methods_available_to_class_and_instance-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 96</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_methods_available_to_class_and_instance</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">const_defined?</span> <span class="ruby-constant">AvailableToClassAndInstanceModuleName</span>&#x000A;    <span class="ruby-identifier">extend</span>  <span class="ruby-identifier">const_get</span>(<span class="ruby-constant">AvailableToClassAndInstanceModuleName</span>)&#x000A;    <span class="ruby-identifier">include</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-constant">AvailableToClassAndInstanceModuleName</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-extract_kwargs-21-source'><span class="ruby-comment"># File lib/krpc/core_extensions.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">extract_kwargs!</span>&#x000A;  <span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

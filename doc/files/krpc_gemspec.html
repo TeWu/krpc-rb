@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>krpc.gemspec</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>krpc.gemspec</h1>
+        <div class='paths'>
+          krpc.gemspec
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2015-09-23 20:54:50 +0200</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>lib = File.expand_path(&#39;../lib&#39;, __FILE__) $LOAD_PATH.unshift(lib)
+            unless $LOAD_PATH.include?(lib)</p>
+            
+            <p>Gem::Specification.new do |s|</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">s</span>.<span class="ruby-identifier">name</span>          = <span class="ruby-string">&quot;krpc&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">version</span>       = <span class="ruby-string">&quot;0.1.1.1&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">authors</span>       = [<span class="ruby-string">&quot;Tomasz Więch&quot;</span>]&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">email</span>         = [<span class="ruby-string">&quot;tewu.dev@gmail.com&quot;</span>]&#x000A;&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">summary</span>       = <span class="ruby-string">&quot;Client library for kRPC&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">description</span>   = <span class="ruby-string">&quot;kRPC-rb is a Ruby client library for kRPC, a Kerbal Space Program mod that allows you to control KSP from external scripts running outside of the game.&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">homepage</span>      = <span class="ruby-string">&quot;https://github.com/TeWu/krpc-rb&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">license</span>       = <span class="ruby-string">&quot;GPL-3.0&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">files</span>         = <span class="ruby-value">%x`git ls-files -z`</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;\x0&quot;</span>).<span class="ruby-identifier">reject</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r{^(doc|test|spec|features)/}</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">f</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;.gitignore&quot;</span> }&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">require_paths</span> = [<span class="ruby-string">&quot;lib&quot;</span>]&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">extra_rdoc_files</span> = [<span class="ruby-string">&quot;README.md&quot;</span>]&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">rdoc_options</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;--markup&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;markdown&quot;</span> <span class="ruby-operator">&lt;&lt;</span>&#x000A;                  <span class="ruby-string">&quot;--format&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;hanna&quot;</span> <span class="ruby-operator">&lt;&lt;</span>&#x000A;                  <span class="ruby-string">&quot;--title&quot;</span>  <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;kRPC-rb API Docs&quot;</span> <span class="ruby-operator">&lt;&lt;</span>&#x000A;                  <span class="ruby-string">&quot;--main&quot;</span>   <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;README.md&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">required_ruby_version</span> = <span class="ruby-string">&#39;&gt;= 2.1.0&#39;</span>&#x000A;&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">add_runtime_dependency</span> <span class="ruby-string">&quot;ruby_protobuf&quot;</span>, <span class="ruby-string">&quot;~&gt; 0.4&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">add_runtime_dependency</span> <span class="ruby-string">&quot;colorize&quot;</span>, <span class="ruby-string">&quot;~&gt; 0.7&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">add_runtime_dependency</span> <span class="ruby-string">&quot;nokogiri&quot;</span>, <span class="ruby-string">&quot;~&gt; 1.6&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">add_development_dependency</span> <span class="ruby-string">&quot;bundler&quot;</span>, <span class="ruby-string">&quot;~&gt; 1.10&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">add_development_dependency</span> <span class="ruby-string">&quot;pry&quot;</span>, <span class="ruby-string">&quot;~&gt; 0.10&quot;</span>&#x000A;<span class="ruby-identifier">s</span>.<span class="ruby-identifier">add_development_dependency</span> <span class="ruby-string">&quot;hanna-nouveau&quot;</span>, <span class="ruby-string">&quot;~&gt; 0.4&quot;</span></pre>
+            
+            <p>end</p>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

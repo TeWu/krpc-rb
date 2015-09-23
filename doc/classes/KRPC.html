@@ -70,6 +70,9 @@
             <a target="docwin" href="../files/lib/krpc/service_rb.html">lib/krpc/service.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/krpc/streaming_rb.html">lib/krpc/streaming.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/krpc/types_rb.html">lib/krpc/types.rb</a>
           </li>
           <li>
@@ -101,6 +104,7 @@
               <li><a target="docwin" href="KRPC/ProtobufUtils.html">KRPC::ProtobufUtils</a></li>
               <li><a target="docwin" href="KRPC/REPLTools.html">KRPC::REPLTools</a></li>
               <li><a target="docwin" href="KRPC/Services.html">KRPC::Services</a></li>
+              <li><a target="docwin" href="KRPC/Streaming.html">KRPC::Streaming</a></li>
               <li><a target="docwin" href="KRPC/Types.html">KRPC::Types</a></li>
               <li><a target="docwin" href="KRPC/ArgumentErrorSig.html">KRPC::ArgumentErrorSig</a></li>
               <li><a target="docwin" href="KRPC/ArgumentsNumberErrorSig.html">KRPC::ArgumentsNumberErrorSig</a></li>
@@ -120,7 +124,7 @@
                 <a name='method-c-connect'></a>
                 <div class='synopsis'>
                   <span class='name'>connect</span>
-                  <span class='arguments'>(name = DEFAULT_NAME, host = Connection::DEFAULT_SERVER_HOST, rpc_port = Connection::DEFAULT_SERVER_RPC_PORT, stream_port = Connection::DEFAULT_SERVER_STREAM_PORT, &block)</span>
+                  <span class='arguments'>(name = Client::DEFAULT_NAME, host = Connection::DEFAULT_SERVER_HOST, rpc_port = Connection::DEFAULT_SERVER_RPC_PORT, stream_port = Connection::DEFAULT_SERVER_STREAM_PORT, &block)</span>
                 </div>
                 <div class='description'>
                   
@@ -133,7 +137,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-connect-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-connect-source'><span class="ruby-comment"># File lib/krpc.rb, line 9</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">connect</span>(<span class="ruby-identifier">name</span> = <span class="ruby-constant">DEFAULT_NAME</span>, <span class="ruby-identifier">host</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_HOST</span>, <span class="ruby-identifier">rpc_port</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_RPC_PORT</span>, <span class="ruby-identifier">stream_port</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_STREAM_PORT</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">host</span>, <span class="ruby-identifier">rpc_port</span>, <span class="ruby-identifier">stream_port</span>).<span class="ruby-identifier">connect!</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">begin</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">client</span>) <span class="ruby-keyword">ensure</span> <span class="ruby-identifier">client</span>.<span class="ruby-identifier">close</span> <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">client</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-connect-source'><span class="ruby-comment"># File lib/krpc.rb, line 9</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">connect</span>(<span class="ruby-identifier">name</span> = <span class="ruby-constant">Client</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_NAME</span>, <span class="ruby-identifier">host</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_HOST</span>, <span class="ruby-identifier">rpc_port</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_RPC_PORT</span>, <span class="ruby-identifier">stream_port</span> = <span class="ruby-constant">Connection</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_SERVER_STREAM_PORT</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">host</span>, <span class="ruby-identifier">rpc_port</span>, <span class="ruby-identifier">stream_port</span>).<span class="ruby-identifier">connect!</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">begin</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">client</span>) <span class="ruby-keyword">ensure</span> <span class="ruby-identifier">client</span>.<span class="ruby-identifier">close</span> <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">client</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
