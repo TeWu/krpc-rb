@@ -28,11 +28,11 @@ module KRPC
         end
       end
       
-      def add_rpc_method(cls, method_name, service_name, proc, client, *options)
+      def add_rpc_method(cls, method_name, service_name, proc, cl, *options)
         is_static = options.include? :static
         prepend_self_to_args = options.include? :prepend_self_to_args
         target_module = is_static ? cls.const_get_or_create(AvailableToClassAndInstanceModuleName, Module.new) : cls
-        param_names, param_types, required_params_count, param_default, return_type = parse_procedure(proc, client)
+        param_names, param_types, required_params_count, param_default, return_type = parse_procedure(proc, cl)
         method_name = method_name.underscore
         
         # Define method
@@ -41,7 +41,7 @@ module KRPC
             begin
               kwargs = args.extract_kwargs!
               args = [self] + args if prepend_self_to_args
-              client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, required_params_count, param_default, return_type: return_type)
+              self.client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, required_params_count, param_default, return_type: return_type)
             rescue ArgumentsNumberErrorSig => err
               sig = Doc.docstring_for_method(self, method_name, false)
               if prepend_self_to_args then raise ArgumentsNumberErrorSig.new(err.args_count - 1, (err.valid_params_count_range.min-1)..(err.valid_params_count_range.max-1), sig)
@@ -55,8 +55,8 @@ module KRPC
         unless options.include? :no_stream
           cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
             req_args = prepend_self_to_args ? [this] + args : args
-            request  = client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, required_params_count, param_default)
-            client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
+            request  = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, required_params_count, param_default)
+            this.client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
           end
         end
         # Add docstring info
@@ -74,7 +74,7 @@ module KRPC
         required_params_count = param_required.take_while{|x| x}.size      
         param_default = proc.parameters.zip(param_types).map do |param, type|
           if param.has_field?("default_argument")
-            Decoder.decode(param.default_argument, type, client.type_store)
+            Decoder.decode(param.default_argument, type, client)
           else nil
           end
         end
@@ -108,10 +108,10 @@ module KRPC
       include Doc::SuffixMethods
       include Streaming::StreamConstructors
       
-      attr_reader :remote_oid
+      attr_reader :client, :remote_oid
       
-      def initialize(remote_oid)
-        @remote_oid = remote_oid
+      def initialize(client, remote_oid)
+        @client, @remote_oid = client, remote_oid
       end
       
       alias_method :eql?, :==

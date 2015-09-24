@@ -40,8 +40,9 @@ module KRPC
       @name = name
       @rpc_connection = RPCConncetion.new(name, host, rpc_port)
       @stream_connection = StreamConncetion.new(rpc_connection, host, stream_port)
-      @type_store = Types::TypeStore.new
       @streams_manager = Streaming::StreamsManager.new(self)
+      @type_store = Types::TypeStore.new
+      @services = {}
       @krpc = Services::KRPC.new(self)
       Doc.add_docstring_info(false, self.class, "krpc", return_type: @krpc.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code.</summary></doc>")
     end
@@ -111,12 +112,14 @@ module KRPC
       resp = krpc.get_services
       resp.services.each do |service_msg|
         next if service_msg.name == "KRPC"
-        service = Services.create_service(service_msg, self)
-        method_name = service.class.class_name.underscore
+        service_class = Services.create_service(service_msg, self)
+        method_name = service_class.class_name.underscore
         self.class.instance_eval do
-          define_method method_name do service end
+          define_method method_name do
+            @services[service_class.name] ||= service_class.new(self)
+          end
         end
-        Doc.add_docstring_info(false, self.class, method_name, return_type: service.class, xmldoc: service_msg.documentation)
+        Doc.add_docstring_info(false, self.class, method_name, return_type: service_class, xmldoc: service_msg.documentation)
       end
       self
     end
@@ -142,7 +145,7 @@ module KRPC
       if return_type == nil
         nil
       else
-        Decoder.decode(resp.return_value, return_type, type_store)
+        Decoder.decode(resp.return_value, return_type, self)
       end
     rescue IOError => e
       raise(Exception, "RPC call attempt while not connected to server -- call Client#connect first") if not connected?

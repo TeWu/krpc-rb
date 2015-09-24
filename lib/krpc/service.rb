@@ -61,8 +61,8 @@ module KRPC
         service_classes = mod.constants.map{|c| mod.const_get(c)}.select {|c| c.is_a? Class}
         service_classes.each(&:add_methods_available_to_class_and_instance)
         
-        # Return service class instance
-        service_class.new(client)
+        # Return service class
+        service_class
       end
       
     end

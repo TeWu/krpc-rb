@@ -79,11 +79,10 @@ module KRPC
         return value if value.is_a?(type.ruby_type)
         # A NilClass can be coerced to a ClassType
         return nil if type.is_a?(ClassType) && value == nil
-        # Coerce identical class types from different client connections
+        # Handle service' class instance
         if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) && 
-           type.ruby_type.service_name == value.class.service_name && 
-           type.ruby_type.name == value.class.name
-          return type.ruby_type.new(value.remote_oid)
+           type.ruby_type == value.class
+          return value
         end
         # -- Collection types --
         begin

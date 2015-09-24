@@ -51,7 +51,7 @@ module KRPC
           loop do
             size = connection.recv_varint
             data = connection.recv(size)
-            stream_msg = Decoder.decode(data, stream_message_type, client.type_store)
+            stream_msg = Decoder.decode(data, stream_message_type, client)
             @streams_mutex.synchronize do
               stream_msg.responses.each do |stream_resp|
                 next if not @streams.include? stream_resp.id
@@ -59,7 +59,7 @@ module KRPC
                 if stream_resp.response.has_field?("error")
                   stream.value = RPCError.new(stream_resp.response.error)
                 else
-                  stream.value = Decoder.decode(stream_resp.response.return_value, stream.return_type, client.type_store)
+                  stream.value = Decoder.decode(stream_resp.response.return_value, stream.return_type, client)
                 end
               end
             end
