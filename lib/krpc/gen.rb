@@ -28,11 +28,11 @@ module KRPC
         end
       end
       
-      def add_rpc_method(cls, method_name, service_name, proc, cl, *options)
+      def add_rpc_method(cls, method_name, service_name, proc, *options)
         is_static = options.include? :static
         prepend_self_to_args = options.include? :prepend_self_to_args
         target_module = is_static ? cls.const_get_or_create(AvailableToClassAndInstanceModuleName, Module.new) : cls
-        param_names, param_types, required_params_count, param_default, return_type = parse_procedure(proc, cl)
+        param_names, param_types, required_params_count, param_default, return_type = parse_procedure(proc)
         method_name = method_name.underscore
         
         # Define method
@@ -65,7 +65,7 @@ module KRPC
       
       private #----------------------------------
       
-      def parse_procedure(proc, client)
+      def parse_procedure(proc)
         param_names = proc.parameters.map{|p| p.name.underscore}
         param_types = proc.parameters.map.with_index do |p,i|
           TypeStore.get_parameter_type(i, p.type, proc.attributes)
@@ -74,7 +74,7 @@ module KRPC
         required_params_count = param_required.take_while{|x| x}.size      
         param_default = proc.parameters.zip(param_types).map do |param, type|
           if param.has_field?("default_argument")
-            Decoder.decode(param.default_argument, type, client)
+            Decoder.decode(param.default_argument, type, :clientless)
           else nil
           end
         end
@@ -88,7 +88,7 @@ module KRPC
     
     module RPCMethodGenerator
       def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, xmldoc: "", options: [])
-        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, return_type: return_type, documentation: xmldoc), client, options)
+        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, return_type: return_type, documentation: xmldoc), options)
       end
     end
     

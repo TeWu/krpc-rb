@@ -111,7 +111,7 @@ module KRPC
       resp = krpc.get_services
       resp.services.each do |service_msg|
         next if service_msg.name == "KRPC"
-        service_class = Services.create_service(service_msg, self)
+        service_class = Services.create_service(service_msg)
         method_name = service_class.class_name.underscore
         self.class.instance_eval do
           define_method method_name do
