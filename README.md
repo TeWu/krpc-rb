@@ -13,7 +13,7 @@ Basic usage
 
 ```ruby
 require 'krpc'
-client = KRPC.connect("client name here")
+client = KRPC.connect(name: "client name here")
 vessel = client.space_center.active_vessel
 ctrl = vessel.control
 ctrl.sas = true
@@ -33,7 +33,7 @@ Connecting and disconnecting
 When you are in REPL, you can connect to kRPC server in this way:
 
 ```ruby
-client = KRPC.connect({name for client}, {host}, {rpc_port}, {stream_port})
+client = KRPC.connect(name: {name for the client}, host: {kRPC server host}, rpc_port: {kRPC server rpc port}, stream_port: {kRPC server stream port})
 # use client here...
 client.close
 ```
@@ -42,7 +42,7 @@ All of the `KRPC.connect`'s arguments are optional, so `client = KRPC.connect` m
 Alternatively you can be more explicit (yet still obtain the same result):
 
 ```ruby
-client = KRPC::Client.new({name for client}, {host}, {rpc_port}, {stream_port}).connect!
+client = KRPC::Client.new( {The same argument list as KRPC.connect has} ).connect!
 # use client here...
 client.close
 ```
@@ -107,11 +107,12 @@ Combination of `ls`s and `_doc`s should teach you API in no time (also don't be 
 ...
 KRPC::Services::SpaceCenter::AvailableToClassAndInstance#methods: 
   can_rails_warp_at  clear_target    draw_line               launch_vessel_from_vab  transform_position  transform_velocity
-  clear_drawing      draw_direction  launch_vessel_from_sph  transform_direction     transform_rotation  warp_to           
+  clear_drawing      draw_direction  launch_vessel_from_sph  transform_direction     transform_rotation  warp_to
 KRPC::Services::SpaceCenter#methods: 
   active_vessel   far_available              physics_warp_factor   rails_warp_factor=     target_body=          target_vessel   vessels      warp_rate
   active_vessel=  g                          physics_warp_factor=  remote_tech_available  target_docking_port   target_vessel=  warp_factor
   bodies          maximum_rails_warp_factor  rails_warp_factor     target_body            target_docking_port=  ut              warp_mode
+...
 [33] pry(main)> sc.warp_to_doc;
 SpaceCenter.warp_to(
 	ut :Float, - The universal time to warp to, in seconds.

@@ -98,7 +98,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 82</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">host</span> = <span class="ruby-constant">DEFAULT_SERVER_HOST</span>, <span class="ruby-identifier">port</span> = <span class="ruby-constant">DEFAULT_SERVER_RPC_PORT</span>)&#x000A;  <span class="ruby-keyword">super</span> <span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>&#x000A;  <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">name</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 80</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">host</span> = <span class="ruby-constant">DEFAULT_SERVER_HOST</span>, <span class="ruby-identifier">port</span> = <span class="ruby-constant">DEFAULT_SERVER_RPC_PORT</span>)&#x000A;  <span class="ruby-keyword">super</span> <span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>&#x000A;  <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">name</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -116,7 +116,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-cleanup-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-cleanup-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 95</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">cleanup</span>&#x000A;  <span class="ruby-ivar">@client_id</span> = <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-cleanup-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 93</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">cleanup</span>&#x000A;  <span class="ruby-ivar">@client_id</span> = <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-handshake'>
@@ -133,7 +133,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-handshake-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-handshake-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 88</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">handshake</span>&#x000A;  <span class="ruby-identifier">send</span> <span class="ruby-constant">Encoder</span><span class="ruby-operator">::</span><span class="ruby-constant">RPC_HELLO_MESSAGE</span>&#x000A;  <span class="ruby-identifier">send</span> <span class="ruby-identifier">trim_fill</span>(<span class="ruby-identifier">name</span>, <span class="ruby-constant">Encoder</span><span class="ruby-operator">::</span><span class="ruby-constant">NAME_LENGTH</span>)&#x000A;  <span class="ruby-ivar">@client_id</span> = <span class="ruby-identifier">recv</span> <span class="ruby-constant">Decoder</span><span class="ruby-operator">::</span><span class="ruby-constant">GUID_LENGTH</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-handshake-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 86</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">handshake</span>&#x000A;  <span class="ruby-identifier">send</span> <span class="ruby-constant">Encoder</span><span class="ruby-operator">::</span><span class="ruby-constant">RPC_HELLO_MESSAGE</span>&#x000A;  <span class="ruby-identifier">send</span> <span class="ruby-identifier">trim_fill</span>(<span class="ruby-identifier">name</span>, <span class="ruby-constant">Encoder</span><span class="ruby-operator">::</span><span class="ruby-constant">NAME_LENGTH</span>)&#x000A;  <span class="ruby-ivar">@client_id</span> = <span class="ruby-identifier">recv</span> <span class="ruby-constant">Decoder</span><span class="ruby-operator">::</span><span class="ruby-constant">GUID_LENGTH</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

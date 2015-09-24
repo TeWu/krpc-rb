@@ -19,7 +19,7 @@ module KRPC
   # `client.service_name.procedure_name(parameter, ...)`
   #
   # ### Example:
-  #     client = KRPC::Client.new("my client").connect!
+  #     client = KRPC::Client.new(name: "my client").connect!
   #     ctrl = client.space_center.active_vessel.control
   #     ctrl.activate_next_stage
   #     ctrl.throttle = 1 # Full ahead!
@@ -36,7 +36,7 @@ module KRPC
     
     # Create new Client object, optionally specifying IP address and port numbers on witch kRPC 
     # server is listening and the name for this client (up to 32 bytes of UTF-8 encoded text).
-    def initialize(name = DEFAULT_NAME, host = Connection::DEFAULT_SERVER_HOST, rpc_port = Connection::DEFAULT_SERVER_RPC_PORT, stream_port = Connection::DEFAULT_SERVER_STREAM_PORT)
+    def initialize(name: DEFAULT_NAME, host: Connection::DEFAULT_SERVER_HOST, rpc_port: Connection::DEFAULT_SERVER_RPC_PORT, stream_port: Connection::DEFAULT_SERVER_STREAM_PORT)
       @name = name
       @rpc_connection = RPCConncetion.new(name, host, rpc_port)
       @stream_connection = StreamConncetion.new(rpc_connection, host, stream_port)
@@ -97,7 +97,7 @@ module KRPC
     # To regenerate API create new Client object and call #generate_services_api! on it.
     #
     # ### Example
-    #       client = KRPC::Client.new("my client").connect # Notice that it is #connect being called, not #connect!
+    #       client = KRPC::Client.new(name: "my client").connect # Notice that it is 'Client#connect' being called, not 'Client#connect!'
     #       sc = client.space_center # => Exception (undefined method "space_center")
     #       client.generate_services_api!
     #       sc = client.space_center # => KRPC::Services::SpaceCenter object
