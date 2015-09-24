@@ -52,7 +52,6 @@ module KRPC
     def send(msg) @socket.send(msg,0) end
     def recv(maxlen = 1) @socket.recv(maxlen) end
     
-    
     def recv_varint
       int_val = 0
       shift = 0
@@ -62,7 +61,6 @@ module KRPC
         return int_val if (byte & 0b1000_0000) == 0
         shift += 7
         raise(RuntimeError, "too many bytes when decoding varint") if shift >= 64
-        sleep 0.1
       end
     end
     
