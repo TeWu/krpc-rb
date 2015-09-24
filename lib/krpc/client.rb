@@ -32,7 +32,7 @@ module KRPC
 
     include Doc::SuffixMethods
 
-    attr_reader :name, :rpc_connection, :stream_connection, :type_store, :streams_manager, :krpc
+    attr_reader :name, :rpc_connection, :stream_connection, :streams_manager, :krpc
     
     # Create new Client object, optionally specifying IP address and port numbers on witch kRPC 
     # server is listening and the name for this client (up to 32 bytes of UTF-8 encoded text).
@@ -41,7 +41,6 @@ module KRPC
       @rpc_connection = RPCConncetion.new(name, host, rpc_port)
       @stream_connection = StreamConncetion.new(rpc_connection, host, stream_port)
       @streams_manager = Streaming::StreamsManager.new(self)
-      @type_store = Types::TypeStore.new
       @services = {}
       @krpc = Services::KRPC.new(self)
       Doc.add_docstring_info(false, self.class, "krpc", return_type: @krpc.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code.</summary></doc>")
@@ -116,7 +115,7 @@ module KRPC
         method_name = service_class.class_name.underscore
         self.class.instance_eval do
           define_method method_name do
-            @services[service_class.name] ||= service_class.new(self)
+            @services[service_class.class_name] ||= service_class.new(self)
           end
         end
         Doc.add_docstring_info(false, self.class, method_name, return_type: service_class, xmldoc: service_msg.documentation)
@@ -173,11 +172,11 @@ module KRPC
                   else raise ArgumentErrorSig.new("missing argument for parameter \"#{name}\"") 
                   end
             begin
-              arg = type_store.coerce_to(arg, param_types[i])
+              arg = TypeStore.coerce_to(arg, param_types[i])
             rescue ValueError
               raise ArgumentErrorSig.new("argument for parameter \"#{name}\" must be a #{param_types[i].ruby_type} -- got #{args[i]} of type #{args[i].class}")
             end
-            v = Encoder.encode(arg, param_types[i], type_store)
+            v = Encoder.encode(arg, param_types[i])
             PB::Argument.new(position: i, value: v)
           end
         end.compact

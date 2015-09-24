@@ -46,8 +46,7 @@ module KRPC
         stop_streaming_thread
         @streaming_thread = Thread.new do
           connection = client.stream_connection
-          stream_message_type = client.type_store.as_type("KRPC.StreamMessage")
-          response_type = client.type_store.as_type("KRPC.Response")
+          stream_message_type = TypeStore["KRPC.StreamMessage"]
           loop do
             size = connection.recv_varint
             data = connection.recv(size)

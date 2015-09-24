@@ -5,7 +5,7 @@ require 'krpc/core_extensions'
 module KRPC
   module Gen
     AvailableToClassAndInstanceModuleName = "AvailableToClassAndInstance"
-  
+    
     class << self
       def service_gen_module(service_name) 
         const_get_or_create(service_name, Module.new)
@@ -68,7 +68,7 @@ module KRPC
       def parse_procedure(proc, client)
         param_names = proc.parameters.map{|p| p.name.underscore}
         param_types = proc.parameters.map.with_index do |p,i|
-          client.type_store.get_parameter_type(i, p.type, proc.attributes)
+          TypeStore.get_parameter_type(i, p.type, proc.attributes)
         end
         param_required = proc.parameters.map{|p| not p.has_field?("default_argument")}
         required_params_count = param_required.take_while{|x| x}.size      
@@ -79,7 +79,7 @@ module KRPC
           end
         end
         return_type = if proc.has_field?("return_type")
-          client.type_store.get_return_type(proc.return_type, proc.attributes)
+          TypeStore.get_return_type(proc.return_type, proc.attributes)
         else nil
         end
         [param_names, param_types, required_params_count, param_default, return_type]

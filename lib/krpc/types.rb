@@ -21,92 +21,91 @@ module KRPC
       "bytes"  => String
     }
     PROTOBUF_TO_MESSAGE_TYPE = ProtobufUtils.create_PB_to_PB_message_class_hash("KRPC")
-  
-    class TypeStore
     
-      def initialize
-        @cache = {}
-      end
+    class TypeStore
+      @cache = {}
+      class << self
       
-      def as_type(type_string)
-        return @cache[type_string] if @cache.include? type_string
+        def [](type_string)
+          return @cache[type_string] if @cache.include? type_string
+          
+          type =
+            if PROTOBUF_VALUE_TYPES.include? type_string then ValueType.new(type_string)
+            elsif type_string.start_with? "Class(" || type_string == "Class" then ClassType.new(type_string)
+            elsif type_string.start_with? "Enum("  || type_string == "Enum"  then EnumType.new(type_string)
+            elsif type_string.start_with? "List("  || type_string == "List"  then ListType.new(type_string)
+            elsif type_string.start_with? "Dictionary(" || type_string == "Dictionary" then DictionaryType.new(type_string)
+            elsif type_string.start_with? "Set("   || type_string == "Set"   then SetType.new(type_string)
+            elsif type_string.start_with? "Tuple(" || type_string == "Tuple" then TupleType.new(type_string)
+            else # A message type (eg. type_string = "KRPC.List" or "KRPC.Services")
+              raise(ValueError, "\"#{type_string}\" is not a valid type string") unless /^[A-Za-z0-9_\.]+$/ =~ type_string
+              if PROTOBUF_TO_MESSAGE_TYPE.has_key? type_string
+                MessageType.new(type_string)
+              else
+                raise(ValueError, "\"#{type_string}\" is not a valid type string")
+              end
+            end
+
+          @cache[type_string] = type
+          type      
+        end
         
-        type =
-          if PROTOBUF_VALUE_TYPES.include? type_string then ValueType.new(type_string)
-          elsif type_string.start_with? "Class(" || type_string == "Class" then ClassType.new(type_string)
-          elsif type_string.start_with? "Enum("  || type_string == "Enum"  then EnumType.new(type_string)
-          elsif type_string.start_with? "List("  || type_string == "List"  then ListType.new(type_string, self)
-          elsif type_string.start_with? "Dictionary(" || type_string == "Dictionary" then DictionaryType.new(type_string, self)
-          elsif type_string.start_with? "Set("   || type_string == "Set"   then SetType.new(type_string, self)
-          elsif type_string.start_with? "Tuple(" || type_string == "Tuple" then TupleType.new(type_string, self)
-          else # A message type (eg. type_string = "KRPC.List" or "KRPC.Services")
-            raise(ValueError, "\"#{type_string}\" is not a valid type string") unless /^[A-Za-z0-9_\.]+$/ =~ type_string
-            if PROTOBUF_TO_MESSAGE_TYPE.has_key? type_string
-              MessageType.new(type_string)
-            else
-              raise(ValueError, "\"#{type_string}\" is not a valid type string")
+        def get_parameter_type(pos, type, attrs)
+          type_attrs = Attributes.get_parameter_type_attrs(pos, attrs)
+          type_attrs.each do |ta|
+            begin
+              return self[ta]
+            rescue ValueError
             end
           end
+          self[type]
+        end
 
-        @cache[type_string] = type
-        type      
-      end
-      
-      def get_parameter_type(pos, type, attrs)
-        type_attrs = Attributes.get_parameter_type_attrs(pos, attrs)
-        type_attrs.each do |ta|
+        def get_return_type(type, attrs)
+          type_attrs = Attributes.get_return_type_attrs(attrs)
+          type_attrs.each do |ta|
+            begin
+              return self[ta]
+            rescue ValueError
+            end
+          end
+          self[type]
+        end
+        
+        def coerce_to(value, type)
+          return value if type.is_a?(EnumType) && value.class == Symbol # Enum handling
+          return value if value.is_a?(type.ruby_type)
+          # A NilClass can be coerced to a ClassType
+          return nil if type.is_a?(ClassType) && value == nil
+          # Handle service' class instance
+          if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) && 
+             type.ruby_type == value.class
+            return value
+          end
+          # -- Collection types --
           begin
-            return as_type(ta)
+            # coerce "list" to array
+            if type.is_a?(ListType) && value.respond_to?(:map) && value.respond_to?(:to_a)
+              return type.ruby_type.new(value.map{|x| coerce_to(x, type.value_type) }.to_a)
+            end
+            # coerce "tuple" to array + check elements count
+            if type.is_a?(TupleType) && value.respond_to?(:map) && value.respond_to?(:to_a) && value.respond_to?(:size)
+              raise ValueError if value.size != type.value_types.size
+              return type.ruby_type.new(value.map.with_index{|x,i| coerce_to(x, type.value_types[i]) }.to_a)
+            end
           rescue ValueError
+            raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")
           end
-        end
-        as_type(type)
-      end
-
-      def get_return_type(type, attrs)
-        type_attrs = Attributes.get_return_type_attrs(attrs)
-        type_attrs.each do |ta|
-          begin
-            return as_type(ta)
-          rescue ValueError
+          # Numeric types
+          if type.ruby_type == Float && value.respond_to?(:to_f)
+            return value.to_f
+          elsif type.ruby_type == Integer && value.respond_to?(:to_i)
+            return value.to_i
           end
-        end
-        as_type(type)
-      end
-      
-      def coerce_to(value, type)
-        return value if type.is_a?(EnumType) && value.class == Symbol # Enum handling
-        return value if value.is_a?(type.ruby_type)
-        # A NilClass can be coerced to a ClassType
-        return nil if type.is_a?(ClassType) && value == nil
-        # Handle service' class instance
-        if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) && 
-           type.ruby_type == value.class
-          return value
-        end
-        # -- Collection types --
-        begin
-          # coerce "list" to array
-          if type.is_a?(ListType) && value.respond_to?(:map) && value.respond_to?(:to_a)
-            return type.ruby_type.new(value.map{|x| coerce_to(x, type.value_type) }.to_a)
-          end
-          # coerce "tuple" to array + check elements count
-          if type.is_a?(TupleType) && value.respond_to?(:map) && value.respond_to?(:to_a) && value.respond_to?(:size)
-            raise ValueError if value.size != type.value_types.size
-            return type.ruby_type.new(value.map.with_index{|x,i| coerce_to(x, type.value_types[i]) }.to_a)
-          end
-        rescue ValueError
           raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")
         end
-        # Numeric types
-        if type.ruby_type == Float && value.respond_to?(:to_f)
-          return value.to_f
-        elsif type.ruby_type == Integer && value.respond_to?(:to_i)
-          return value.to_i
-        end
-        raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")
-      end
       
+      end
     end
     
     
@@ -180,25 +179,25 @@ module KRPC
     
     class ListType < TypeBase
       attr_reader :value_type
-      def initialize(type_string, type_store)
+      def initialize(type_string)
         m = /^List\((.+)\)$/.match type_string
         raise(ValueError, "\"#{type_string}\" is not a valid type string for a list type") unless m
-        @value_type = type_store.as_type(m[1])
+        @value_type = TypeStore[m[1]]
         super(type_string, Array)
       end
     end
     
     class DictionaryType < TypeBase
       attr_reader :key_type, :value_type
-      def initialize(type_string, type_store)
+      def initialize(type_string)
         m = /^Dictionary\((.+)\)$/.match type_string
         raise(ValueError, "\"#{type_string}\" is not a valid type string for a dictionary type") unless m
 
         key_string, type   = parse_type_string(m[1])
         value_string, type = parse_type_string(type)
         raise(ValueError, "\"#{type_string}\" is not a valid type string for a dictionary type") if type != nil
-        @key_type   = type_store.as_type(key_string)
-        @value_type = type_store.as_type(value_string)
+        @key_type   = TypeStore[key_string]
+        @value_type = TypeStore[value_string]
 
         super(type_string, Hash)
       end
@@ -206,17 +205,17 @@ module KRPC
     
     class SetType < TypeBase
       attr_reader :value_type
-      def initialize(type_string, type_store)
+      def initialize(type_string)
         m = /^Set\((.+)\)$/.match type_string
         raise(ValueError, "\"#{type_string}\" is not a valid type string for a set type") unless m
-        @value_type = type_store.as_type(m[1])
+        @value_type = TypeStore[m[1]]
         super(type_string, Set)
       end
     end
     
     class TupleType < TypeBase
       attr_reader :value_types
-      def initialize(type_string, type_store)
+      def initialize(type_string)
         m = /^Tuple\((.+)\)$/.match type_string
         raise(ValueError, "\"#{type_string}\" is not a valid type string for a tuple type") unless m
         
@@ -224,7 +223,7 @@ module KRPC
         type = m[1]
         while type != nil
           value_type, type = parse_type_string(type)
-          @value_types << type_store.as_type(value_type)
+          @value_types << TypeStore[value_type]
         end
         
         super(type_string, Array)
@@ -232,5 +231,7 @@ module KRPC
     end
         
   end
+  
+  TypeStore = Types::TypeStore
 end
 
