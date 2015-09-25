@@ -32,7 +32,7 @@ module KRPC
         is_static = options.include? :static
         prepend_self_to_args = options.include? :prepend_self_to_args
         target_module = is_static ? cls.const_get_or_create(AvailableToClassAndInstanceModuleName, Module.new) : cls
-        param_names, param_types, required_params_count, param_default, return_type = parse_procedure(proc)
+        param_names, param_types, param_default, return_type = parse_procedure(proc)
         method_name = method_name.underscore
         
         # Define method
@@ -41,7 +41,7 @@ module KRPC
             begin
               kwargs = args.extract_kwargs!
               args = [self] + args if prepend_self_to_args
-              self.client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, required_params_count, param_default, return_type: return_type)
+              self.client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
             rescue ArgumentsNumberErrorSig => err
               sig = Doc.docstring_for_method(self, method_name, false)
               if prepend_self_to_args then raise ArgumentsNumberErrorSig.new(err.args_count - 1, (err.valid_params_count_range.min-1)..(err.valid_params_count_range.max-1), sig)
@@ -55,7 +55,7 @@ module KRPC
         unless options.include? :no_stream
           cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
             req_args = prepend_self_to_args ? [this] + args : args
-            request  = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, required_params_count, param_default)
+            request  = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, param_default)
             this.client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
           end
         end
@@ -70,8 +70,6 @@ module KRPC
         param_types = proc.parameters.map.with_index do |p,i|
           TypeStore.get_parameter_type(i, p.type, proc.attributes)
         end
-        param_required = proc.parameters.map{|p| not p.has_field?("default_argument")}
-        required_params_count = param_required.take_while{|x| x}.size      
         param_default = proc.parameters.zip(param_types).map do |param, type|
           if param.has_field?("default_argument")
             Decoder.decode(param.default_argument, type, :clientless)
@@ -82,7 +80,7 @@ module KRPC
           TypeStore.get_return_type(proc.return_type, proc.attributes)
         else nil
         end
-        [param_names, param_types, required_params_count, param_default, return_type]
+        [param_names, param_types, param_default, return_type]
       end
     end
     

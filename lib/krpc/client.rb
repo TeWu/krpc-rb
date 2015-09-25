@@ -129,9 +129,9 @@ module KRPC
     end
     
     # Execute an RPC.
-    def rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], required_params_count=0, param_default=[], return_type: nil)
+    def rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
       # Send request
-      req = build_request(service, procedure, args, kwargs, param_names, param_types, required_params_count, param_default)
+      req = build_request(service, procedure, args, kwargs, param_names, param_types, param_default)
       rpc_connection.send Encoder.encode_request(req)
       # Receive response
       resp_length = rpc_connection.recv_varint
@@ -152,9 +152,11 @@ module KRPC
     end
     
     # Build a PB::Request object.
-    def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], required_params_count=0, param_default=[])
+    def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[])
       begin
-        raise(ArgumentError, "param_names and param_types should be equal length\n\tparam_names = #{param_names}\n\tparam_types = #{param_types}") unless param_names.size == param_types.size
+        raise(ArgumentError, "param_names and param_types should be equal length\n\tparam_names = #{param_names}\n\tparam_types = #{param_types}") unless param_names.length == param_types.length
+        raise(ArgumentError, "param_names and param_default should be equal length\n\tparam_names = #{param_names}\n\tparam_default = #{param_default}") unless param_names.length == param_default.length
+        required_params_count = param_default.take_while(&:nil?).count
         raise ArgumentsNumberErrorSig.new(args.count, required_params_count..param_names.count) unless args.count <= param_names.count
         kwargs_remaining = kwargs.count
         
