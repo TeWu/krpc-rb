@@ -71,6 +71,7 @@ module KRPC
     # Close connection to kRPC server. Returns `true` if the connection has closed or `false` if 
     # the client had been already disconnected.
     def close
+      streams_manager.remove_all_streams
       streams_manager.stop_streaming_thread
       stream_connection.close
       rpc_connection.close

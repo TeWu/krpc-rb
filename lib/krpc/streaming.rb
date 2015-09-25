@@ -38,7 +38,13 @@ module KRPC
           @streams.delete stream.id
         end
         stream.value = RuntimeError.new("Stream has been removed")
+        stream.mark_as_inactive
         true
+      end
+
+      # Remove all streams created by this streams manager
+      def remove_all_streams
+        @streams.each {|_,stream| remove_stream(stream)}
       end
       
       # Start streaming thread. It receives stream data, and updates Stream object's `value` attribute.
@@ -90,17 +96,19 @@ module KRPC
         @value
       end
       alias_method :value, :get
-      
+
       # Remove stream. Has alias method `close`.
       def remove
-        result = manager.remove_stream self
-        @active = false
-        result
+        manager.remove_stream self
       end
       alias_method :close, :remove
       
       # Check if stream is active (i.e. not removed).
       def active?; @active end
+
+      # Mark stream as inactive.
+      # WARNING: This method does not remove the stream. To remove the stream call Stream#remove instead.
+      def mark_as_inactive; @active = false end
     end
   
     module StreamConstructors
