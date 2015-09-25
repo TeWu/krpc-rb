@@ -34,29 +34,37 @@ module KRPC
         target_module = is_static ? cls.const_get_or_create(AvailableToClassAndInstanceModuleName, Module.new) : cls
         param_names, param_types, param_default, return_type = parse_procedure(proc)
         method_name = method_name.underscore
-        
+
+        transform_exceptions = Proc.new do |method_owner, &block|
+          begin
+            block.call
+          rescue ArgumentsNumberErrorSig => err
+            sig = Doc.docstring_for_method(method_owner, method_name, false)
+            if prepend_self_to_args then raise ArgumentsNumberErrorSig.new(err.args_count - 1, (err.valid_params_count_range.min-1)..(err.valid_params_count_range.max-1), sig)
+            else raise err.with_signature(sig) end
+          rescue ArgumentErrorSig => err
+            raise err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
+          end
+        end
+
         # Define method
         target_module.instance_eval do
           define_method method_name do |*args|
-            begin
+            transform_exceptions.call(self) do
               kwargs = args.extract_kwargs!
               args = [self] + args if prepend_self_to_args
               self.client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
-            rescue ArgumentsNumberErrorSig => err
-              sig = Doc.docstring_for_method(self, method_name, false)
-              if prepend_self_to_args then raise ArgumentsNumberErrorSig.new(err.args_count - 1, (err.valid_params_count_range.min-1)..(err.valid_params_count_range.max-1), sig)
-              else raise err.with_signature(sig) end
-            rescue ArgumentErrorSig => err
-              raise err.with_signature(Doc.docstring_for_method(self, method_name, false))
             end
           end
         end
         # Add stream-constructing Proc
         unless options.include? :no_stream
           cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
-            req_args = prepend_self_to_args ? [this] + args : args
-            request  = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, param_default)
-            this.client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
+            transform_exceptions.call(this) do
+              req_args = prepend_self_to_args ? [this] + args : args
+              request  = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, param_default)
+              this.client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
+            end
           end
         end
         # Add docstring info
