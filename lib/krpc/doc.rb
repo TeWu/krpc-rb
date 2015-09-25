@@ -4,16 +4,16 @@ require 'colorize'
 
 module KRPC
   module Doc
+    @docstr_infos = {}
+    @procedure_docstr_infos = {}
     class << self
-      @@docstr_infos = {}
-      @@procedure_docstr_infos = {}
       
       def docstring_for_method(method_owner, method_name, is_print_xmldoc_summary = true)
         is_static, class_cls = method_owner.class == Class ? [true, method_owner] : [false, method_owner.class]
         service_module_name, class_name = ruby_class_to_pb_module_class_pair(class_cls)
         key = [service_module_name, is_static, class_name, method_name.to_s].hash
-        if (@@docstr_infos.has_key? key)
-          construct_docstring(*@@docstr_infos[key], true, is_print_xmldoc_summary)
+        if @docstr_infos.has_key? key
+          construct_docstring(*@docstr_infos[key], true, is_print_xmldoc_summary)
         else
           "No docstring for #{class_cls.name}#{calc_separator(is_static)}#{method_name.to_s} method" +
           (method_owner.respond_to?(method_name) ? "" : "\nThere is no such method -- maybe a typo")
@@ -22,8 +22,8 @@ module KRPC
       
       def docstring_for_procedure(service_name, procedure_name, is_print_xmldoc_summary = true)
         key = [service_name, procedure_name].hash
-        if (@@procedure_docstr_infos.has_key? key)
-          construct_docstring(service_name, '.', procedure_name, *@@procedure_docstr_infos[key][3..-1], false, is_print_xmldoc_summary)
+        if @procedure_docstr_infos.has_key? key
+          construct_docstring(service_name, '.', procedure_name, *@procedure_docstr_infos[key][3..-1], false, is_print_xmldoc_summary)
         else
           "No docstring for #{service_name}.#{procedure_name} procedure"
         end
@@ -34,15 +34,15 @@ module KRPC
         key0 = [service_name, procedure_name].hash
         key1 = [service_module_name, false, cls.class_name, method_name].hash
         val = [cls.krpc_name, calc_separator(is_static), method_name, param_names, param_types, param_default, return_type, xmldoc]
-        @@docstr_infos[key1] = @@procedure_docstr_infos[key0] = val
+        @docstr_infos[key1] = @procedure_docstr_infos[key0] = val
         if is_static
           key2 = [service_module_name, true, cls.class_name, method_name].hash
-          @@docstr_infos[key2] = val
+          @docstr_infos[key2] = val
         end
       end
       
       def add_special_docstring_info(key, value)
-        @@docstr_infos[key] = value
+        @docstr_infos[key] = value
       end
       
       private #----------------------------------
@@ -108,16 +108,16 @@ module KRPC
       end
         
       def xmlElements2str(elements, main_color, paramref_color, value_color, error_color = :red)
-        elements.map do |ch|
-          if ch.is_a?(Nokogiri::XML::Text)
-            ch.text.colorize(main_color)
+        elements.map do |elem|
+          if elem.is_a?(Nokogiri::XML::Text)
+            elem.text.colorize(main_color)
           else
             begin
-              case ch.name
-                when "paramref" then ch.attr("name").underscore.colorize(paramref_color)
-                when "a", "math" then ch.text.colorize(main_color)
+              case elem.name
+                when "paramref" then elem.attr("name").underscore.colorize(paramref_color)
+                when "a", "math" then elem.text.colorize(main_color)
                 when "see"
-                  type, _, cref = ch.attr("cref").rpartition(':')
+                  type, _, cref = elem.attr("cref").rpartition(':')
                   cref = cref.split('.')
                   if type == 'T'
                     cref.join("::").colorize(value_color)
@@ -132,13 +132,13 @@ module KRPC
                     end
                   else raise RuntimeException end
                 when "list"
-                  "!n!" + ch.children.map{|ch| "!s! * ".bold + ch.text}.join("!n!").colorize(main_color)
+                  "!n!" + elem.children.map{|ch| "!s! * ".bold + ch.text}.join("!n!").colorize(main_color)
                 when "c"
-                  ch.text.gsub("null","nil").colorize(value_color)
-                else ch.to_s.colorize(error_color)
+                  elem.text.gsub("null","nil").colorize(value_color)
+                else elem.to_s.colorize(error_color)
               end
             rescue RuntimeException => exc
-              ch.to_s.colorize(error_color)
+              elem.to_s.colorize(error_color)
             end
           end
         end.join.gsub("\n"," ").gsub("!n!","\n").squeeze(' ').strip.gsub("!s!"," ")

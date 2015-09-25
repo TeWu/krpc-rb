@@ -74,7 +74,7 @@ module KRPC
 
   ##
   # TCP connection for sending RPC calls and retrieving it's results.
-  class RPCConncetion < Connection
+  class RPCConnection < Connection
     attr_reader :name, :client_id
     
     def initialize(name, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_RPC_PORT)
@@ -97,7 +97,7 @@ module KRPC
 
   ##
   # TCP connection for streaming.
-  class StreamConncetion < Connection
+  class StreamConnection < Connection
     attr_reader :rpc_connection
     
     def initialize(rpc_connection, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_STREAM_PORT)
@@ -116,4 +116,3 @@ module KRPC
   end
   
 end
-

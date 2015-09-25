@@ -76,7 +76,7 @@ module KRPC
           return value if type.is_a?(EnumType) && value.class == Symbol # Enum handling
           return value if value.is_a?(type.ruby_type)
           # A NilClass can be coerced to a ClassType
-          return nil if type.is_a?(ClassType) && value == nil
+          return nil if type.is_a?(ClassType) && value.nil?
           # Handle service' class instance
           if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) && 
              type.ruby_type == value.class
@@ -119,7 +119,7 @@ module KRPC
       protected
       
       def parse_type_string(type)
-        raise ValueError.new if type == nil
+        raise ValueError.new if type.nil?
         result = ""
         level  = 0
         type.each_char do |x|
@@ -195,7 +195,7 @@ module KRPC
 
         key_string, type   = parse_type_string(m[1])
         value_string, type = parse_type_string(type)
-        raise(ValueError, "\"#{type_string}\" is not a valid type string for a dictionary type") if type != nil
+        raise(ValueError, "\"#{type_string}\" is not a valid type string for a dictionary type") unless type.nil?
         @key_type   = TypeStore[key_string]
         @value_type = TypeStore[value_string]
 
@@ -221,7 +221,7 @@ module KRPC
         
         @value_types = []
         type = m[1]
-        while type != nil
+        until type.nil?
           value_type, type = parse_type_string(type)
           @value_types << TypeStore[value_type]
         end
@@ -234,4 +234,3 @@ module KRPC
   
   TypeStore = Types::TypeStore
 end
-

@@ -76,7 +76,7 @@
                 <a name='method-c-new'></a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
-                  <span class='arguments'>(type_string, type_store)</span>
+                  <span class='arguments'>(type_string)</span>
                 </div>
                 <div class='description'>
                   
@@ -85,7 +85,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/krpc/types.rb, line 184</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">type_string</span>, <span class="ruby-identifier">type_store</span>)&#x000A;  <span class="ruby-identifier">m</span> = <span class="ruby-regexp">/^List\((.+)\)$/</span>.<span class="ruby-identifier">match</span> <span class="ruby-identifier">type_string</span>&#x000A;  <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-node">&quot;\&quot;#{type_string}\&quot; is not a valid type string for a list type&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">m</span>&#x000A;  <span class="ruby-ivar">@value_type</span> = <span class="ruby-identifier">type_store</span>.<span class="ruby-identifier">as_type</span>(<span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>])&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">type_string</span>, <span class="ruby-constant">Array</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/krpc/types.rb, line 182</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">type_string</span>)&#x000A;  <span class="ruby-identifier">m</span> = <span class="ruby-regexp">/^List\((.+)\)$/</span>.<span class="ruby-identifier">match</span> <span class="ruby-identifier">type_string</span>&#x000A;  <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ValueError</span>, <span class="ruby-node">&quot;\&quot;#{type_string}\&quot; is not a valid type string for a list type&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">m</span>&#x000A;  <span class="ruby-ivar">@value_type</span> = <span class="ruby-constant">TypeStore</span>[<span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>]]&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">type_string</span>, <span class="ruby-constant">Array</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

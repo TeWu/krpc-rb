@@ -9,4 +9,3 @@ module KRPC
 end
 
 include KRPC::REPLTools
-

@@ -33,13 +33,13 @@ module KRPC
     include Doc::SuffixMethods
 
     attr_reader :name, :rpc_connection, :stream_connection, :streams_manager, :krpc
-    
+
     # Create new Client object, optionally specifying IP address and port numbers on witch kRPC 
     # server is listening and the name for this client (up to 32 bytes of UTF-8 encoded text).
     def initialize(name: DEFAULT_NAME, host: Connection::DEFAULT_SERVER_HOST, rpc_port: Connection::DEFAULT_SERVER_RPC_PORT, stream_port: Connection::DEFAULT_SERVER_STREAM_PORT)
       @name = name
-      @rpc_connection = RPCConncetion.new(name, host, rpc_port)
-      @stream_connection = StreamConncetion.new(rpc_connection, host, stream_port)
+      @rpc_connection = RPCConnection.new(name, host, rpc_port)
+      @stream_connection = StreamConnection.new(rpc_connection, host, stream_port)
       @streams_manager = Streaming::StreamsManager.new(self)
       @services = {}
       @krpc = Services::KRPC.new(self)
@@ -195,4 +195,3 @@ module KRPC
     
   end
 end
-

@@ -33,7 +33,7 @@ module KRPC
       def remove_stream(stream)
         return false unless stream.active?
         @streams_mutex.synchronize do
-          return false if not @streams.include? stream.id
+          return false unless @streams.include? stream.id
           client.krpc.remove_stream stream.id
           @streams.delete stream.id
         end
@@ -53,7 +53,7 @@ module KRPC
             stream_msg = Decoder.decode(data, stream_message_type, client)
             @streams_mutex.synchronize do
               stream_msg.responses.each do |stream_resp|
-                next if not @streams.include? stream_resp.id
+                next unless @streams.include? stream_resp.id
                 stream = @streams[stream_resp.id]
                 if stream_resp.response.has_field?("error")
                   stream.value = RPCError.new(stream_resp.response.error)
@@ -142,4 +142,3 @@ module KRPC
     
   end
 end
-
