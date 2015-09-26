@@ -50,7 +50,7 @@ module KRPC
       
       def encode_request(req)
         data = req.serialize_to_string
-        length =  ProtobufUtils::Encoder.encode_nonnegative_varint(data.length)
+        length = ProtobufUtils::Encoder.encode_nonnegative_varint(data.length)
         length + data
       end
       

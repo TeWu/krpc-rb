@@ -43,7 +43,7 @@ module KRPC
         true
       end
 
-      # Remove all streams created by this streams manager
+      # Remove all streams created by this streams manager.
       def remove_all_streams
         @streams.each {|_,stream| remove_stream(stream)}
       end

@@ -16,7 +16,7 @@ module KRPC
           construct_docstring(*@docstr_infos[key], true, is_print_xmldoc_summary)
         else
           "No docstring for #{class_cls.name}#{calc_separator(is_static)}#{method_name.to_s} method" +
-          (method_owner.respond_to?(method_name) ? "" : "\nThere is no such method -- maybe a typo")
+            (method_owner.respond_to?(method_name) ? "" : "\nThere is no such method -- maybe a typo")
         end
       end
       
@@ -190,4 +190,3 @@ module KRPC
     
   end
 end
-

@@ -49,7 +49,7 @@ module KRPC
     def handshake; end
     def cleanup; end
     
-    def send(msg) @socket.send(msg,0) end
+    def send(msg) @socket.send(msg, 0) end
     def recv(maxlen = 1) @socket.recv(maxlen) end
     
     def recv_varint
@@ -67,7 +67,7 @@ module KRPC
     protected #----------------------------------
     
     def trim_fill(str, len, fill_char = "\x00")
-      str = str.encode("UTF-8")[0,len]
+      str = str.encode("UTF-8")[0, len]
       str + fill_char*(len-str.length)
     end
   end

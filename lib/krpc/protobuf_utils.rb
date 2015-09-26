@@ -4,11 +4,11 @@ module KRPC
   module ProtobufUtils
     class << self
       def create_PB_to_PB_message_class_hash(package)
-       protobuf_module = Kernel.const_get(package.gsub(".","::") + "::PB")
-       msg_classes_names = protobuf_module.constants.select{|c| protobuf_module.const_get(c,false).superclass == ::Protobuf::Message}
-       msg_classes_names.map do |name|
-         [package + "." + name.to_s, protobuf_module.const_get(name,false)]
-       end.to_h
+        protobuf_module = Kernel.const_get(package.gsub(".","::") + "::PB")
+        msg_classes_names = protobuf_module.constants.select{|c| protobuf_module.const_get(c,false).superclass == ::Protobuf::Message}
+        msg_classes_names.map do |name|
+          [package + "." + name.to_s, protobuf_module.const_get(name,false)]
+        end.to_h
       end    
     end
 
@@ -29,7 +29,7 @@ module KRPC
           result = 0
           shift = 0
           loop do
-            byte = bytes[pos].ord  # <-- replace ".ord" with ".bytes[0]" if ".ord" start to cause problems again
+            byte = bytes[pos].ord
             pos += 1
             result |= (byte & 0b0111_1111) << shift
             return [result, pos] if (byte & 0b1000_0000) == 0

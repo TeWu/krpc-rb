@@ -86,9 +86,8 @@ module KRPC
           end
         end
         return_type = if proc.has_field?("return_type")
-          TypeStore.get_return_type(proc.return_type, proc.attributes)
-        else nil
-        end
+                        TypeStore.get_return_type(proc.return_type, proc.attributes)
+                      else nil end
         [param_names, param_types, param_default, return_type]
       end
     end
