@@ -1,6 +1,7 @@
 require 'krpc/doc'
 require 'krpc/streaming'
 require 'krpc/core_extensions'
+require 'colorize'
 
 module KRPC
   module Gen
@@ -116,6 +117,10 @@ module KRPC
       
       attr_reader :client, :remote_oid
       
+      def self.krpc_name
+        name[11..-1]
+      end
+      
       def initialize(client, remote_oid)
         @client, @remote_oid = client, remote_oid
       end
@@ -128,8 +133,12 @@ module KRPC
         remote_oid.hash
       end
       
-      def self.krpc_name
-        name[11..-1]
+      def to_s
+        "#<#{self.class} @remote_oid=#{remote_oid}>"
+      end
+      
+      def inspect
+        "#<#{self.class} ".green + "@remote_oid" + "=".green + remote_oid.to_s.bold.blue + ">".green
       end
     end
     

@@ -1,4 +1,5 @@
 require 'thread'
+require 'colorize'
 
 module KRPC
   module Streaming
@@ -109,6 +110,29 @@ module KRPC
       # Mark stream as inactive.
       # WARNING: This method does not remove the stream. To remove the stream call Stream#remove instead.
       def mark_as_inactive; @active = false end
+      
+      def to_s
+        inspect.gsub(/\n|\t/," ").squeeze(" ").uncolorize
+      end
+      
+      def inspect
+        def coderay(x)
+          require 'coderay'
+          if x.is_a?(Array) then "[" + x.map{|e| e.is_a?(Gen::ClassBase) ? e.inspect : coderay(e.inspect)}.join(", ") + "]"
+          elsif x.is_a?(Hash) then "{" + x.map{|k,v| coderay(k.inspect) + "=>" + (v.is_a?(Gen::ClassBase) ? v.inspect : coderay(v.inspect))}.join(", ") + "}"
+          else CodeRay.scan(x, :ruby).term end
+        rescue Exception
+         x.inspect
+        end
+        "#<#{self.class}".green +
+            " @id" + "=".green + id.to_s.bold.blue +
+            " @active" + "=".green + @active.to_s.bold.light_cyan +
+            "\n\t@method" + "=".green + method.inspect.green +
+            (args.empty? ? "" : "\n\t@args" + "=".green + coderay(args)) +
+            (kwargs.empty? ? "" : "\n\t@kwargs" + "=".green + coderay(kwargs)) +
+            "\n\treturn_ruby_type" + "=".green + coderay(return_type.ruby_type) +
+            ">".green
+      end
     end
   
     module StreamConstructors
