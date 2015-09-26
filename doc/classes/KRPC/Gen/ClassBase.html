@@ -57,7 +57,9 @@
               <li><a target="docwin" href="#method-i-3D-3D">==</a></li>
               <li><a target="docwin" href="#attribute-i-client">client</a></li>
               <li><a target="docwin" href="#method-i-hash">hash</a></li>
+              <li><a target="docwin" href="#method-i-inspect">inspect</a></li>
               <li><a target="docwin" href="#attribute-i-remote_oid">remote_oid</a></li>
+              <li><a target="docwin" href="#method-i-to_s">to_s</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -118,7 +120,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-krpc_name-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-krpc_name-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 125</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">krpc_name</span>&#x000A;  <span class="ruby-identifier">name</span>[<span class="ruby-value">11</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-krpc_name-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 119</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">krpc_name</span>&#x000A;  <span class="ruby-identifier">name</span>[<span class="ruby-value">11</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-new'>
@@ -134,7 +136,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 113</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">client</span>, <span class="ruby-identifier">remote_oid</span>)&#x000A;  <span class="ruby-ivar">@client</span>, <span class="ruby-ivar">@remote_oid</span> = <span class="ruby-identifier">client</span>, <span class="ruby-identifier">remote_oid</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 123</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">client</span>, <span class="ruby-identifier">remote_oid</span>)&#x000A;  <span class="ruby-ivar">@client</span>, <span class="ruby-ivar">@remote_oid</span> = <span class="ruby-identifier">client</span>, <span class="ruby-identifier">remote_oid</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -151,7 +153,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-3D-3D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-3D-3D-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 118</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">==</span>(<span class="ruby-identifier">other</span>)&#x000A;  <span class="ruby-identifier">other</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">remote_oid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">remote_oid</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-3D-3D-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 128</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">==</span>(<span class="ruby-identifier">other</span>)&#x000A;  <span class="ruby-identifier">other</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">remote_oid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">remote_oid</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-hash'>
@@ -167,7 +169,39 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-hash-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-hash-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 121</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">hash</span>&#x000A;  <span class="ruby-identifier">remote_oid</span>.<span class="ruby-identifier">hash</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-hash-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 131</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">hash</span>&#x000A;  <span class="ruby-identifier">remote_oid</span>.<span class="ruby-identifier">hash</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-inspect'>
+                <a name='method-i-inspect'></a>
+                <div class='synopsis'>
+                  <span class='name'>inspect</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inspect-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 139</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#&lt;#{self.class} &quot;</span>.<span class="ruby-identifier">green</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;@remote_oid&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;=&quot;</span>.<span class="ruby-identifier">green</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">remote_oid</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">bold</span>.<span class="ruby-identifier">blue</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;&gt;&quot;</span>.<span class="ruby-identifier">green</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-to_s'>
+                <a name='method-i-to_s'></a>
+                <div class='synopsis'>
+                  <span class='name'>to_s</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-to_s-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/krpc/gen.rb, line 135</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-node">&quot;#&lt;#{self.class} @remote_oid=#{remote_oid}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -277,7 +277,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-send-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-send-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 52</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>) <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>,<span class="ruby-value">0</span>) <span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-send-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 52</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>) <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-value">0</span>) <span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Protected Instance methods</h2>
@@ -294,7 +294,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-trim_fill-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-trim_fill-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 69</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">trim_fill</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">len</span>, <span class="ruby-identifier">fill_char</span> = <span class="ruby-string">&quot;\x00&quot;</span>)&#x000A;  <span class="ruby-identifier">str</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-string">&quot;UTF-8&quot;</span>)[<span class="ruby-value">0</span>,<span class="ruby-identifier">len</span>]&#x000A;  <span class="ruby-identifier">str</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">fill_char</span><span class="ruby-operator">*</span>(<span class="ruby-identifier">len</span><span class="ruby-operator">-</span><span class="ruby-identifier">str</span>.<span class="ruby-identifier">length</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-trim_fill-source'><span class="ruby-comment"># File lib/krpc/connection.rb, line 69</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">trim_fill</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">len</span>, <span class="ruby-identifier">fill_char</span> = <span class="ruby-string">&quot;\x00&quot;</span>)&#x000A;  <span class="ruby-identifier">str</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-string">&quot;UTF-8&quot;</span>)[<span class="ruby-value">0</span>, <span class="ruby-identifier">len</span>]&#x000A;  <span class="ruby-identifier">str</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">fill_char</span><span class="ruby-operator">*</span>(<span class="ruby-identifier">len</span><span class="ruby-operator">-</span><span class="ruby-identifier">str</span>.<span class="ruby-identifier">length</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
