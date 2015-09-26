@@ -3,6 +3,8 @@ kRPC-rb [![Gem Version](https://badge.fury.io/rb/krpc.svg)](http://badge.fury.io
 
 kRPC-rb is a Ruby client library for [kRPC](http://forum.kerbalspaceprogram.com/threads/69313), a Kerbal Space Program mod that allows you to control KSP from external scripts running outside of the game.
 
+![kRPC-rb image](http://drive.google.com/uc?export=view&id=0B2PFP23spNJwXzFCbmR0eDF5TVE "This is kRPC-rb!")
+
 Installation
 -------
 
@@ -99,29 +101,9 @@ SpaceCenter.transform_position(
 I recommend ending the line with `;` to suppress printing return value (the `=> nil` line at the end).
 If you want doc for method whose name ends with a `=` sign, you can put `_doc` before the `=`. Alternatively use `Object#send`, like in: `client.space_center.send "active_vessel=_doc"`.
 
-Combination of `ls`s and `_doc`s should teach you API in no time (also don't be surprised if you'll have a lot of fun with it too :))
+Combination of `ls`s and `_doc`s should teach you API in no time (also don't be surprised if you have a lot of fun with it too :))
 
-```ruby
-[31] pry(main)> sc = client.space_center;
-[32] pry(main)> ls sc
-...
-KRPC::Services::SpaceCenter::AvailableToClassAndInstance#methods: 
-  can_rails_warp_at  clear_target    draw_line               launch_vessel_from_vab  transform_position  transform_velocity
-  clear_drawing      draw_direction  launch_vessel_from_sph  transform_direction     transform_rotation  warp_to
-KRPC::Services::SpaceCenter#methods: 
-  active_vessel   far_available              physics_warp_factor   rails_warp_factor=     target_body=          target_vessel   vessels      warp_rate
-  active_vessel=  g                          physics_warp_factor=  remote_tech_available  target_docking_port   target_vessel=  warp_factor
-  bodies          maximum_rails_warp_factor  rails_warp_factor     target_body            target_docking_port=  ut              warp_mode
-...
-[33] pry(main)> sc.warp_to_doc;
-SpaceCenter.warp_to(
-	ut :Float, - The universal time to warp to, in seconds.
-	max_rails_rate :Float = 100000.0, - The maximum warp rate in regular "on-rails" time warp.
-	max_physics_rate :Float = 2.0 - The maximum warp rate in physical time warp.
-) :nil - When the time warp is complete.
-
- Uses time acceleration to warp forward to a time in the future, specified by universal time ut. This call blocks until the desired time is reached. Uses regular "on-rails" or physical time warp as appropriate. For example, physical time warp is used when the active vessel is traveling through an atmosphere. When using regular "on-rails" time warp, the warp rate is limited by max_rails_rate, and when using physical time warp, the warp rate is limited by max_physics_rate.
-```
+![kRPC-rb in-REPL documentation example](http://drive.google.com/uc?export=view&id=0B2PFP23spNJwRWNIN3c2SWlpd0E "kRPC-rb in-REPL documentation example")
 
 Streaming
 -------
