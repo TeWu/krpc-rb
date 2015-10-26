@@ -126,7 +126,7 @@ module KRPC
     
     # Returns `true` if services API has been already generated, `false` otherwise.
     def services_api_generated?
-      respond_to? :space_center
+      respond_to? :space_center or respond_to? :test_service
     end
     
     # Execute an RPC.

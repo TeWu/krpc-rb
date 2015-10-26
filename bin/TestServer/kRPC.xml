@@ -1,0 +1,2208 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>kRPC</name>
+    </assembly>
+    <members>
+        <member name="T:KRPC.CompatibilityChecker">
+                 * This utility displays a warning with a list of mods that determine themselves
+                 * to be incompatible with the current running version of Kerbal Space Program.
+                 *
+                 * See this forum thread for details:
+                 * http://forum.kerbalspaceprogram.com/threads/65395-Voluntarily-Locking-Plugins-to-a-Particular-KSP-Version</member>
+        <member name="T:KRPC.Continuations.Continuation`1">
+            <summary>
+            A continuation that returns a result of type T
+            </summary></member>
+        <member name="M:KRPC.Continuations.Continuation`1.Run">
+            <summary>
+            Run the continuation and return the result.
+            </summary></member>
+        <member name="M:KRPC.Continuations.Continuation`1.RunUntyped">
+            <summary>
+            Run the continuation and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.Continuation">
+            <summary>
+            A continuation that does not return a value
+            </summary></member>
+        <member name="M:KRPC.Continuations.Continuation.Run">
+            <summary>
+            Run the continuation and return the result.
+            </summary></member>
+        <member name="M:KRPC.Continuations.Continuation.RunUntyped">
+            <summary>
+            Run the continuation and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.IContinuation">
+            <summary>
+            A continuation
+            </summary></member>
+        <member name="M:KRPC.Continuations.IContinuation.RunUntyped">
+            <summary>
+            Run the continuation and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`1">
+            <summary>
+            A continuation wrapping a function that takes 0 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`1.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`1.#ctor(KRPC.Continuations.ParameterizedContinuation{`0}.Fn)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`1.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid">
+            <summary>
+            A continuation wrapping a function that takes 0 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid.#ctor(KRPC.Continuations.ParameterizedContinuationVoid.Fn)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`2">
+            <summary>
+            A continuation wrapping a function that takes 1 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`2.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`2.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1}.Fn,`1)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`2.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`1">
+            <summary>
+            A continuation wrapping a function that takes 1 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`1.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`1.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0}.Fn,`0)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`1.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`3">
+            <summary>
+            A continuation wrapping a function that takes 2 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`3.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`3.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2}.Fn,`1,`2)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`3.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`2">
+            <summary>
+            A continuation wrapping a function that takes 2 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`2.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`2.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1}.Fn,`0,`1)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`2.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`4">
+            <summary>
+            A continuation wrapping a function that takes 3 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`4.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`4.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3}.Fn,`1,`2,`3)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`4.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`3">
+            <summary>
+            A continuation wrapping a function that takes 3 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`3.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`3.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2}.Fn,`0,`1,`2)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`3.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`5">
+            <summary>
+            A continuation wrapping a function that takes 4 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`5.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`5.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3,`4}.Fn,`1,`2,`3,`4)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`5.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`4">
+            <summary>
+            A continuation wrapping a function that takes 4 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`4.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`4.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2,`3}.Fn,`0,`1,`2,`3)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`4.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`6">
+            <summary>
+            A continuation wrapping a function that takes 5 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`6.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`6.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3,`4,`5}.Fn,`1,`2,`3,`4,`5)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`6.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`5">
+            <summary>
+            A continuation wrapping a function that takes 5 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`5.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`5.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2,`3,`4}.Fn,`0,`1,`2,`3,`4)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`5.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`7">
+            <summary>
+            A continuation wrapping a function that takes 6 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`7.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`7.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3,`4,`5,`6}.Fn,`1,`2,`3,`4,`5,`6)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`7.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`6">
+            <summary>
+            A continuation wrapping a function that takes 6 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`6.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`6.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2,`3,`4,`5}.Fn,`0,`1,`2,`3,`4,`5)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`6.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`8">
+            <summary>
+            A continuation wrapping a function that takes 7 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`8.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`8.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3,`4,`5,`6,`7}.Fn,`1,`2,`3,`4,`5,`6,`7)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`8.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`7">
+            <summary>
+            A continuation wrapping a function that takes 7 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`7.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`7.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2,`3,`4,`5,`6}.Fn,`0,`1,`2,`3,`4,`5,`6)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`7.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`9">
+            <summary>
+            A continuation wrapping a function that takes 8 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`9.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`9.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3,`4,`5,`6,`7,`8}.Fn,`1,`2,`3,`4,`5,`6,`7,`8)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`9.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`8">
+            <summary>
+            A continuation wrapping a function that takes 8 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`8.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`8.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2,`3,`4,`5,`6,`7}.Fn,`0,`1,`2,`3,`4,`5,`6,`7)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`8.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`10">
+            <summary>
+            A continuation wrapping a function that takes 9 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`10.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`10.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9}.Fn,`1,`2,`3,`4,`5,`6,`7,`8,`9)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`10.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`9">
+            <summary>
+            A continuation wrapping a function that takes 9 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`9.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`9.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2,`3,`4,`5,`6,`7,`8}.Fn,`0,`1,`2,`3,`4,`5,`6,`7,`8)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`9.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`11">
+            <summary>
+            A continuation wrapping a function that takes 10 arguments and returns a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuation`11.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`11.#ctor(KRPC.Continuations.ParameterizedContinuation{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9,`10}.Fn,`1,`2,`3,`4,`5,`6,`7,`8,`9,`10)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuation`11.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments, and return the result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`10">
+            <summary>
+            A continuation wrapping a function that takes 10 arguments, but does not return a result.
+            </summary></member>
+        <member name="T:KRPC.Continuations.ParameterizedContinuationVoid`10.Fn">
+            <summary>
+            Delegate used to invoke the continuation.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`10.#ctor(KRPC.Continuations.ParameterizedContinuationVoid{`0,`1,`2,`3,`4,`5,`6,`7,`8,`9}.Fn,`0,`1,`2,`3,`4,`5,`6,`7,`8,`9)">
+            <summary>
+            Create a continuation from a delegate and its arguments.
+            </summary></member>
+        <member name="M:KRPC.Continuations.ParameterizedContinuationVoid`10.Run">
+            <summary>
+            Invoke the continuation delegate with the stored arguments.
+            </summary></member>
+        <member name="T:KRPC.Continuations.YieldException">
+            <summary>
+            Thrown by a continuation to indicate that there is more work to do later,
+            represented by the new continuation in the exception.
+            </summary></member>
+        <member name="P:KRPC.Continuations.YieldException.Continuation">
+            <summary>
+            The continuation to run to continue the work.
+            </summary></member>
+        <member name="M:KRPC.Continuations.YieldException.#ctor(KRPC.Continuations.IContinuation)">
+            <summary>
+            Create a yield exception, with a continuation
+            representing the work to do later.
+            </summary></member>
+        <member name="T:KRPC.KRPCAddon">
+            <summary>
+            Main KRPC addon. Contains the server instance and UI.
+            </summary></member>
+        <member name="M:KRPC.KRPCAddon.Finalize">
+            <summary>
+            Destructor. Stops the server if running.
+            </summary></member>
+        <member name="M:KRPC.KRPCAddon.Awake">
+            <summary>
+            Wake the addon. Creates the server instance and UI.
+            </summary></member>
+        <member name="M:KRPC.KRPCAddon.OnDestroy">
+            <summary>
+            Destroy the UI.
+            </summary></member>
+        <member name="M:KRPC.KRPCAddon.FixedUpdate">
+            <summary>
+            Trigger server update
+            </summary></member>
+        <member name="T:KRPC.KRPCServer">
+            <summary>
+            The kRPC server
+            </summary></member>
+        <member name="E:KRPC.KRPCServer.OnStarted">
+            <summary>
+            Event triggered when the server starts
+            </summary></member>
+        <member name="E:KRPC.KRPCServer.OnStopped">
+            <summary>
+            Event triggered when the server stops
+            </summary></member>
+        <member name="E:KRPC.KRPCServer.OnClientRequestingConnection">
+            <summary>
+            Event triggered when a client is requesting a connection
+            </summary></member>
+        <member name="E:KRPC.KRPCServer.OnClientConnected">
+            <summary>
+            Event triggered when a client has connected
+            </summary></member>
+        <member name="E:KRPC.KRPCServer.OnClientActivity">
+            <summary>
+            Event triggered when a client performs some activity
+            </summary></member>
+        <member name="E:KRPC.KRPCServer.OnClientDisconnected">
+            <summary>
+            Event triggered when a client has disconnected
+            </summary></member>
+        <member name="T:KRPC.KRPCServer.Context">
+            <summary>
+            Stores the context in which a continuation is executed.
+            For example, used by a continuation to find out which client made the request.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.Context.Server">
+            <summary>
+            The server instance
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.Context.RPCClient">
+            <summary>
+            The current client
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.Context.GameScene">
+            <summary>
+            The current game scene
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.Start">
+            <summary>
+            Start the server
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.Stop">
+            <summary>
+            Stop the server
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.Address">
+            <summary>
+            Get/set the servers listen address
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.RPCPort">
+            <summary>
+            Get/set the RPC port
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.StreamPort">
+            <summary>
+            Get/set the Stream port
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.OneRPCPerUpdate">
+            <summary>
+            Only execute one RPC for each client per update.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.MaxTimePerUpdate">
+            <summary>
+            Get/set the maximum number of microseconds to spend in a call to FixedUpdate
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.AdaptiveRateControl">
+            <summary>
+            Get/set whether MaxTimePerUpdate should be adjusted to achieve a target framerate.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.BlockingRecv">
+            <summary>
+            Get/set whether FixedUpdate should block for RecvTimeout microseconds to receive RPCs.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.RecvTimeout">
+            <summary>
+            Get/set the timeout for blocking for RPCs, in microseconds.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.Running">
+            <summary>
+            Returns true if the server is running
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.Clients">
+            <summary>
+            Returns a list of clients the server knows about. Note that they might
+            not be connected to the server.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.BytesRead">
+            <summary>
+            Get the total number of bytes read from the network.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.BytesWritten">
+            <summary>
+            Get the total number of bytes written to the network.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.BytesReadRate">
+            <summary>
+            Get the total number of bytes read from the network.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.BytesWrittenRate">
+            <summary>
+            Get the total number of bytes written to the network.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.RPCsExecuted">
+            <summary>
+            Total number of RPCs executed.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.RPCRate">
+            <summary>
+            Number of RPCs processed per second.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.TimePerRPCUpdate">
+            <summary>
+            Time taken by the update loop per update, in seconds.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.PollTimePerRPCUpdate">
+            <summary>
+            Time taken polling for new RPCs per update, in seconds.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.ExecTimePerRPCUpdate">
+            <summary>
+            Time taken polling executing RPCs per update, in seconds.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.StreamRPCs">
+            <summary>
+            Number of currently active streaming RPCs.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.StreamRPCsExecuted">
+            <summary>
+            Total number of streaming RPCs executed.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.StreamRPCRate">
+            <summary>
+            Number of streaming RPCs processed per second.
+            </summary></member>
+        <member name="P:KRPC.KRPCServer.TimePerStreamUpdate">
+            <summary>
+            Time taken by the stream update loop, in seconds.
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.Update">
+            <summary>
+            Update the server
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.RPCServerUpdate">
+            <summary>
+            Update the RPC server, called once every FixedUpdate.
+            This method receives and executes RPCs, for up to MaxTimePerUpdate microseconds.
+            RPCs are delayed to the next update if this time expires. If AdaptiveRateControl
+            is true, MaxTimePerUpdate will be automatically adjusted to achieve a target framerate.
+            If NonBlockingUpdate is false, this call will block waiting for new RPCs for up to
+            MaxPollTimePerUpdate microseconds. If NonBlockingUpdate is true, a single non-blocking call
+            will be made to check for new RPCs.
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.StreamServerUpdate">
+            <summary>
+            Update the Stream server. Executes all streaming RPCs and sends the results to clients.
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.AddStream(KRPC.Server.IClient,KRPC.Schema.KRPC.Request)">
+            <summary>
+            Add a stream to the server
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.RemoveStream(KRPC.Server.IClient,System.UInt32)">
+            <summary>
+            Remove a stream from the server
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.PollRequests(System.Collections.Generic.IEnumerable{KRPC.Service.RequestContinuation})">
+            <summary>
+            Poll connected clients for new requests.
+            Adds a continuation to the queue for any client with a new request,
+            if a continuation is not already being processed for the client.
+            </summary></member>
+        <member name="M:KRPC.KRPCServer.ExecuteContinuation(KRPC.Service.RequestContinuation)">
+            <summary>
+            Execute the continuation and send a response to the client,
+            or throw a YieldException if the continuation is not complete.
+            </summary></member>
+        <member name="T:KRPC.Server.ClientActivityArgs">
+            <summary>
+            Arguments passed to a client activity event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientActivityArgs.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="T:KRPC.Server.ClientActivityArgs`2">
+            <summary>
+            Arguments passed to a client activity event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientActivityArgs`2.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="T:KRPC.Server.ClientConnectedArgs">
+            <summary>
+            Arguments passed to a client connected event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientConnectedArgs.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="T:KRPC.Server.ClientConnectedArgs`2">
+            <summary>
+            Arguments passed to a client connected event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientConnectedArgs`2.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="T:KRPC.Server.ClientConnectionRequest">
+            <summary>
+            Used by a client requesting connection event to determine
+            if the request should be allowed or denied.
+            </summary></member>
+        <member name="P:KRPC.Server.ClientConnectionRequest.ShouldAllow">
+            <summary>
+            Should the connection be allowed?
+            </summary></member>
+        <member name="P:KRPC.Server.ClientConnectionRequest.ShouldDeny">
+            <summary>
+            Should the connection be denied?
+            </summary></member>
+        <member name="P:KRPC.Server.ClientConnectionRequest.StillPending">
+            <summary>
+            Is a decision still pending?
+            </summary></member>
+        <member name="M:KRPC.Server.ClientConnectionRequest.Allow">
+            <summary>
+            Allow the connection
+            </summary></member>
+        <member name="M:KRPC.Server.ClientConnectionRequest.Deny">
+            <summary>
+            Deny the connection
+            </summary></member>
+        <member name="T:KRPC.Server.ClientDisconnectedArgs">
+            <summary>
+            Arguments passed to a client disconnected event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientDisconnectedArgs.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="T:KRPC.Server.ClientDisconnectedArgs`2">
+            <summary>
+            Arguments passed to a client disconnected event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientDisconnectedArgs`2.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="T:KRPC.Server.ClientRequestingConnectionArgs">
+            <summary>
+            Arguments passed to a client requesting connection event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientRequestingConnectionArgs.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="P:KRPC.Server.ClientRequestingConnectionArgs.Request">
+            <summary>
+            The request
+            </summary></member>
+        <member name="T:KRPC.Server.ClientRequestingConnectionArgs`2">
+            <summary>
+            Arguments passed to a client requesting connection event
+            </summary></member>
+        <member name="P:KRPC.Server.ClientRequestingConnectionArgs`2.Client">
+            <summary>
+            The client
+            </summary></member>
+        <member name="P:KRPC.Server.ClientRequestingConnectionArgs`2.Request">
+            <summary>
+            The request
+            </summary></member>
+        <member name="T:KRPC.Server.IClient">
+            <summary>
+            Non-generic client interface.
+            </summary></member>
+        <member name="P:KRPC.Server.IClient.Name">
+            <summary>
+            A string identifying the client. Should be human readable.
+            </summary></member>
+        <member name="P:KRPC.Server.IClient.Guid">
+            <summary>
+            A the globally unique identifier for the client.
+            </summary></member>
+        <member name="P:KRPC.Server.IClient.Address">
+            <summary>
+            The address of the client. Depends on the underlying communication method.
+            </summary>
+            <remarks>For example, could be an IP address when client
+            communication is over a network.</remarks></member>
+        <member name="P:KRPC.Server.IClient.Connected">
+            <summary>
+            Returns true if the client is actively connected to the server.
+            </summary></member>
+        <member name="M:KRPC.Server.IClient.Close">
+            <summary>
+            Close the connection to the client and free the connections resources.
+            </summary></member>
+        <member name="T:KRPC.Server.IClient`2">
+            <summary>
+            Generic client interface.
+            </summary></member>
+        <member name="P:KRPC.Server.IClient`2.Stream">
+            <summary>
+            A stream for communicating with the client.
+            </summary></member>
+        <member name="T:KRPC.Server.IServer">
+            <summary>
+            A non-generic server.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer.Start">
+            <summary>
+            Start the server.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer.Stop">
+            <summary>
+            Stop the server.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer.Update">
+            <summary>
+            Update the server. Call this regularly to ensure timely handling
+            of new client connections and other functionality.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer.Running">
+            <summary>
+            Returns true if the server is running and accepting client connections.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer.Clients">
+            <summary>
+            Clients that are connected to the server.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer.BytesRead">
+            <summary>
+            The total number of bytes read by the server.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer.BytesWritten">
+            <summary>
+            The total number of bytes written by the server.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer.ClearStats">
+            <summary>
+            Clear the bytes read and bytes written counts.
+            </summary></member>
+        <member name="T:KRPC.Server.IServer`2">
+            <summary>
+            A generic server, that receives values of type TIn from clients and
+            sends values of type TOut to them.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer`2.Start">
+            <summary>
+            Start the server.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer`2.Stop">
+            <summary>
+            Stop the server.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer`2.Update">
+            <summary>
+            Update the server. Call this regularly to ensure timely handling
+            of new client connections and other functionality.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer`2.Running">
+            <summary>
+            Returns true if the server is running and accepting client connections.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer`2.Clients">
+            <summary>
+            Clients that are connected to the server.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer`2.BytesRead">
+            <summary>
+            Gets the total number of bytes read from client streams.
+            </summary></member>
+        <member name="P:KRPC.Server.IServer`2.BytesWritten">
+            <summary>
+            Gets the total number of bytes written to client streams.
+            </summary></member>
+        <member name="M:KRPC.Server.IServer`2.ClearStats">
+            <summary>
+            Clear the bytes read and bytes written counts.
+            </summary></member>
+        <member name="T:KRPC.Server.IStream">
+            <summary>
+            A non-generic stream.
+            </summary></member>
+        <member name="P:KRPC.Server.IStream.DataAvailable">
+            <summary>
+            Returns true if the stream contains data to read.
+            </summary></member>
+        <member name="M:KRPC.Server.IStream.Close">
+            <summary>
+            Close the stream and free its resources.
+            </summary></member>
+        <member name="P:KRPC.Server.IStream.BytesRead">
+            <summary>
+            Gets the total number of bytes read from the stream.
+            </summary></member>
+        <member name="P:KRPC.Server.IStream.BytesWritten">
+            <summary>
+            Gets the total number of bytes written to the stream.
+            </summary></member>
+        <member name="M:KRPC.Server.IStream.ClearStats">
+            <summary>
+            Clear the bytes read and bytes written counts.
+            </summary></member>
+        <member name="T:KRPC.Server.IStream`2">
+            <summary>
+            A generic stream, from which values of type In can be read and values of type Out can be written.
+            </summary></member>
+        <member name="M:KRPC.Server.IStream`2.Read">
+            <summary>
+            Read a single value from the stream.
+            </summary></member>
+        <member name="M:KRPC.Server.IStream`2.Read(`0[],System.Int32)">
+            <summary>
+            Read multiple values from the stream, into buffer starting at offset
+            and up to the end of the buffer.
+            </summary></member>
+        <member name="M:KRPC.Server.IStream`2.Read(`0[],System.Int32,System.Int32)">
+            <summary>
+            Read multiple values from the stream, into buffer starting at offset
+            and up to the end of the buffer or size items, whichever comes first.
+            </summary></member>
+        <member name="M:KRPC.Server.IStream`2.Write(`1)">
+            <summary>
+            Write a value to the stream.
+            </summary></member>
+        <member name="M:KRPC.Server.IStream`2.Write(`1[])">
+            <summary>
+            Write multiple values to the stream.
+            </summary></member>
+        <member name="M:KRPC.Server.Net.NetworkInformation.GetLocalIPAddresses">
+            <summary>
+            Returns the IPv4 address of all local network interfaces.
+            </summary></member>
+        <member name="M:KRPC.Server.Net.NetworkInformation.GetSubnetMask(System.Net.IPAddress)">
+            <summary>
+            Returns the IPv4 subnet mask of the network interface with the given IPv4 address.
+            </summary></member>
+        <member name="E:KRPC.Server.Net.TCPServer.OnClientActivity">
+            <summary>
+            Does not trigger this event.
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.name">
+            <summary>
+            A name for the server.
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.port">
+            <summary>
+            Port that the server listens on for new connections. If set to 0,
+            a port number with be automatically chosen.
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.actualPort">
+            <summary>
+            The actual local port number of the server. Will be identical to
+            port, unless port was set to 0.
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.listenerThread">
+            <summary>
+            Thread used to poll for new connections.
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.startedEvent">
+            <summary>
+            Event used to wait for the TCP listener to start
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.running">
+            <summary>
+            True if the listenerThread is running.
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.clients">
+            <summary>
+            Connected clients.
+            </summary></member>
+        <member name="F:KRPC.Server.Net.TCPServer.pendingClients">
+            <summary>
+            Clients requesting a connection. Must be locked before accessing.
+            </summary></member>
+        <member name="M:KRPC.Server.Net.TCPServer.#ctor(System.String,System.Net.IPAddress,System.UInt16)">
+            <summary>
+            Create a TCP server. After Start() is called, the server will listen for
+            connections to the specified local address and port number.
+            </summary></member>
+        <member name="P:KRPC.Server.Net.TCPServer.Port">
+            <summary>
+            Port number that the server listens on. Server must be restarted for changes to take effect.
+            </summary></member>
+        <member name="P:KRPC.Server.Net.TCPServer.Address">
+            <summary>
+            Local address that the server listens on. Server must be restarted for changes to take effect.
+            </summary></member>
+        <member name="E:KRPC.Server.RPC.RPCServer.OnClientActivity">
+            <summary>
+            Does not trigger this event, unless the underlying server does.
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCServer.HandleClientRequestingConnection(System.Object,KRPC.Server.ClientRequestingConnectionArgs{System.Byte,System.Byte})">
+            <summary>
+            When a client requests a connection, check and parse the hello message (which should
+            consist of a header and a client name), then trigger RPCServer.OnClientRequestingConnection
+            to get response of delegates
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCServer.CheckHelloMessage(KRPC.Server.IClient{System.Byte,System.Byte})">
+            <summary>
+            Read the hello message (header and client name) and check that they are correct.
+            This is triggered whenever a client connects to the server. Returns the client name as a string,
+            or null if the hello message is not valid.
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCServer.ReadHelloMessage(KRPC.Server.IStream{System.Byte,System.Byte},System.Byte[])">
+            <summary>
+            Read a fixed length 40-byte message from the client with the given timeout
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCServer.CheckAndDecodeClientName(System.Byte[])">
+            <summary>
+            Validate a fixed-length 32-byte array as a UTF8 string, and return it as a string object.
+            </summary>
+            <returns>The decoded client name, or null if not valid.</returns></member>
+        <member name="P:KRPC.Server.RPC.RPCStream.DataAvailable">
+            <summary>
+            Returns true if there is a request waiting to be read. A Call to Read() will
+            not throw NoRequestException if this returns true. Throws MalformedRequestException
+            if a malformed request is received.
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCStream.Read">
+            <summary>
+            Read a request from the client. Blocks until a request is available.
+            Throws NoRequestException if there is no request.
+            Throws MalformedRequestException if malformed data is received.
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCStream.Write(KRPC.Schema.KRPC.Response)">
+            <summary>
+            Write a response to the client.
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCStream.Close">
+            <summary>
+            Close the stream.
+            </summary></member>
+        <member name="M:KRPC.Server.RPC.RPCStream.Poll">
+            Returns quietly if there is a message in bufferedRequest
+            Throws NoRequestException if not
+            Throws MalformedRequestException if malformed data received
+            Throws RequestBufferOverflowException if buffer full but complete request not received</member>
+        <member name="E:KRPC.Server.Stream.StreamServer.OnClientActivity">
+            <summary>
+            Does not trigger this event, unless the underlying server does.
+            </summary></member>
+        <member name="M:KRPC.Server.Stream.StreamServer.HandleClientRequestingConnection(System.Object,KRPC.Server.ClientRequestingConnectionArgs{System.Byte,System.Byte})">
+            <summary>
+            When a client requests a connection, check the hello message,
+            then trigger RPCServer.OnClientRequestingConnection to get response of delegates
+            </summary></member>
+        <member name="M:KRPC.Server.Stream.StreamServer.CheckHelloMessage(KRPC.Server.IClient{System.Byte,System.Byte})">
+            <summary>
+            Read hello message from client, and client identifier and check they are correct.
+            This is triggered whenever a client connects to the server.
+            Returns the guid of the client, or Guid.Empty if the hello message and client identifier are valid.
+            </summary></member>
+        <member name="M:KRPC.Server.Stream.StreamServer.ReadHelloMessage(KRPC.Server.IStream{System.Byte,System.Byte},System.Byte[])">
+            <summary>
+            Read a fixed length hello message and identifier from the client
+            </summary></member>
+        <member name="M:KRPC.Server.Stream.StreamServer.DecodeClientIdentifier(System.Byte[])">
+            <summary>
+            Validate a fixed-length 32-bit identifier, and return it as an int.
+            </summary>
+            <returns>The clients GUID.</returns>
+            <param name="receivedIdentifier">Received identifier.</param></member>
+        <member name="T:KRPC.Service.Attributes.KRPCClassAttribute">
+            <summary>
+            A kRPC class.
+            </summary></member>
+        <member name="P:KRPC.Service.Attributes.KRPCClassAttribute.Service">
+            <summary>
+            Name of the service in which the class is declared.
+            </summary></member>
+        <member name="T:KRPC.Service.Attributes.KRPCEnumAttribute">
+            <summary>
+            A kRPC enum.
+            </summary></member>
+        <member name="P:KRPC.Service.Attributes.KRPCEnumAttribute.Service">
+            <summary>
+            Name of the service in which the enum is declared.
+            </summary></member>
+        <member name="T:KRPC.Service.Attributes.KRPCMethodAttribute">
+            <summary>
+            A kRPC method.
+            </summary></member>
+        <member name="T:KRPC.Service.Attributes.KRPCProcedureAttribute">
+            <summary>
+            A kRPC procedure.
+            </summary></member>
+        <member name="T:KRPC.Service.Attributes.KRPCPropertyAttribute">
+            <summary>
+            A kRPC property.
+            </summary></member>
+        <member name="T:KRPC.Service.Attributes.KRPCServiceAttribute">
+            <summary>
+            A kRPC service.
+            </summary></member>
+        <member name="P:KRPC.Service.Attributes.KRPCServiceAttribute.Name">
+            <summary>
+            Name of the service.
+            </summary></member>
+        <member name="P:KRPC.Service.Attributes.KRPCServiceAttribute.GameScene">
+            <summary>
+            Game scene(s) in which the service is available.
+            </summary></member>
+        <member name="M:KRPC.Service.Attributes.KRPCServiceAttribute.#ctor">
+            <summary>
+            A kRPC service.
+            </summary></member>
+        <member name="T:KRPC.Service.ClassMethodHandler">
+            <summary>
+            Used to invoke a class method with the KRPCMethod attribute.
+            Invoke() gets the instance of the class using the guid
+            (which is always the first parameter) and runs the method.
+            </summary></member>
+        <member name="M:KRPC.Service.ClassMethodHandler.Invoke(System.Object[])">
+            <summary>
+            Invokes a method on an object. The first parameter must be an the objects GUID, which is
+            used to fetch the instance, and the remaining parameters are passed to the method.
+            </summary></member>
+        <member name="T:KRPC.Service.ClassStaticMethodHandler">
+            <summary>
+            Used to invoke a static method with the KRPCMethod attribute.
+            Invoke() and runs the static method.
+            </summary></member>
+        <member name="M:KRPC.Service.ClassStaticMethodHandler.Invoke(System.Object[])">
+            <summary>
+            Invokes the static method.
+            </summary></member>
+        <member name="T:KRPC.Service.GameScene">
+            <summary>
+            KSP game scenes
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.None">
+            <summary>
+            None of the scenes
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.SpaceCenter">
+            <summary>
+            The space center overview
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.Flight">
+            <summary>
+            When piloting a vessel
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.TrackingStation">
+            <summary>
+            The tracking station
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.EditorVAB">
+            <summary>
+            The VAB editor
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.EditorSPH">
+            <summary>
+            The SPH editor
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.All">
+            <summary>
+            All game scenes
+            </summary></member>
+        <member name="F:KRPC.Service.GameScene.Editor">
+            <summary>
+            The VAB or SPH editors
+            </summary></member>
+        <member name="T:KRPC.Service.IProcedureHandler">
+            <summary>
+            Use to invoke the method that implement an RPC
+            </summary></member>
+        <member name="T:KRPC.Service.KRPC">
+            <summary>
+            Main kRPC service, used by clients to interact with basic server functionality.
+            </summary></member>
+        <member name="M:KRPC.Service.KRPC.GetStatus">
+            <summary>
+            Returns some information about the server, such as the version.
+            </summary></member>
+        <member name="M:KRPC.Service.KRPC.GetServices">
+            <summary>
+            Returns information on all services, procedures, classes, properties etc. provided by the server.
+            Can be used by client libraries to automatically create functionality such as stubs.
+            </summary></member>
+        <member name="M:KRPC.Service.KRPC.AddStream(KRPC.Schema.KRPC.Request)">
+            <summary>
+            Add a streaming request and return its identifier.
+            </summary></member>
+        <member name="M:KRPC.Service.KRPC.RemoveStream(System.UInt32)">
+            <summary>
+            Remove a streaming request.
+            </summary></member>
+        <member name="M:KRPC.Service.ObjectStore.AddInstance(System.Object)">
+            <summary>
+            Register an instance with the object store, associating a unique object
+            identifier with the instance that can be passed to clients.
+            If the instance has already been added, this just returns it's object identifier.
+            </summary></member>
+        <member name="M:KRPC.Service.ObjectStore.RemoveInstance(System.Object)">
+            <summary>
+            Remove an instance from the object store.
+            Note: this doesn't destroy the instance, just removes the reference to it.
+            </summary></member>
+        <member name="M:KRPC.Service.ObjectStore.GetInstance(System.UInt64)">
+            <summary>
+            Get an instance by it's unique object identifier.
+            </summary></member>
+        <member name="M:KRPC.Service.ObjectStore.GetObjectId(System.Object)">
+            <summary>
+            Get the object identifier for a given instance.
+            </summary></member>
+        <member name="T:KRPC.Service.ProcedureHandler">
+            <summary>
+            Used to invoke a static method with the KRPCProcedure attribute.
+            </summary></member>
+        <member name="T:KRPC.Service.RequestContinuation">
+            <summary>
+            A continuation that runs a client request.
+            </summary></member>
+        <member name="T:KRPC.Service.Scanner.ClassSignature">
+            <summary>
+            Signature information for a class, including class name and documentation.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ClassSignature.Name">
+            <summary>
+            Name of the procedure, not including the service it is in.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ClassSignature.FullyQualifiedName">
+            <summary>
+            Name of the class including the service it is in.
+            I.e. ServiceName.ClassName
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ClassSignature.Documentation">
+            <summary>
+            Documentation for the procedure
+            </summary></member>
+        <member name="T:KRPC.Service.Scanner.EnumerationSignature">
+            <summary>
+            Signature information for an enumeration type, including name, values and documentation.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.EnumerationSignature.Name">
+            <summary>
+            Name of the enumeration, not including the service it is in.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.EnumerationSignature.FullyQualifiedName">
+            <summary>
+            Name of the enumeration including the service it is in.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.EnumerationSignature.Documentation">
+            <summary>
+            Documentation for the procedure
+            </summary></member>
+        <member name="T:KRPC.Service.Scanner.EnumerationValueSignature">
+            <summary>
+            Signature information for an enumeration type, including name, values and documentation.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.EnumerationValueSignature.Name">
+            <summary>
+            Name of the enumeration value.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.EnumerationValueSignature.FullyQualifiedName">
+            <summary>
+            Name of the enumeration value including the service and enum it is in.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.EnumerationValueSignature.Value">
+            <summary>
+            Integer value of the enumeration value.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.EnumerationValueSignature.Documentation">
+            <summary>
+            Documentation for the enumeration value.
+            </summary></member>
+        <member name="T:KRPC.Service.Scanner.ParameterSignature">
+            <summary>
+            Signature information for a parameter.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ParameterSignature.Name">
+            <summary>
+            Name of the parameter.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ParameterSignature.Type">
+            <summary>
+            Type of the parameter.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ParameterSignature.DefaultArgument">
+            <summary>
+            Serialized value of its default argument, or null if it has no default argument.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ParameterSignature.HasDefaultArgument">
+            <summary>
+            True if this parameter is optional.
+            </summary></member>
+        <member name="T:KRPC.Service.Scanner.ProcedureSignature">
+            <summary>
+            Signature information for a procedure, including procedure name,
+            parameter types and return types.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.Name">
+            <summary>
+            Name of the procedure, not including the service it is in.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.FullyQualifiedName">
+            <summary>
+            Name of the procedure including the service it is in.
+            I.e. ServiceName.ProcedureName
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.Documentation">
+            <summary>
+            Documentation for the procedure
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.Handler">
+            <summary>
+            The method that implements the procedure.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.GameScene">
+            <summary>
+            Which game scene(s) the service should be active during
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.ParameterBuilders">
+            <summary>
+            Protocol buffer builder objects, used to deserialize parameter values.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.ReturnBuilder">
+            <summary>
+            Protocol buffer builder objects, used to serialize the return value.
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ServiceSignature.Name">
+            <summary>
+            The name of the service
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ServiceSignature.Documentation">
+            <summary>
+            Documentation for the service
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ServiceSignature.Procedures">
+            <summary>
+            A mapping from procedure names to signatures for all RPCs in this service
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ServiceSignature.Classes">
+            <summary>
+            The names of all classes defined in this service
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ServiceSignature.Enums">
+            <summary>
+            The names of all C# defined enums defined in this service, and their allowed values
+            </summary></member>
+        <member name="P:KRPC.Service.Scanner.ServiceSignature.GameScene">
+            <summary>
+            Which game scene(s) the service should be active during
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.#ctor(System.Type)">
+            <summary>
+            Create a service signature from a C# type annotated with the KRPCService attribute
+            </summary>
+            <param name="type">Type.</param></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.#ctor(System.String)">
+            <summary>
+            Create a service with the given name.
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.AddProcedure(KRPC.Service.Scanner.ProcedureSignature)">
+            <summary>
+            Add a procedure to the service
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.AddProcedure(System.Reflection.MethodInfo)">
+            <summary>
+            Add a procedure to the service for the given method annotated with the KRPCProcedure attribute.
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.AddProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Add a property to the service for the given property annotated with the KRPCProperty attribute.
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.AddClass(System.Type)">
+            <summary>
+            Add a class to the service for the given class type annotated with the KRPCClass attribute.
+            Returns the name of the class.
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.AddEnum(System.Type)">
+            <summary>
+            Add an enum to the service for the given enum type annotated with the KRPCEnum attribute.
+            Returns the name of the enumeration.
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.AddClassMethod(System.String,System.Reflection.MethodInfo)">
+            <summary>
+            Add a class method to the given class in the given service for the given class type annotated with the KRPCClass attribute.
+            </summary></member>
+        <member name="M:KRPC.Service.Scanner.ServiceSignature.AddClassProperty(System.String,System.Reflection.PropertyInfo)">
+            <summary>
+            Add a class property to the given class in the given service for the given property annotated with the KRPCProperty attribute.
+            </summary></member>
+        <member name="M:KRPC.Service.Services.#ctor">
+            <summary>
+            Create a Services instance. Scans the loaded assemblies for services, procedures etc.
+            </summary></member>
+        <member name="M:KRPC.Service.Services.HandleRequest(KRPC.Service.Scanner.ProcedureSignature,KRPC.Schema.KRPC.Request)">
+            <summary>
+            Executes the given request and returns a response builder with the relevant
+            fields populated. Throws YieldException, containing a continuation, if the request yields.
+            Throws RPCException if processing the request fails.
+            </summary></member>
+        <member name="M:KRPC.Service.Services.HandleRequest(KRPC.Service.Scanner.ProcedureSignature,System.Object[])">
+            <summary>
+            Executes a request (from an array of decoded arguments) and returns a response builder with the relevant
+            fields populated. Throws YieldException, containing a continuation, if the request yields.
+            Throws RPCException if processing the request fails.
+            </summary></member>
+        <member name="M:KRPC.Service.Services.HandleRequest(KRPC.Service.Scanner.ProcedureSignature,KRPC.Continuations.IContinuation)">
+            <summary>
+            Executes the request, continuing using the given continuation. Returns a response builder with the relevant
+            fields populated. Throws YieldException, containing a continuation, if the request yields.
+            Throws RPCException if processing the request fails.
+            </summary></member>
+        <member name="M:KRPC.Service.Services.DecodeArguments(KRPC.Service.Scanner.ProcedureSignature,KRPC.Schema.KRPC.Request)">
+            <summary>
+            Decode the arguments for a request
+            </summary></member>
+        <member name="M:KRPC.Service.Services.DecodeArguments(KRPC.Service.Scanner.ProcedureSignature,System.Collections.Generic.IList{KRPC.Schema.KRPC.Argument})">
+            <summary>
+            Decode the arguments for a procedure from a serialized request
+            </summary></member>
+        <member name="M:KRPC.Service.Services.Decode(KRPC.Service.Scanner.ProcedureSignature,System.Int32,System.Type,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Decode a serialized value
+            </summary></member>
+        <member name="M:KRPC.Service.Services.DecodeCollection(KRPC.Service.Scanner.ProcedureSignature,System.Int32,System.Type,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Decode a serialized collection
+            </summary></member>
+        <member name="M:KRPC.Service.Services.EncodeReturnValue(KRPC.Service.Scanner.ProcedureSignature,System.Object)">
+            <summary>
+            Encodes the value returned by a procedure handler into a ByteString
+            </summary></member>
+        <member name="M:KRPC.Service.Services.Encode(System.Type,System.Object)">
+            <summary>
+            Encode a value
+            </summary></member>
+        <member name="M:KRPC.Service.Services.EncodeCollection(System.Type,System.Object)">
+            <summary>
+            Encode a collection
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsAValidIdentifier(System.String)">
+            <summary>
+            Returns true if the given identifier is a valid kRPC identifier.
+            A valid identifier is a non-zero length string, containing letters and numbers,
+            and starting with a letter.
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsAValidType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsAValidKeyType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC key type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsAClassType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC class type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsAnEnumType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC enum type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsACollectionType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC collection type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsAListCollectionType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC list collection type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsADictionaryCollectionType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC dictionary collection type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsASetCollectionType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC list collection type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.IsATupleCollectionType(System.Type)">
+            <summary>
+            Returns true if the given type can be used as a kRPC tuple collection type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.GetTypeName(System.Type)">
+            <summary>
+            Return the name of the protocol buffer type for the given C# type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.GetKRPCTypeName(System.Type)">
+            <summary>
+            Return the name of the kRPC type for the given C# type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ParameterTypeAttributes(System.Int32,System.Type)">
+            <summary>
+            Get the parameter type attributes for the given kRPC procedure parameter
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ReturnTypeAttributes(System.Type)">
+            <summary>
+            Get the return type attributes for the given type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.GetServiceName(System.Type)">
+            <summary>
+            Get the name of the service for the given KRPCService annotated type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.GetServiceGameScene(System.Type)">
+            <summary>
+            Get the GameScene that the service should active during
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.GetClassServiceName(System.Type)">
+            <summary>
+            Get the name of the service for the given KRPCClass annotated type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.GetEnumServiceName(System.Type)">
+            <summary>
+            Get the name of the service for the given KRPCEnum annotated type
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateIdentifier(System.String)">
+            <summary>
+            Check if the string is a valid identifier for a kRPC service, procedure, property, class or method.
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateKRPCService(System.Type)">
+            <summary>
+            Check the given type is a valid kRPC service
+            1. Must have KRPCService attribute
+            2. Must have a valid identifier
+            3. Must be a public static class
+            4. Must not be declared inside another kRPC service
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateKRPCProcedure(System.Reflection.MethodInfo)">
+            <summary>
+            Check the given method is a valid kRPC procedure
+            1. Must have KRPCProcedure attribute
+            2. Must have a valid identifier
+            3. Must be a public static method
+            4. Must be declared inside a kRPC service
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateKRPCProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Check the given type is a valid kRPC property
+            1. Must have KRPCProperty attribute
+            2. Must have a valid identifier
+            3. Must be a public static property
+            4. Must be declared inside a kRPC service
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateKRPCClass(System.Type)">
+            <summary>
+            Check the given type is a valid kRPC class
+            1. Must have KRPCClass attribute
+            2. Must have a valid identifier
+            3. Must be a public non-static class
+            4. Must be declared inside a kRPC service if it doesn't have the service explicity set
+            5. Must not be declared inside a kRPC service if it does have the service explicity set
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateKRPCEnum(System.Type)">
+            <summary>
+            Check the given type is a valid kRPC enumeration
+            1. Must have KRPCEnum attribute
+            2. Must have a valid identifier
+            3. Must be a public enum
+            4. Underlying type must be a 32-bit signed integer (int)
+            5. Must be declared inside a kRPC service if it doesn't have the service explicity set
+            6. Must not be declared inside a kRPC service if it does have the service explicity set
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateKRPCMethod(System.Reflection.MethodInfo)">
+            <summary>
+            Check the given method is a valid kRPC class method
+            1. Must have KRPCMethod attribute
+            2. Must have a valid identifier
+            3. Must be a public method
+            4. Must be declared inside a kRPC class
+            </summary></member>
+        <member name="M:KRPC.Service.TypeUtils.ValidateKRPCClassProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Check the given type is a valid kRPC class property
+            1. Must have KRPCProperty attribute
+            2. Must have a valid identifier
+            3. Must be a public non-static property
+            4. Must be declared inside a kRPC class
+            </summary></member>
+        <member name="F:KRPC.UI.Icons.iconsPath">
+            <summary>
+            Path to directory in GameData when icons are stored
+            </summary></member>
+        <member name="M:KRPC.UI.Icons.LoadTexture(System.String)">
+            <summary>
+            Load a file as a 2D texture.
+            </summary></member>
+        <member name="P:KRPC.UI.MainWindow.Errors">
+            <summary>
+            Errors to display
+            </summary></member>
+        <member name="T:KRPC.UI.ToolbarManager">
+            ********************************************************\
+                *          --- DO NOT EDIT BELOW THIS COMMENT ---          *
+                *                                                          *
+                * This file contains classes and interfaces to use the     *
+                * Toolbar Plugin without creating a hard dependency on it. *
+                *                                                          *
+                * There is nothing in this file that needs to be edited    *
+                * by hand.                                                 *
+                *                                                          *
+                *          --- DO NOT EDIT BELOW THIS COMMENT ---          *
+                \*********************************************************<summary>
+            The global tool bar manager.
+            </summary></member>
+        <member name="P:KRPC.UI.ToolbarManager.ToolbarAvailable">
+            <summary>
+            Whether the Toolbar Plugin is available.
+            </summary></member>
+        <member name="P:KRPC.UI.ToolbarManager.Instance">
+            <summary>
+            The global tool bar manager instance.
+            </summary></member>
+        <member name="T:KRPC.UI.IToolbarManager">
+            <summary>
+            A toolbar manager.
+            </summary></member>
+        <member name="M:KRPC.UI.IToolbarManager.add(System.String,System.String)">
+            <summary>
+            Adds a new button.
+            </summary>
+            <remarks>
+            To replace an existing button, just add a new button using the old button's namespace and ID.
+            Note that the new button will inherit the screen position of the old button.
+            </remarks>
+            <param name="ns">The new button's namespace. This is usually the plugin's name. Must not include special characters like '.'</param>
+            <param name="id">The new button's ID. This ID must be unique across all buttons in the namespace. Must not include special characters like '.'</param>
+            <returns>The button created.</returns></member>
+        <member name="T:KRPC.UI.IButton">
+            <summary>
+            Represents a clickable button.
+            </summary></member>
+        <member name="P:KRPC.UI.IButton.Text">
+            <summary>
+            The text displayed on the button. Set to null to hide text.
+            </summary>
+            <remarks>
+            The text can be changed at any time to modify the button's appearance. Note that since this will also
+            modify the button's size, this feature should be used sparingly, if at all.
+            </remarks>
+            <seealso cref="P:KRPC.UI.IButton.TexturePath" /></member>
+        <member name="P:KRPC.UI.IButton.TextColor">
+            <summary>
+            The color the button text is displayed with. Defaults to Color.white.
+            </summary>
+            <remarks>
+            The text color can be changed at any time to modify the button's appearance.
+            </remarks></member>
+        <member name="P:KRPC.UI.IButton.TexturePath">
+            <summary>
+            The path of a texture file to display an icon on the button. Set to null to hide icon.
+            </summary>
+            <remarks>
+            <para>
+            A texture path on a button will have precedence over text. That is, if both text and texture path
+            have been set on a button, the button will show the texture, not the text.
+            </para>
+            <para>
+            The texture size must not exceed 24x24 pixels.
+            </para>
+            <para>
+            The texture path must be relative to the "GameData" directory, and must not specify a file name suffix.
+            Valid example: MyAddon/Textures/icon_mybutton
+            </para>
+            <para>
+            The texture path can be changed at any time to modify the button's appearance.
+            </para>
+            </remarks>
+            <seealso cref="P:KRPC.UI.IButton.Text" /></member>
+        <member name="P:KRPC.UI.IButton.ToolTip">
+            <summary>
+            The button's tool tip text. Set to null if no tool tip is desired.
+            </summary>
+            <remarks>
+            Tool Tip Text Should Always Use Headline Style Like This.
+            </remarks></member>
+        <member name="P:KRPC.UI.IButton.Visible">
+            <summary>
+            Whether this button is currently visible or not. Can be used in addition to or as a replacement for <see cref="T:Visibility" />.
+            </summary>
+            <remarks>
+            Setting this property to true does not affect the player's ability to hide the button using the configuration.
+            Conversely, setting this property to false does not enable the player to show the button using the configuration.
+            </remarks></member>
+        <member name="P:KRPC.UI.IButton.Visibility">
+            <summary>
+            Determines this button's visibility. Can be used in addition to or as a replacement for <see cref="P:KRPC.UI.IButton.Visible" />.
+            </summary>
+            <remarks>
+            The return value from IVisibility.Visible is subject to the same rules as outlined for
+            <see cref="P:KRPC.UI.IButton.Visible" />.
+            </remarks></member>
+        <member name="P:KRPC.UI.IButton.EffectivelyVisible">
+            <summary>
+            Whether this button is currently effectively visible or not. This is a combination of
+            <see cref="P:KRPC.UI.IButton.Visible" /> and <see cref="T:Visibility" />.
+            </summary>
+            <remarks>
+            Note that the toolbar is not visible in certain game scenes, for example the loading screens. This property
+            does not reflect button invisibility in those scenes. In addition, this property does not reflect the
+            player's configuration of the button's visibility.
+            </remarks></member>
+        <member name="P:KRPC.UI.IButton.Enabled">
+            <summary>
+            Whether this button is currently enabled (clickable) or not. This does not affect the player's ability to
+            position the button on their toolbar.
+            </summary></member>
+        <member name="P:KRPC.UI.IButton.Important">
+            <summary>
+            Whether this button is currently "important." Set to false to return to normal button behaviour.
+            </summary>
+            <remarks>
+            <para>
+            This can be used to temporarily force the button to be shown on screen regardless of the toolbar being
+            currently in auto-hidden mode. For example, a button that signals the arrival of a private message in
+            a chat room could mark itself as "important" as long as the message has not been read.
+            </para>
+            <para>
+            Setting this property does not change the appearance of the button. Use <see cref="P:KRPC.UI.IButton.TexturePath" /> to
+            change the button's icon.
+            </para>
+            <para>
+            Setting this property to true does not affect the player's ability to hide the button using the
+            configuration.
+            </para>
+            <para>
+            This feature should be used only sparingly, if at all, since it forces the button to be displayed on
+            screen even when it normally wouldn't.
+            </para>
+            </remarks></member>
+        <member name="P:KRPC.UI.IButton.Drawable">
+            <summary>
+            A drawable that is tied to the current button. This can be anything from a popup menu to
+            an informational window. Set to null to hide the drawable.
+            </summary></member>
+        <member name="E:KRPC.UI.IButton.OnClick">
+            <summary>
+            Event handler that can be registered with to receive "on click" events.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.OnClick += (e) =&gt; {
+            Debug.Log("button clicked, mouseButton: " + e.MouseButton);
+            };
+            </code>
+            </example></member>
+        <member name="E:KRPC.UI.IButton.OnMouseEnter">
+            <summary>
+            Event handler that can be registered with to receive "on mouse enter" events.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.OnMouseEnter += (e) =&gt; {
+            Debug.Log("mouse entered button");
+            };
+            </code>
+            </example></member>
+        <member name="E:KRPC.UI.IButton.OnMouseLeave">
+            <summary>
+            Event handler that can be registered with to receive "on mouse leave" events.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.OnMouseLeave += (e) =&gt; {
+            Debug.Log("mouse left button");
+            };
+            </code>
+            </example></member>
+        <member name="M:KRPC.UI.IButton.Destroy">
+            <summary>
+            Permanently destroys this button so that it is no longer displayed.
+            Should be used when a plugin is stopped to remove leftover buttons.
+            </summary></member>
+        <member name="T:KRPC.UI.IDrawable">
+            <summary>
+            A drawable that is tied to a particular button. This can be anything from a popup menu
+            to an informational window.
+            </summary></member>
+        <member name="M:KRPC.UI.IDrawable.Update">
+            <summary>
+            Update any information. This is called once per frame.
+            </summary></member>
+        <member name="M:KRPC.UI.IDrawable.Draw(UnityEngine.Vector2)">
+            <summary>
+            Draws GUI widgets for this drawable. This is the equivalent to the OnGUI() message in
+            <see cref="T:UnityEngine.MonoBehaviour" />.
+            </summary>
+            <remarks>
+            The drawable will be positioned near its parent toolbar according to the drawable's current
+            width/height.
+            </remarks>
+            <param name="position">The left/top position of where to draw this drawable.</param>
+            <returns>The current width/height of this drawable.</returns></member>
+        <member name="T:KRPC.UI.ClickEvent">
+            <summary>
+            Event describing a click on a button.
+            </summary></member>
+        <member name="F:KRPC.UI.ClickEvent.Button">
+            <summary>
+            The button that has been clicked.
+            </summary></member>
+        <member name="F:KRPC.UI.ClickEvent.MouseButton">
+            <summary>
+            The mouse button which the button was clicked with.
+            </summary>
+            <remarks>
+            Is 0 for left mouse button, 1 for right mouse button, and 2 for middle mouse button.
+            </remarks></member>
+        <member name="T:KRPC.UI.ClickHandler">
+            <summary>
+            An event handler that is invoked whenever a button has been clicked.
+            </summary>
+            <param name="e">An event describing the button click.</param></member>
+        <member name="T:KRPC.UI.MouseMoveEvent">
+            <summary>
+            Event describing the mouse pointer moving about a button.
+            </summary></member>
+        <member name="F:KRPC.UI.MouseMoveEvent.button">
+            <summary>
+            The button in question.
+            </summary></member>
+        <member name="T:KRPC.UI.MouseEnterEvent">
+            <summary>
+            Event describing the mouse pointer entering a button's area.
+            </summary></member>
+        <member name="T:KRPC.UI.MouseLeaveEvent">
+            <summary>
+            Event describing the mouse pointer leaving a button's area.
+            </summary></member>
+        <member name="T:KRPC.UI.MouseEnterHandler">
+            <summary>
+            An event handler that is invoked whenever the mouse pointer enters a button's area.
+            </summary>
+            <param name="e">An event describing the mouse pointer entering.</param></member>
+        <member name="T:KRPC.UI.MouseLeaveHandler">
+            <summary>
+            An event handler that is invoked whenever the mouse pointer leaves a button's area.
+            </summary>
+            <param name="e">An event describing the mouse pointer leaving.</param></member>
+        <member name="T:KRPC.UI.IVisibility">
+            <summary>
+            Determines visibility of a button.
+            </summary>
+            <seealso cref="P:KRPC.UI.IButton.Visibility" /></member>
+        <member name="P:KRPC.UI.IVisibility.Visible">
+            <summary>
+            Whether a button is currently visible or not.
+            </summary>
+            <seealso cref="P:KRPC.UI.IButton.Visible" /></member>
+        <member name="T:KRPC.UI.GameScenesVisibility">
+            <summary>
+            Determines visibility of a button in relation to the currently running game scene.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.Visibility = new GameScenesVisibility(GameScenes.EDITOR, GameScenes.SPH);
+            </code>
+            </example>
+            <seealso cref="P:KRPC.UI.IButton.Visibility" /></member>
+        <member name="T:KRPC.UI.PopupMenuDrawable">
+            <summary>
+            A drawable that draws a popup menu.
+            </summary></member>
+        <member name="E:KRPC.UI.PopupMenuDrawable.OnAnyOptionClicked">
+            <summary>
+            Event handler that can be registered with to receive "any menu option clicked" events.
+            </summary></member>
+        <member name="M:KRPC.UI.PopupMenuDrawable.AddOption(System.String)">
+            <summary>
+            Adds a new option to the popup menu.
+            </summary>
+            <param name="text">The text of the option.</param>
+            <returns>A button that can be used to register clicks on the menu option.</returns></member>
+        <member name="M:KRPC.UI.PopupMenuDrawable.AddSeparator">
+            <summary>
+            Adds a separator to the popup menu.
+            </summary></member>
+        <member name="M:KRPC.UI.PopupMenuDrawable.Destroy">
+            <summary>
+            Destroys this drawable. This must always be called before disposing of this drawable.
+            </summary></member>
+        <member name="M:KRPC.Utils.ConfigurationStorage.#ctor(System.String)">
+            <summary>
+            Create a configuration object with default values. Call Load() to load from the file.
+            The file path is relative to the directory containing this assembly.
+            </summary></member>
+        <member name="M:KRPC.Utils.ConfigurationStorage.Load">
+            <summary>
+            Load settings from the underlying storage
+            </summary></member>
+        <member name="M:KRPC.Utils.ConfigurationStorage.Save">
+            <summary>
+            Save settings to the underlying storage
+            </summary></member>
+        <member name="M:KRPC.Utils.ConfigurationStorageNode.BeforeSave">
+            <summary>
+            Override to provide custom behaviour before saving.
+            </summary></member>
+        <member name="M:KRPC.Utils.ConfigurationStorageNode.AfterLoad">
+            <summary>
+            Override to provide custom behaviour after loading.
+            </summary></member>
+        <member name="M:KRPC.Utils.DocumentationExtensions.Dedent(System.String)">
+            <summary>
+            Remove indentiation from a multi-line string, where the first line
+            is not indented, and following lines are indented.
+            </summary></member>
+        <member name="T:KRPC.Utils.Equatable`1">
+            <summary>
+            Abstract base class for equatable objects.
+            Provides implementations of comparison operators.
+            </summary></member>
+        <member name="M:KRPC.Utils.Equatable`1.Equals(`0)">
+            <summary>
+            Returns true if the objects are equal
+            </summary></member>
+        <member name="M:KRPC.Utils.Equatable`1.GetHashCode">
+            <summary>
+            Hash function
+            </summary></member>
+        <member name="M:KRPC.Utils.Equatable`1.Equals(System.Object)">
+            <summary>
+            Returns true if the objects are equal
+            </summary></member>
+        <member name="M:KRPC.Utils.Equatable`1.op_Equality(KRPC.Utils.Equatable{`0},KRPC.Utils.Equatable{`0})">
+            <summary>
+            Returns true if the lhs equals the rhs
+            </summary></member>
+        <member name="M:KRPC.Utils.Equatable`1.op_Inequality(KRPC.Utils.Equatable{`0},KRPC.Utils.Equatable{`0})">
+            <summary>
+            Returns true if the lhs does not equal the rhs
+            </summary></member>
+        <member name="T:KRPC.Utils.KSPAddonImproved">
+            <remarks>
+            Adapted from public domain code by Majiir
+            http://forum.kerbalspaceprogram.com/threads/79889-Expanded-KSPAddon-modes
+            </remarks></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.GetMessageTypeName(System.Type)">
+            <summary>
+            Return the string name of the Protocol Buffer message type (with the package name prefixing it).
+            E.g. "KRPC.Request"
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.GetEnumTypeName(System.Type)">
+            <summary>
+            Return the string name of the Protocol Buffer enumeration type (with the package name prefixing it).
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.GetValueTypeName(System.Type)">
+            <summary>
+            Return the string name of the Protocol Buffer message type corresponding to the given type.
+            E.g. "uint32" for uint
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.GetTypeName(System.Type)">
+            <summary>
+            Return the string name of the Protocol Buffer message, enumeration or value type.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.BuilderForMessageType(System.Type)">
+            <summary>
+            Return a builder object for the given Protocol Buffer message type.
+            The type must be derived from IMessage.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.IsAMessageType(System.Type)">
+            <summary>
+            Returns true if the given type is a Protocol Buffer message type.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.IsAnEnumType(System.Type)">
+            <summary>
+            Returns true if the given type is a Protocol Buffer enumeration type.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.IsAValueType(System.Type)">
+            <summary>
+            Returns true if the given type is a Protocol Buffer value type.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.IsAValidType(System.Type)">
+            <summary>
+            Returns true if the given type is a Protocol Buffer message or value type.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.WriteMessage(Google.ProtocolBuffers.IMessage)">
+            <summary>
+            Convert a Protocol Buffer message to a byte string.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.ReadValue(Google.ProtocolBuffers.ByteString,System.Type)">
+            <summary>
+            Convert a Protocol Buffer value type, encoded as a byte string, to a C# value.
+            </summary></member>
+        <member name="M:KRPC.Utils.ProtocolBuffers.WriteValue(System.Object,System.Type)">
+            <summary>
+            Convert a Protocol Buffer value type from a C# value to a byte string.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.GetType(System.String)">
+            <summary>
+            Returns the type with the specified full name, from all assemblies, or null if no such type exists.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.GetTypesWith``1(System.Boolean)">
+            <summary>
+            Returns all types with the specified attribute, from all assemblies.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.GetMethodsWith``1(System.Type,System.Boolean)">
+            <summary>
+            Returns all methods within a given type that have the specified attribute.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.GetPropertiesWith``1(System.Type,System.Boolean)">
+            <summary>
+            Returns all properties within a given type that have the specified attribute.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.GetAttribute``1(System.Reflection.MemberInfo)">
+            <summary>
+            Return attribute of type T for the given member. Does not follow inheritance.
+            Throws ArgumentException if there is no attribute, or more than one attribute.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.HasAttribute``1(System.Reflection.MemberInfo)">
+            <summary>
+            Return true if member has the attribute of type T. Does not follow inheritance.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.IsStatic(System.Type)">
+            <summary>
+            Extension method to check if a type is static.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.IsStatic(System.Reflection.PropertyInfo)">
+            <summary>
+            Extension method to check if a property is static.
+            </summary></member>
+        <member name="M:KRPC.Utils.Reflection.IsPublic(System.Reflection.PropertyInfo)">
+            <summary>
+            Extension method to check if a property is public.
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`1">
+            <summary>
+            A tuple with 1 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`1.Item1">
+            <summary>
+            Get/set the value of element 1
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`1.#ctor(`0)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`2">
+            <summary>
+            A tuple with 2 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`2.Item1">
+            <summary>
+            Get/set the value of element 2
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`2.Item2">
+            <summary>
+            Get/set the value of element 2
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`2.#ctor(`0,`1)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`3">
+            <summary>
+            A tuple with 3 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`3.Item1">
+            <summary>
+            Get/set the value of element 3
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`3.Item2">
+            <summary>
+            Get/set the value of element 3
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`3.Item3">
+            <summary>
+            Get/set the value of element 3
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`3.#ctor(`0,`1,`2)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`4">
+            <summary>
+            A tuple with 4 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`4.Item1">
+            <summary>
+            Get/set the value of element 4
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`4.Item2">
+            <summary>
+            Get/set the value of element 4
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`4.Item3">
+            <summary>
+            Get/set the value of element 4
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`4.Item4">
+            <summary>
+            Get/set the value of element 4
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`4.#ctor(`0,`1,`2,`3)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`5">
+            <summary>
+            A tuple with 5 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`5.Item1">
+            <summary>
+            Get/set the value of element 5
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`5.Item2">
+            <summary>
+            Get/set the value of element 5
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`5.Item3">
+            <summary>
+            Get/set the value of element 5
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`5.Item4">
+            <summary>
+            Get/set the value of element 5
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`5.Item5">
+            <summary>
+            Get/set the value of element 5
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`5.#ctor(`0,`1,`2,`3,`4)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`6">
+            <summary>
+            A tuple with 6 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`6.Item1">
+            <summary>
+            Get/set the value of element 6
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`6.Item2">
+            <summary>
+            Get/set the value of element 6
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`6.Item3">
+            <summary>
+            Get/set the value of element 6
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`6.Item4">
+            <summary>
+            Get/set the value of element 6
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`6.Item5">
+            <summary>
+            Get/set the value of element 6
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`6.Item6">
+            <summary>
+            Get/set the value of element 6
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`6.#ctor(`0,`1,`2,`3,`4,`5)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`7">
+            <summary>
+            A tuple with 7 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`7.Item1">
+            <summary>
+            Get/set the value of element 7
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`7.Item2">
+            <summary>
+            Get/set the value of element 7
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`7.Item3">
+            <summary>
+            Get/set the value of element 7
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`7.Item4">
+            <summary>
+            Get/set the value of element 7
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`7.Item5">
+            <summary>
+            Get/set the value of element 7
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`7.Item6">
+            <summary>
+            Get/set the value of element 7
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`7.Item7">
+            <summary>
+            Get/set the value of element 7
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`7.#ctor(`0,`1,`2,`3,`4,`5,`6)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple`8">
+            <summary>
+            A tuple with 8 elements
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item1">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item2">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item3">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item4">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item5">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item6">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item7">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="P:KRPC.Utils.Tuple`8.Item8">
+            <summary>
+            Get/set the value of element 8
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple`8.#ctor(`0,`1,`2,`3,`4,`5,`6,`7)">
+            <summary>
+            Create a tuple with the given values as its elements
+            </summary></member>
+        <member name="T:KRPC.Utils.Tuple">
+            <summary>
+            Static functions for constructing tuples
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``1(``0)">
+            <summary>
+            Construct a tuple with 1 elements
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``2(``0,``1)">
+            <summary>
+            Construct a tuple with 2 elements
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``3(``0,``1,``2)">
+            <summary>
+            Construct a tuple with 3 elements
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``4(``0,``1,``2,``3)">
+            <summary>
+            Construct a tuple with 4 elements
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``5(``0,``1,``2,``3,``4)">
+            <summary>
+            Construct a tuple with 5 elements
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``6(``0,``1,``2,``3,``4,``5)">
+            <summary>
+            Construct a tuple with 6 elements
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``7(``0,``1,``2,``3,``4,``5,``6)">
+            <summary>
+            Construct a tuple with 7 elements
+            </summary></member>
+        <member name="M:KRPC.Utils.Tuple.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)">
+            <summary>
+            Construct a tuple with 8 elements
+            </summary></member>
+    </members>
+</doc>

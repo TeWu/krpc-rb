@@ -8,7 +8,7 @@ require 'set'
 module KRPC
   module Types
     PROTOBUF_VALUE_TYPES = ["double", "float", "int32", "int64", "uint32", "uint64", "bool", "string", "bytes"]
-    RUBY_VALUE_TYPES = [Float, Integer, Boolean, String]
+    RUBY_VALUE_TYPES = [Float, Integer, Boolean, String, Array]
     PROTOBUF_TO_RUBY_VALUE_TYPE = {
       "double" => Float,
       "float"  => Float,
@@ -18,7 +18,7 @@ module KRPC
       "uint64" => Integer,
       "bool"   => Boolean,
       "string" => String,
-      "bytes"  => String
+      "bytes"  => Array
     }
     PROTOBUF_TO_MESSAGE_TYPE = ProtobufUtils.create_PB_to_PB_message_class_hash("KRPC")
     
@@ -37,6 +37,7 @@ module KRPC
             elsif type_string.start_with? "Dictionary(" || type_string == "Dictionary" then DictionaryType.new(type_string)
             elsif type_string.start_with? "Set("   || type_string == "Set"   then SetType.new(type_string)
             elsif type_string.start_with? "Tuple(" || type_string == "Tuple" then TupleType.new(type_string)
+            elsif type_string == "Test.TestEnum" then ValueType.new("int32")
             else # A message type (eg. type_string = "KRPC.List" or "KRPC.Services")
               raise(ValueError, "\"#{type_string}\" is not a valid type string") unless /^[A-Za-z0-9_\.]+$/ =~ type_string
               if PROTOBUF_TO_MESSAGE_TYPE.has_key? type_string
@@ -97,9 +98,9 @@ module KRPC
             raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")
           end
           # Numeric types
-          if type.ruby_type == Float && value.respond_to?(:to_f)
+          if type.ruby_type == Float && ( value.kind_of?(Float) || value.to_s.numeric? )
             return value.to_f
-          elsif type.ruby_type == Integer && value.respond_to?(:to_i)
+          elsif type.ruby_type == Integer && ( value.kind_of?(Integer) || value.to_s.integer? )
             return value.to_i
           end
           raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")

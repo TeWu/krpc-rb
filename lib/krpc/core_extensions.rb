@@ -24,7 +24,16 @@ class String
     tr("-", "_").
     downcase
   end
+
+  def integer?
+    Integer(self) != nil rescue false 
+  end
+  
+  def numeric?
+    Float(self) != nil rescue false
+  end
 end
+
 
 class Array
   def extract_kwargs!

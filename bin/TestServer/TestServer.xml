@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TestServer</name>
+    </assembly>
+    <members>
+        <member name="T:TestServer.Services.TestService">
+            <summary>
+            Service documentation string.
+            </summary></member>
+        <member name="M:TestServer.Services.TestService.FloatToString(System.Single)">
+            <summary>
+            Procedure documentation string.
+            </summary></member>
+        <member name="P:TestServer.Services.TestService.StringProperty">
+            <summary>
+            Property documentation string.
+            </summary></member>
+        <member name="T:TestServer.Services.TestService.TestClass">
+            <summary>
+            Class documentation string.
+            </summary></member>
+        <member name="M:TestServer.Services.TestService.TestClass.GetValue">
+            <summary>
+            Method documentation string.
+            </summary></member>
+        <member name="P:TestServer.Services.TestService.TestClass.IntProperty">
+            <summary>
+            Property documentation string.
+            </summary></member>
+    </members>
+</doc>
