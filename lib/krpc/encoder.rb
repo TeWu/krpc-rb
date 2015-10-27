@@ -20,25 +20,25 @@ module KRPC
           encode_value(remote_oid, TypeStore["uint64"])
         elsif type.is_a?(Types::ListType)
           msg = TypeStore["KRPC.List"].ruby_type.new
-          msg.items = obj.map{|x| encode(x, type.value_type)}.to_a
+          msg.items = obj.map{|x| encode( TypeStore.coerce_to(x, type.value_type), type.value_type )}.to_a
           msg.serialize_to_string
         elsif type.is_a?(Types::DictionaryType)
           entry_type = TypeStore["KRPC.DictionaryEntry"].ruby_type
           msg = TypeStore["KRPC.Dictionary"].ruby_type.new
           msg.entries = obj.map do |k,v|
             entry = entry_type.new
-            entry.key = encode(k, type.key_type)
-            entry.value = encode(v, type.value_type)
+            entry.key = encode( TypeStore.coerce_to(k, type.key_type), type.key_type )
+            entry.value = encode( TypeStore.coerce_to(v, type.value_type), type.value_type )
             entry
           end
           msg.serialize_to_string
         elsif type.is_a?(Types::SetType)
           msg = TypeStore["KRPC.Set"].ruby_type.new
-          msg.items = obj.map{|x| encode(x, type.value_type)}.to_a
+          msg.items = obj.map{|x| encode( TypeStore.coerce_to(x, type.value_type), type.value_type )}.to_a
           msg.serialize_to_string
         elsif type.is_a?(Types::TupleType)
           msg = TypeStore["KRPC.Tuple"].ruby_type.new
-          msg.items = obj.zip(type.value_types).map{|x,t| encode(x, t)}.to_a
+          msg.items = obj.zip(type.value_types).map{|x,t| encode( TypeStore.coerce_to(x, t), t )}.to_a
           msg.serialize_to_string
         else raise(RuntimeError, "Cannot encode object #{obj} of type #{type}")
         end

@@ -103,6 +103,10 @@ module KRPC
           elsif type.ruby_type == Integer && ( value.kind_of?(Integer) || value.to_s.integer? )
             return value.to_i
           end
+          # Convert value type to string
+          if type.is_a?(ValueType) && type.ruby_type == String
+            return value.to_s
+          end
           raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")
         end
       

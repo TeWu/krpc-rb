@@ -72,7 +72,51 @@ describe KRPC::Client do
 
   specify "class static methods handling" do
     expect(KRPC::Gen::TestService::TestClass.static_method(@test_client)).to eq "jeb"
-    expect(KRPC::Gen::TestService::TestClass.static_method(@test_client,"bob", "bill")).to eq "jebbobbill"
+    expect(KRPC::Gen::TestService::TestClass.static_method(@test_client, "bob", "bill")).to eq "jebbobbill"
+  end
+
+  specify "class properties handling" do
+    obj = @test_service.create_test_object("jeb")
+    obj.int_property = 0
+    expect(obj.int_property).to eq 0
+    obj.int_property = 42
+    expect(obj.int_property).to eq 42
+    obj2 = @test_service.create_test_object("kermin")
+    obj.object_property = obj2
+    expect(obj.object_property.remote_oid).to eq obj2.remote_oid
+  end
+
+  specify "optional arguments handling" do
+    expect(@test_service.optional_arguments("jeb")).to eq "jebfoobarbaz"
+    expect(@test_service.optional_arguments("jeb", "bob", "bill")).to eq "jebbobbillbaz"
+  end
+
+  specify "named parameters handling" do
+    expect(@test_service.optional_arguments(x: "1", y: "2", z: "3", another_parameter: "4")).to eq "1234"
+    expect(@test_service.optional_arguments(y: "4", z: "1", x: "2", another_parameter: "3")).to eq "2413"
+    expect(@test_service.optional_arguments("1", "2", another_parameter: "3", z: "4")).to eq "1243"
+    expect(@test_service.optional_arguments("1", "2", z: "3")).to eq "123baz"
+    expect(@test_service.optional_arguments("1", "2", another_parameter: "3")).to eq "12bar3"
+    expect { @test_service.optional_arguments("1", "2", "3", "4", another_parameter: "5") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "another_parameter"/)
+    expect { @test_service.optional_arguments("1", "2", "3", y: "4") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "y"/)
+    expect { @test_service.optional_arguments("1", foo: "4") }.to raise_error(KRPC::ArgumentErrorSig, /keyword arguments for non existing parameters: foo/)
+
+    obj = @test_service.create_test_object("jeb")
+    expect(obj.optional_arguments(x: "1", y: "2", z: "3", another_parameter: "4")).to eq "1234"
+    expect(obj.optional_arguments(z: "1", x: "2", another_parameter: "3", y: "4")).to eq "2413"
+    expect(obj.optional_arguments("1", "2", another_parameter: "3", z: "4")).to eq "1243"
+    expect(obj.optional_arguments("1", "2", z: "3")).to eq "123baz"
+    expect(obj.optional_arguments("1", "2", another_parameter: "3")).to eq "12bar3"
+    expect { obj.optional_arguments("1", "2", "3", "4", another_parameter: "5") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "another_parameter"/)
+    expect { obj.optional_arguments("1", "2", "3", y: "4") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "y"/)
+    expect { obj.optional_arguments("1", foo: "4") }.to raise_error(KRPC::ArgumentErrorSig, /keyword arguments for non existing parameters: foo/)
+  end
+
+  specify "blocking procedure handling" do
+    expect(@test_service.blocking_procedure(0, 0)).to eq 0
+    expect(@test_service.blocking_procedure(1, 0)).to eq 1
+    expect(@test_service.blocking_procedure(2)).to eq (1 + 2)
+    expect(@test_service.blocking_procedure(42)).to eq (1..42).reduce(:+)
   end
 
   specify "wrong method arguments handling" do
@@ -87,6 +131,63 @@ describe KRPC::Client do
     expect { KRPC::Gen::TestService::TestClass.static_method }.to raise_error(KRPC::ArgumentErrorSig, /missing argument for parameter "client"/)
     expect { KRPC::Gen::TestService::TestClass.static_method(2) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "client" must be a KRPC::Client -- got 2 of type Fixnum/)
     expect { KRPC::Gen::TestService::TestClass.static_method(@test_client, "str", "str2", "str3") }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(4 for 1\.\.3\)/)
+
+    expect { @test_service.optional_arguments("1", "2", "3", "4", "5") }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(5 for 1\.\.4\)/)
+    obj = @test_service.create_test_object("jeb")
+    expect { obj.optional_arguments("1", "2", "3", "4", "5") }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(5 for 1\.\.4\)/)
   end
-  
+
+  specify "client generated members" do
+    expect(@test_client.methods).to include(:krpc, :test_service)
+  end
+
+  specify "krpc service members" do
+    expect(@test_client.krpc.methods).to include(:get_services, :get_status, :add_stream, :remove_stream)
+  end
+
+  specify "enums handling" do
+    expect(@test_service.c_sharp_enum_return).to eq :value_b
+    expect(@test_service.c_sharp_enum_echo(:value_a)).to eq :value_a
+    expect(@test_service.c_sharp_enum_echo(:value_b)).to eq :value_b
+    expect(@test_service.c_sharp_enum_echo(:value_c)).to eq :value_c
+
+    expect(@test_service.c_sharp_enum_default_arg(:value_a)).to eq :value_a
+    expect(@test_service.c_sharp_enum_default_arg).to eq :value_c
+    expect(@test_service.c_sharp_enum_default_arg(:value_b)).to eq :value_b
+
+    expect(KRPC::Gen::TestService::CSharpEnum).to eq ({value_a: 0, value_b: 1, value_c: 2})
+  end
+
+  specify "invalid enum handling" do
+    expect(KRPC::Gen::TestService::CSharpEnum[:value_invalid]).to eq nil
+  end
+
+  specify "collections handling" do
+    expect(@test_service.increment_list([])).to eq []
+    expect(@test_service.increment_list([0, 1, 2])).to eq [1, 2, 3]
+    expect(@test_service.increment_dictionary({}, {})).to eq ({})
+    expect(@test_service.increment_dictionary({a: 0, b: 1, c: 2}, {})).to eq ({"a" => 1, "b" => 2, "c" => 3})
+    expect(@test_service.increment_set(Set.new)).to eq Set.new
+    expect(@test_service.increment_set(Set.new([0, 1, 2]))).to eq Set.new([1, 2, 3])
+    expect(@test_service.increment_tuple([1, 2])).to eq [2, 3]
+    expect { @test_service.increment_list(nil) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "l" must be a Array -- got nil of type NilClass/)
+    expect { @test_service.increment_set(nil) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "h" must be a Set -- got nil of type NilClass/)
+    expect { @test_service.increment_dictionary(nil) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "d" must be a Hash -- got nil of type NilClass/)
+  end
+
+  specify "nested collections handling" do
+    expect(@test_service.increment_nested_collection({}, {})).to eq ({})
+    expect(@test_service.increment_nested_collection({"a" => [0, 1], b: [], c: [2]}, {})).to eq ({"a" => [1, 2], "b" => [], "c" => [3]})
+  end
+
+  specify "collections of objects handling" do
+    list = @test_service.add_to_object_list([], "jeb")
+    expect(list.length).to eq 1
+    expect(list.first.get_value).to eq "value=jeb"
+    list2 = @test_service.add_to_object_list(list, "bob")
+    expect(list2.length).to eq 2
+    expect(list2.first.get_value).to eq "value=jeb"
+    expect(list2[1].get_value).to eq "value=bob"
+  end
+
 end
