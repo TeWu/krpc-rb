@@ -28,6 +28,10 @@ module KRPC
       super("wrong number of arguments (#{args_count} for #{valid_params_str})", sig)
     end
 
+    def with_arguments_count_incremented_by(args_count_increment)
+      self.class.new(args_count + args_count_increment, (valid_params_count_range.min + args_count_increment)..(valid_params_count_range.max + args_count_increment), signature)
+    end
+    
     def with_signature(sig)
       self.class.new(args_count, valid_params_count_range, sig)
     end

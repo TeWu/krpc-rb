@@ -13,7 +13,7 @@ module KRPC
         service_module_name, class_name = ruby_class_to_pb_module_class_pair(class_cls)
         key = [service_module_name, is_static, class_name, method_name.to_s].hash
         if @docstr_infos.has_key? key
-          construct_docstring(*@docstr_infos[key], true, is_print_xmldoc_summary)
+          construct_docstring(*@docstr_infos[key], true, is_static, is_print_xmldoc_summary)
         else
           "No docstring for #{class_cls.name}#{calc_separator(is_static)}#{method_name.to_s} method" +
             (method_owner.respond_to?(method_name) ? "" : "\nThere is no such method -- maybe a typo")
@@ -23,7 +23,7 @@ module KRPC
       def docstring_for_procedure(service_name, procedure_name, is_print_xmldoc_summary = true)
         key = [service_name, procedure_name].hash
         if @procedure_docstr_infos.has_key? key
-          construct_docstring(service_name, '.', procedure_name, *@procedure_docstr_infos[key][3..-1], false, is_print_xmldoc_summary)
+          construct_docstring(service_name, '.', procedure_name, *@procedure_docstr_infos[key][3..-1], false, false, is_print_xmldoc_summary)
         else
           "No docstring for #{service_name}.#{procedure_name} procedure"
         end
@@ -58,7 +58,7 @@ module KRPC
         is_static ? '.' : '#'
       end
       
-      def construct_docstring(namespace, separator, name, param_names, param_types, param_default, return_type, xmldoc, is_hide_this_param, is_print_xmldoc_summary)
+      def construct_docstring(namespace, separator, name, param_names, param_types, param_default, return_type, xmldoc, is_hide_this_param, is_prepend_client_param,  is_print_xmldoc_summary)
         xmldoc = Nokogiri::XML(xmldoc)
         xmldoc_summary = xmlElements2str(xmldoc.xpath("doc/summary").children, :light_blue, :light_green, :light_red)
 
@@ -79,6 +79,7 @@ module KRPC
         
         param_infos = param_names.zip(param_types.map{|x| type2str(x)}, param_default)
         param_infos.shift if is_hide_this_param && param_names[0] == "this"
+        param_infos.unshift ["client", "Client", nil] if is_prepend_client_param 
         if param_infos.empty?
           params = ""
         else

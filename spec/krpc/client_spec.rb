@@ -70,4 +70,23 @@ describe KRPC::Client do
     expect(obj.object_to_string(obj2)).to eq "bobbill"
   end
 
+  specify "class static methods handling" do
+    expect(KRPC::Gen::TestService::TestClass.static_method(@test_client)).to eq "jeb"
+    expect(KRPC::Gen::TestService::TestClass.static_method(@test_client,"bob", "bill")).to eq "jebbobbill"
+  end
+
+  specify "wrong method arguments handling" do
+    expect { @test_service.int32_to_string }.to raise_error(KRPC::ArgumentErrorSig, /missing argument for parameter "value"/)
+    expect { @test_service.int32_to_string(2, 3) }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(2 for 1\)/)
+
+    obj = @test_service.create_test_object("bob")
+    expect { obj.object_to_string }.to raise_error(KRPC::ArgumentErrorSig, /missing argument for parameter "other"/)
+    expect { obj.object_to_string(2) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "other" must be a KRPC::Gen::TestService::TestClass/)
+    expect { obj.object_to_string(obj, 2) }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(2 for 1\)/)
+
+    expect { KRPC::Gen::TestService::TestClass.static_method }.to raise_error(KRPC::ArgumentErrorSig, /missing argument for parameter "client"/)
+    expect { KRPC::Gen::TestService::TestClass.static_method(2) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "client" must be a KRPC::Client -- got 2 of type Fixnum/)
+    expect { KRPC::Gen::TestService::TestClass.static_method(@test_client, "str", "str2", "str3") }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(4 for 1\.\.3\)/)
+  end
+  
 end

@@ -5,8 +5,6 @@ require 'colorize'
 
 module KRPC
   module Gen
-    AvailableToClassAndInstanceModuleName = "AvailableToClassAndInstance"
-    
     class << self
       def service_gen_module(service_name) 
         const_get_or_create(service_name, Module.new)
@@ -32,7 +30,6 @@ module KRPC
       def add_rpc_method(cls, method_name, service_name, proc, *options)
         is_static = options.include? :static
         prepend_self_to_args = options.include? :prepend_self_to_args
-        target_module = is_static ? cls.const_get_or_create(AvailableToClassAndInstanceModuleName, Module.new) : cls
         param_names, param_types, param_default, return_type = parse_procedure(proc)
         method_name = method_name.underscore
 
@@ -40,16 +37,17 @@ module KRPC
           begin
             block.call
           rescue ArgumentsNumberErrorSig => err
-            sig = Doc.docstring_for_method(method_owner, method_name, false)
-            if prepend_self_to_args then raise ArgumentsNumberErrorSig.new(err.args_count - 1, (err.valid_params_count_range.min-1)..(err.valid_params_count_range.max-1), sig)
-            else raise err.with_signature(sig) end
+            err = err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
+            if prepend_self_to_args then raise err.with_arguments_count_incremented_by(-1)
+            elsif method_owner.is_a?(Class) then raise err.with_arguments_count_incremented_by(1)
+            else raise err end
           rescue ArgumentErrorSig => err
             raise err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
           end
         end
-
-        # Define method
-        target_module.instance_eval do
+        
+        cls.instance_eval do
+          # Define method
           define_method method_name do |*args|
             transform_exceptions.call(self) do
               kwargs = args.extract_kwargs!
@@ -57,7 +55,19 @@ module KRPC
               self.client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
             end
           end
-        end
+          # Define static method
+          if is_static
+            define_singleton_method method_name do |*args|
+              transform_exceptions.call(cls) do
+                raise ArgumentErrorSig.new("missing argument for parameter \"client\"") if args.count < 1
+                raise ArgumentErrorSig.new("argument for parameter \"client\" must be a #{KRPC::Client.name} -- got #{args.first.inspect} of type #{args.first.class}") unless args.first.is_a?(KRPC::Client)
+                client = args.shift
+                kwargs = args.extract_kwargs!
+                client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
+              end
+            end
+          end
+        end        
         # Add stream-constructing Proc
         unless options.include? :no_stream
           cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
@@ -98,19 +108,9 @@ module KRPC
       end
     end
     
-    module AvailableToClassAndInstanceMethodsHandler
-      def add_methods_available_to_class_and_instance
-        if const_defined? AvailableToClassAndInstanceModuleName
-          extend  const_get(AvailableToClassAndInstanceModuleName)
-          include const_get(AvailableToClassAndInstanceModuleName)
-        end
-      end
-    end
-    
     ##
     # Base class for service-defined class types.
     class ClassBase
-      extend AvailableToClassAndInstanceMethodsHandler
       include Doc::SuffixMethods
       include Streaming::StreamConstructors
       

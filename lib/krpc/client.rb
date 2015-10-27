@@ -177,7 +177,7 @@ module KRPC
             begin
               arg = TypeStore.coerce_to(arg, param_types[i])
             rescue ValueError
-              raise ArgumentErrorSig.new("argument for parameter \"#{name}\" must be a #{param_types[i].ruby_type} -- got #{args[i]} of type #{args[i].class}")
+              raise ArgumentErrorSig.new("argument for parameter \"#{name}\" must be a #{param_types[i].ruby_type} -- got #{args[i].inspect} of type #{args[i].class}")
             end
             v = Encoder.encode(arg, param_types[i])
             PB::Argument.new(position: i, value: v)

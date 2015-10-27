@@ -55,12 +55,6 @@ module KRPC
           end
         end
         
-        # Add methods available to class and instance in service class & service' classes
-        service_class.add_methods_available_to_class_and_instance
-        mod = Gen.service_gen_module(service_name)
-        service_classes = mod.constants.map{|c| mod.const_get(c)}.select {|c| c.is_a? Class}
-        service_classes.each(&:add_methods_available_to_class_and_instance)
-        
         # Return service class
         service_class
       end
@@ -70,7 +64,6 @@ module KRPC
     ##
     # Base class for service objects, created at runtime using information received from the server.
     class ServiceBase
-      extend Gen::AvailableToClassAndInstanceMethodsHandler
       include Doc::SuffixMethods
       include Streaming::StreamConstructors
       
