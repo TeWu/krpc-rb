@@ -137,14 +137,6 @@ describe KRPC::Client do
     expect { obj.optional_arguments("1", "2", "3", "4", "5") }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(5 for 1\.\.4\)/)
   end
 
-  specify "client generated members" do
-    expect(@test_client.methods).to include(:krpc, :test_service)
-  end
-
-  specify "krpc service members" do
-    expect(@test_client.krpc.methods).to include(:get_services, :get_status, :add_stream, :remove_stream)
-  end
-
   specify "enums handling" do
     expect(@test_service.c_sharp_enum_return).to eq :value_b
     expect(@test_service.c_sharp_enum_echo(:value_a)).to eq :value_a
@@ -188,6 +180,93 @@ describe KRPC::Client do
     expect(list2.length).to eq 2
     expect(list2.first.get_value).to eq "value=jeb"
     expect(list2[1].get_value).to eq "value=bob"
+  end
+
+  specify "client generated members" do
+    expect(@test_client.methods).to include(:krpc, :test_service)
+  end
+
+  specify "krpc service members" do
+    expect(@test_client.krpc.methods).to include(:get_services, :get_status, :add_stream, :remove_stream)
+  end
+
+  specify "test service generated members" do
+    expected_static_methods = [
+        :float_to_string,
+        :double_to_string,
+        :int32_to_string,
+        :int64_to_string,
+        :bool_to_string,
+        :string_to_int32,
+        :bytes_to_hex_string,
+        :add_multiple_values,
+
+        :create_test_object,
+        :echo_test_object,
+
+        :optional_arguments,
+
+        :enum_return,
+        :enum_echo,
+        :enum_default_arg,
+        :c_sharp_enum_return,
+        :c_sharp_enum_echo,
+        :c_sharp_enum_default_arg,
+
+        :blocking_procedure,
+
+        :increment_list,
+        :increment_dictionary,
+        :increment_set,
+        :increment_tuple,
+        :increment_nested_collection,
+        :add_to_object_list,
+
+        :counter,
+        :throw_argument_exception,
+        :throw_invalid_operation_exception
+    ]
+    expected_instance_methods = expected_static_methods + [
+        :string_property,
+        :string_property_private_get=,
+        :string_property_private_set,
+        :object_property
+    ]
+
+    expect(KRPC::Services::TestService.methods(false)).to include(*expected_static_methods)
+    expect(KRPC::Services::TestService.instance_methods(false)).to include(*expected_instance_methods)
+  end
+
+  specify "test class generated members" do
+    expected_static_methods = [:static_method]
+    expected_instance_methods = expected_static_methods + [
+        :get_value,
+        :float_to_string,
+        :object_to_string,
+        :int_property,
+        :object_property,
+        :optional_arguments
+    ]
+
+    expect(KRPC::Gen::TestService::TestClass.methods(false)).to include(*expected_static_methods)
+    expect(KRPC::Gen::TestService::TestClass.instance_methods(false)).to include(*expected_instance_methods)
+  end
+
+  specify "line endings handling" do
+    strings = [
+        "foo\nbar",
+        "foo\rbar",
+        "foo\n\rbar",
+        "foo\r\nbar",
+        "foo\x10bar",
+        "foo\x13bar",
+        "foo\x10\x13bar",
+        "foo\x13\x10bar"
+    ]
+    strings.each do |str|
+      @test_service.string_property = str
+      expect(@test_service.string_property).to eq str
+    end
   end
 
 end
