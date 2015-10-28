@@ -26,63 +26,70 @@ module KRPC
           values.map{|ev| [ev.name.underscore.to_sym, ev.value]}.to_h
         end
       end
-      
+
       def add_rpc_method(cls, method_name, service_name, proc, *options)
         is_static = options.include? :static
         prepend_self_to_args = options.include? :prepend_self_to_args
         param_names, param_types, param_default, return_type = parse_procedure(proc)
         method_name = method_name.underscore
+        args = [cls, method_name, param_default, param_names, param_types, prepend_self_to_args, proc, return_type, service_name]
 
-        transform_exceptions = Proc.new do |method_owner, &block|
-          begin
-            block.call
-          rescue ArgumentsNumberErrorSig => err
-            err = err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
-            if prepend_self_to_args then raise err.with_arguments_count_incremented_by(-1)
-            elsif method_owner.is_a?(Class) then raise err.with_arguments_count_incremented_by(1)
-            else raise err end
-          rescue ArgumentErrorSig => err
-            raise err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
-          end
-        end
-        
-        cls.instance_eval do
-          # Define method
-          define_method method_name do |*args|
-            transform_exceptions.call(self) do
-              kwargs = args.extract_kwargs!
-              args = [self] + args if prepend_self_to_args
-              self.client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
-            end
-          end
-          # Define static method
-          if is_static
-            define_singleton_method method_name do |*args|
-              transform_exceptions.call(cls) do
-                raise ArgumentErrorSig.new("missing argument for parameter \"client\"") if args.count < 1
-                raise ArgumentErrorSig.new("argument for parameter \"client\" must be a #{KRPC::Client.name} -- got #{args.first.inspect} of type #{args.first.class}") unless args.first.is_a?(KRPC::Client)
-                client = args.shift
-                kwargs = args.extract_kwargs!
-                client.rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
-              end
-            end
-          end
-        end        
-        # Add stream-constructing Proc
-        unless options.include? :no_stream
-          cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
-            transform_exceptions.call(this) do
-              req_args = prepend_self_to_args ? [this] + args : args
-              request  = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, param_default)
-              this.client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
-            end
-          end
-        end
-        # Add docstring info
+        define_rpc_method(*args)
+        define_static_rpc_method(*args) if is_static
+        add_stream_constructing_proc(*args) unless options.include? :no_stream
         Doc.add_docstring_info(is_static, cls, method_name, service_name, proc.name, param_names, param_types, param_default, return_type: return_type, xmldoc: proc.documentation)
+      end
+
+      def transform_exceptions(method_owner, method_name, prepend_self_to_args, &block)
+        begin
+          block.call
+        rescue ArgumentsNumberErrorSig => err
+          err = err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
+          if prepend_self_to_args then raise err.with_arguments_count_incremented_by(-1)
+          elsif method_owner.is_a?(Class) then raise err.with_arguments_count_incremented_by(1)
+          else raise err end
+        rescue ArgumentErrorSig => err
+          raise err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
+        end
       end
       
       private #----------------------------------
+      
+      def define_static_rpc_method(cls, method_name, param_default, param_names, param_types, prepend_self_to_args, proc, return_type, service_name)
+        cls.instance_eval do
+          define_singleton_method method_name do |*args|
+            Gen.transform_exceptions(cls, method_name, prepend_self_to_args) do
+              raise ArgumentErrorSig.new("missing argument for parameter \"client\"") if args.count < 1
+              raise ArgumentErrorSig.new("argument for parameter \"client\" must be a #{KRPC::Client.name} -- got #{args.first.inspect} of type #{args.first.class}") unless args.first.is_a?(KRPC::Client)
+              client = args.shift
+              kwargs = args.extract_kwargs!
+              client.execute_rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
+            end
+          end
+        end
+      end
+
+      def define_rpc_method(cls, method_name, param_default, param_names, param_types, prepend_self_to_args, proc, return_type, service_name)
+        cls.instance_eval do
+          define_method method_name do |*args|
+            Gen.transform_exceptions(self, method_name, prepend_self_to_args) do
+              kwargs = args.extract_kwargs!
+              args = [self] + args if prepend_self_to_args
+              self.client.execute_rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
+            end
+          end
+        end
+      end
+
+      def add_stream_constructing_proc(cls, method_name, param_default, param_names, param_types, prepend_self_to_args, proc, return_type, service_name)
+        cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
+          Gen.transform_exceptions(this, method_name, prepend_self_to_args) do
+            req_args = prepend_self_to_args ? [this] + args : args
+            request = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, param_default)
+            this.client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
+          end
+        end
+      end
       
       def parse_procedure(proc)
         param_names = proc.parameters.map{|p| p.name.underscore}

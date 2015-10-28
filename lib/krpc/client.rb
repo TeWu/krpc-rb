@@ -14,7 +14,7 @@ module KRPC
   # A kRPC client, through which all Remote Procedure Calls are made. To make RPC calls client 
   # must first connect to server. This can be achieved by calling Client#connect or Client#connect!
   # methods. Client object can connect and disconnect from the server many times during it's 
-  # lifetime. RPCs can be made by calling Client#rpc method. After generating services API (with
+  # lifetime. RPCs can be made by calling Client#execute_rpc method. After generating services API (with
   # Client#generate_services_api! call), RPCs can be also made using
   # `client.service_name.procedure_name(parameter, ...)`
   #
@@ -130,28 +130,20 @@ module KRPC
     end
     
     # Execute an RPC.
-    def rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
-      # Send request
-      req = build_request(service, procedure, args, kwargs, param_names, param_types, param_default)
-      rpc_connection.send Encoder.encode_request(req)
-      # Receive response
-      resp_length = rpc_connection.recv_varint
-      resp_data = rpc_connection.recv resp_length
-      resp = PB::Response.new
-      resp.parse_from_string resp_data
-      # Check for an error response
+    def execute_rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
+      send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
+      resp = receive_response
       raise(RPCError, resp.error) if resp.has_field? "error"
-      # Optionally decode and return the response' return value
-      if return_type == nil
-        nil
-      else
+      unless return_type.nil?
         Decoder.decode(resp.return_value, return_type, self)
+      else
+        nil
       end
     rescue IOError => e
       raise(Exception, "RPC call attempt while not connected to server -- call Client#connect first") if not connected?
       raise e
     end
-    
+
     # Build a PB::Request object.
     def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[])
       begin
@@ -159,38 +151,60 @@ module KRPC
         raise(ArgumentError, "param_names and param_default should be equal length\n\tparam_names = #{param_names}\n\tparam_default = #{param_default}") unless param_names.length == param_default.length
         required_params_count = param_default.take_while(&:nil?).count
         raise ArgumentsNumberErrorSig.new(args.count, required_params_count..param_names.count) unless args.count <= param_names.count
-        kwargs_remaining = kwargs.count
-        
-        param_names_symbols = param_names.map(&:to_sym)
-        req_args = param_names_symbols.map.with_index do |name,i|
-          is_kwarg = kwargs.has_key? name
-          raise ArgumentErrorSig.new("there are both positional and keyword arguments for parameter \"#{name}\"") if is_kwarg && i < args.count 
-          kwargs_remaining -= 1 if is_kwarg
-          unless i >= required_params_count && 
-                 (!is_kwarg && i >= args.count ||
-                  !is_kwarg && args[i] == param_default[i] ||
-                  is_kwarg  && kwargs[name] == param_default[i])
-            arg = if is_kwarg then kwargs[name]
-                  elsif i < args.count then args[i]
-                  else raise ArgumentErrorSig.new("missing argument for parameter \"#{name}\"") 
-                  end
-            begin
-              arg = TypeStore.coerce_to(arg, param_types[i])
-            rescue ValueError
-              raise ArgumentErrorSig.new("argument for parameter \"#{name}\" must be a #{param_types[i].ruby_type} -- got #{args[i].inspect} of type #{args[i].class}")
-            end
-            v = Encoder.encode(arg, param_types[i])
-            PB::Argument.new(position: i, value: v)
-          end
-        end.compact
-        raise ArgumentErrorSig.new("keyword arguments for non existing parameters: #{(kwargs.keys - param_names_symbols).join(", ")}") unless kwargs_remaining == 0
+        req_args = construct_arguments(args, kwargs, param_names, param_types, param_default, required_params_count)
       rescue ArgumentErrorSig => err
         raise err.with_signature(Doc.docstring_for_procedure(service, procedure, false))
       end
       PB::Request.new(service: service, procedure: procedure, arguments: req_args)
     end
-    
+
     protected #----------------------------------
+    
+    def construct_arguments(args, kwargs, param_names, param_types, param_default, required_params_count)
+      param_names_symbols = param_names.map(&:to_sym)
+      kwargs_remaining = kwargs.count
+      
+      req_args = param_names_symbols.map.with_index do |name, i|
+        is_kwarg = kwargs.has_key? name
+        kwargs_remaining -= 1 if is_kwarg
+        raise ArgumentErrorSig.new("there are both positional and keyword arguments for parameter \"#{name}\"") if is_kwarg && i < args.count
+        is_parameter_optional = i >= required_params_count
+        is_parameter_has_default_value = !is_kwarg && i >= args.count ||
+                                         !is_kwarg && args[i] == param_default[i] ||
+                                         is_kwarg && kwargs[name] == param_default[i]
+        unless is_parameter_optional and is_parameter_has_default_value
+          arg = if is_kwarg then
+                  kwargs[name]
+                elsif i < args.count then
+                  args[i]
+                else
+                  raise ArgumentErrorSig.new("missing argument for parameter \"#{name}\"")
+                end
+          begin
+            arg = TypeStore.coerce_to(arg, param_types[i])
+          rescue ValueError
+            raise ArgumentErrorSig.new("argument for parameter \"#{name}\" must be a #{param_types[i].ruby_type} -- got #{args[i].inspect} of type #{args[i].class}")
+          end
+          v = Encoder.encode(arg, param_types[i])
+          PB::Argument.new(position: i, value: v)
+        end
+      end.compact
+      
+      raise ArgumentErrorSig.new("keyword arguments for non existing parameters: #{(kwargs.keys - param_names_symbols).join(", ")}") unless kwargs_remaining == 0
+      req_args
+    end
+
+    def send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
+      req = build_request(service, procedure, args, kwargs, param_names, param_types, param_default)
+      rpc_connection.send Encoder.encode_request(req)
+    end
+    
+    def receive_response
+      resp_length = rpc_connection.recv_varint
+      resp_data = rpc_connection.recv resp_length
+      resp = PB::Response.new
+      resp.parse_from_string resp_data
+    end
     
     def call_block_and_close(block)
       begin block.call(self) ensure close end
