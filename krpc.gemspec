@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ruby_protobuf", "~> 0.4"
   s.add_runtime_dependency "colorize", "~> 0.7"
   s.add_runtime_dependency "nokogiri", "~> 1.6"
-  s.add_development_dependency "bundler", "~> 1.10"
+  s.add_development_dependency "bundler", ">= 1.7.0"
   s.add_development_dependency "pry", "~> 0.10"
   s.add_development_dependency "rspec", "~> 3.0"
   s.add_development_dependency "hanna-nouveau", "~> 0.4"
