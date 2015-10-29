@@ -99,7 +99,7 @@ module KRPC
         param_default = proc.parameters.zip(param_types).map do |param, type|
           if param.has_field?("default_argument")
             Decoder.decode(param.default_argument, type, :clientless)
-          else nil
+          else :no_default_value
           end
         end
         return_type = if proc.has_field?("return_type")

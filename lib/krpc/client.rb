@@ -149,7 +149,7 @@ module KRPC
       begin
         raise(ArgumentError, "param_names and param_types should be equal length\n\tparam_names = #{param_names}\n\tparam_types = #{param_types}") unless param_names.length == param_types.length
         raise(ArgumentError, "param_names and param_default should be equal length\n\tparam_names = #{param_names}\n\tparam_default = #{param_default}") unless param_names.length == param_default.length
-        required_params_count = param_default.take_while(&:nil?).count
+        required_params_count = param_default.take_while{|pd| pd == :no_default_value}.count
         raise ArgumentsNumberErrorSig.new(args.count, required_params_count..param_names.count) unless args.count <= param_names.count
         req_args = construct_arguments(args, kwargs, param_names, param_types, param_default, required_params_count)
       rescue ArgumentErrorSig => err

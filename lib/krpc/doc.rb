@@ -79,12 +79,12 @@ module KRPC
         
         param_infos = param_names.zip(param_types.map{|x| type2str(x)}, param_default)
         param_infos.shift if is_hide_this_param && param_names[0] == "this"
-        param_infos.unshift ["client", "Client", nil] if is_prepend_client_param 
+        param_infos.unshift ["client", "Client", :no_default_value] if is_prepend_client_param 
         if param_infos.empty?
           params = ""
         else
           params = "\n" + param_infos.map.with_index do |pi, i|
-            "\t#{pi[0].light_green} :#{pi[1]}" + (pi[2].nil? ? "" : " = #{pi[2]}".magenta) \
+            "\t#{pi[0].light_green} :#{pi[1]}" + (pi[2] == :no_default_value ? "" : " = #{pi[2].inspect}".magenta) \
               + (param_infos.size == i+1 ? "" : ",") \
               + xmldoc_params[pi[0]].to_s
           end.join("\n") + "\n"
