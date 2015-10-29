@@ -2,10 +2,11 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'krpc/version'
 
 Gem::Specification.new do |s|
   s.name          = "krpc"
-  s.version       = "0.2.0"
+  s.version       = KRPC::VERSION
   s.authors       = ["Tomasz Więch"]
   s.email         = ["tewu.dev@gmail.com"]
   

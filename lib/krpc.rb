@@ -1,3 +1,4 @@
+require 'krpc/version'
 require 'krpc/client'
 
 module KRPC
