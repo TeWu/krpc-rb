@@ -1,4 +1,4 @@
-kRPC-rb [![Gem Version](https://badge.fury.io/rb/krpc.svg)](http://badge.fury.io/rb/krpc)
+kRPC-rb [![Gem Version](https://badge.fury.io/rb/krpc.svg)](http://badge.fury.io/rb/krpc) [![Build Status](https://travis-ci.org/TeWu/krpc-rb.svg?branch=master)](https://travis-ci.org/TeWu/krpc-rb)
 =======
 
 kRPC-rb is a Ruby client library for [kRPC](http://forum.kerbalspaceprogram.com/threads/69313), a Kerbal Space Program mod that allows you to control KSP from external scripts running outside of the game.
