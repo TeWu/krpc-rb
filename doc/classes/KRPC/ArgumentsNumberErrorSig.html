@@ -52,6 +52,7 @@
             <ol>
               <li><a target="docwin" href="#attribute-i-args_count">args_count</a></li>
               <li><a target="docwin" href="#attribute-i-valid_params_count_range">valid_params_count_range</a></li>
+              <li><a target="docwin" href="#method-i-with_arguments_count_incremented_by">with_arguments_count_incremented_by</a></li>
               <li><a target="docwin" href="#method-i-with_signature">with_signature</a></li>
             </ol>
           </div>
@@ -98,6 +99,22 @@
                 </div>
               </div>
               <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-with_arguments_count_incremented_by'>
+                <a name='method-i-with_arguments_count_incremented_by'></a>
+                <div class='synopsis'>
+                  <span class='name'>with_arguments_count_incremented_by</span>
+                  <span class='arguments'>(args_count_increment)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-with_arguments_count_incremented_by-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-with_arguments_count_incremented_by-source'><span class="ruby-comment"># File lib/krpc/error.rb, line 31</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_arguments_count_incremented_by</span>(<span class="ruby-identifier">args_count_increment</span>)&#x000A;  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args_count</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">args_count_increment</span>, (<span class="ruby-identifier">valid_params_count_range</span>.<span class="ruby-identifier">min</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">args_count_increment</span>)<span class="ruby-operator">..</span>(<span class="ruby-identifier">valid_params_count_range</span>.<span class="ruby-identifier">max</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">args_count_increment</span>), <span class="ruby-identifier">signature</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
               <div class='method public-instance' id='method-method-i-with_signature'>
                 <a name='method-i-with_signature'></a>
                 <div class='synopsis'>
@@ -111,7 +128,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-with_signature-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-with_signature-source'><span class="ruby-comment"># File lib/krpc/error.rb, line 31</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_signature</span>(<span class="ruby-identifier">sig</span>)&#x000A;  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args_count</span>, <span class="ruby-identifier">valid_params_count_range</span>, <span class="ruby-identifier">sig</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-with_signature-source'><span class="ruby-comment"># File lib/krpc/error.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_signature</span>(<span class="ruby-identifier">sig</span>)&#x000A;  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args_count</span>, <span class="ruby-identifier">valid_params_count_range</span>, <span class="ruby-identifier">sig</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
