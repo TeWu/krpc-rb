@@ -1,4 +1,11 @@
 
+v0.2.2  (30 Oct 2015)
+========
++ Static methods now require `KRPC::Client` instance as first argument (Fix #4)
++ Improved parameters default value handling
++ Improved collections encoding
++ Fixed few minor bugs
+
 v0.2.0  (26 Sep 2015)
 ========
 + **Added Streaming support**:
