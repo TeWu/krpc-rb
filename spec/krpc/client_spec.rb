@@ -138,20 +138,20 @@ describe KRPC::Client do
   end
 
   specify "enums handling" do
-    expect(@test_service.c_sharp_enum_return).to eq :value_b
-    expect(@test_service.c_sharp_enum_echo(:value_a)).to eq :value_a
-    expect(@test_service.c_sharp_enum_echo(:value_b)).to eq :value_b
-    expect(@test_service.c_sharp_enum_echo(:value_c)).to eq :value_c
+    expect(@test_service.enum_return).to eq :value_b
+    expect(@test_service.enum_echo(:value_a)).to eq :value_a
+    expect(@test_service.enum_echo(:value_b)).to eq :value_b
+    expect(@test_service.enum_echo(:value_c)).to eq :value_c
 
-    expect(@test_service.c_sharp_enum_default_arg(:value_a)).to eq :value_a
-    expect(@test_service.c_sharp_enum_default_arg).to eq :value_c
-    expect(@test_service.c_sharp_enum_default_arg(:value_b)).to eq :value_b
+    expect(@test_service.enum_default_arg(:value_a)).to eq :value_a
+    expect(@test_service.enum_default_arg).to eq :value_c
+    expect(@test_service.enum_default_arg(:value_b)).to eq :value_b
 
-    expect(KRPC::Gen::TestService::CSharpEnum).to eq ({value_a: 0, value_b: 1, value_c: 2})
+    expect(KRPC::Gen::TestService::TestEnum).to eq ({value_a: 0, value_b: 1, value_c: 2})
   end
 
   specify "invalid enum handling" do
-    expect(KRPC::Gen::TestService::CSharpEnum[:value_invalid]).to eq nil
+    expect(KRPC::Gen::TestService::TestEnum[:value_invalid]).to eq nil
   end
 
   specify "collections handling" do
@@ -209,9 +209,6 @@ describe KRPC::Client do
         :enum_return,
         :enum_echo,
         :enum_default_arg,
-        :c_sharp_enum_return,
-        :c_sharp_enum_echo,
-        :c_sharp_enum_default_arg,
 
         :blocking_procedure,
 

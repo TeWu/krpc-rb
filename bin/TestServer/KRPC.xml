@@ -1873,10 +1873,6 @@
             Return the string name of the Protocol Buffer message type (with the package name prefixing it).
             E.g. "KRPC.Request"
             </summary></member>
-        <member name="M:KRPC.Utils.ProtocolBuffers.GetEnumTypeName(System.Type)">
-            <summary>
-            Return the string name of the Protocol Buffer enumeration type (with the package name prefixing it).
-            </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.GetValueTypeName(System.Type)">
             <summary>
             Return the string name of the Protocol Buffer message type corresponding to the given type.
@@ -1884,7 +1880,7 @@
             </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.GetTypeName(System.Type)">
             <summary>
-            Return the string name of the Protocol Buffer message, enumeration or value type.
+            Return the string name of the Protocol Buffer message or value type.
             </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.ParseFrom(System.Type,Google.Protobuf.ByteString)">
             <summary>
@@ -1894,10 +1890,6 @@
         <member name="M:KRPC.Utils.ProtocolBuffers.IsAMessageType(System.Type)">
             <summary>
             Returns true if the given type is a Protocol Buffer message type.
-            </summary></member>
-        <member name="M:KRPC.Utils.ProtocolBuffers.IsAnEnumType(System.Type)">
-            <summary>
-            Returns true if the given type is a Protocol Buffer enumeration type.
             </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.IsAValueType(System.Type)">
             <summary>
