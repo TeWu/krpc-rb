@@ -28,5 +28,9 @@
             <summary>
             Property documentation string.
             </summary></member>
+        <member name="T:Test.TestReflection">
+            <summary>Holder for reflection information generated from protobuf/test.proto</summary></member>
+        <member name="P:Test.TestReflection.Descriptor">
+            <summary>File descriptor for protobuf/test.proto</summary></member>
     </members>
 </doc>

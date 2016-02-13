@@ -50,7 +50,9 @@ module KRPC
     def cleanup; end
     
     def send(msg) @socket.send(msg, 0) end
-    def recv(maxlen = 1) @socket.recv(maxlen) end
+    def recv(maxlen = 1)
+      maxlen == 0 ? "" : @socket.recv(maxlen)
+    end
     
     def recv_varint
       int_val = 0
