@@ -1,4 +1,5 @@
 require 'krpc/version'
+require 'krpc/protobuf_extensions'
 require 'krpc/client'
 
 module KRPC
