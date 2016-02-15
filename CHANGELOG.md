@@ -1,6 +1,3 @@
-v0.3.0
-======
-+ Update to work with kRPC server version 0.2.x
 
 v0.2.2  (30 Oct 2015)
 ========
