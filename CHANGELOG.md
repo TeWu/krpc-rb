@@ -1,3 +1,8 @@
+v0.3.0  (15 Feb 2016)
+========
++ **Updated to work with kRPC server version 0.2.x** (#6):
+  + Using *google-protobuf* gem instead of *ruby_protobuf*, for protocol buffers version 3
++ Turned development dependency on *hanna-nouveau* into runtime dependency (Fix #5)
 
 v0.2.2  (30 Oct 2015)
 ========
