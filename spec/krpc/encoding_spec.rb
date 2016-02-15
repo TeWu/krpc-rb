@@ -126,7 +126,7 @@ describe "protocol buffer encoding" do
   end
 
   it "encodes message" do
-    msg = KRPC::PB::Request.new(:service => "ServiceName", :procedure => "ProcedureName")
+    msg = KRPC::PB::Request.new(service: "ServiceName", procedure: "ProcedureName")
     data = "0a0b536572766963654e616d65120d50726f6365647572654e616d65"
     check_equal(msg, data, TypeStore["KRPC.Request"])
   end
