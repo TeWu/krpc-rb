@@ -97,12 +97,12 @@ module KRPC
           TypeStore.get_parameter_type(i, p.type, proc.attributes)
         end
         param_default = proc.parameters.zip(param_types).map do |param, type|
-          if param.has_field?("default_argument")
+          if param.has_default_argument
             Decoder.decode(param.default_argument, type, :clientless)
           else :no_default_value
           end
         end
-        return_type = if proc.has_field?("return_type")
+        return_type = if proc.has_return_type
                         TypeStore.get_return_type(proc.return_type, proc.attributes)
                       else nil end
         [param_names, param_types, param_default, return_type]
@@ -111,7 +111,7 @@ module KRPC
     
     module RPCMethodGenerator
       def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, xmldoc: "", options: [])
-        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, return_type: return_type, documentation: xmldoc), options)
+        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, has_return_type: return_type != nil, return_type: return_type != nil ? return_type : "", documentation: xmldoc), options)
       end
     end
     

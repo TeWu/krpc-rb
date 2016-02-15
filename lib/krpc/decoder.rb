@@ -43,9 +43,7 @@ module KRPC
       end
       
       def decode_message(data, type)
-        msg = type.ruby_type.new
-        msg.parse_from_string data.to_s
-        msg
+        type.ruby_type.decode(data.to_s)
       end
       
     end

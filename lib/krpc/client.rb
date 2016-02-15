@@ -6,7 +6,7 @@ require 'krpc/decoder'
 require 'krpc/streaming'
 require 'krpc/error'
 require 'krpc/core_extensions'
-require 'krpc/KRPC.pb'
+require 'krpc/krpc.pb'
 
 module KRPC
   
@@ -133,7 +133,7 @@ module KRPC
     def execute_rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
       send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
       resp = receive_response
-      raise(RPCError, resp.error) if resp.has_field? "error"
+      raise(RPCError, resp.error) if resp.has_error
       unless return_type.nil?
         Decoder.decode(resp.return_value, return_type, self)
       else
@@ -202,8 +202,7 @@ module KRPC
     def receive_response
       resp_length = rpc_connection.recv_varint
       resp_data = rpc_connection.recv resp_length
-      resp = PB::Response.new
-      resp.parse_from_string resp_data
+      resp = PB::Response.decode(resp_data)
     end
     
     def call_block_and_close(block)

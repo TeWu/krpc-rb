@@ -62,7 +62,7 @@ module KRPC
               stream_msg.responses.each do |stream_resp|
                 next unless @streams.include? stream_resp.id
                 stream = @streams[stream_resp.id]
-                if stream_resp.response.has_field?("error")
+                if stream_resp.response.has_error
                   stream.value = RPCError.new(stream_resp.response.error)
                 else
                   stream.value = Decoder.decode(stream_resp.response.return_value, stream.return_type, client)

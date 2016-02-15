@@ -1,4 +1,5 @@
 require 'krpc/protobuf_utils'
+require 'krpc/types'
 
 module KRPC
   module Encoder
@@ -10,7 +11,7 @@ module KRPC
       
       # Given a type object, and ruby object, encode the ruby object
       def encode(obj, type)
-        if type.is_a?(Types::MessageType) then obj.serialize_to_string
+        if type.is_a?(Types::MessageType) then type.ruby_type.encode(obj)
         elsif type.is_a?(Types::ValueType) then encode_value(obj, type)
         elsif type.is_a?(Types::EnumType)
           enum_value = type.ruby_type[obj]
@@ -19,27 +20,30 @@ module KRPC
           remote_oid = if obj == nil then 0 else obj.remote_oid end
           encode_value(remote_oid, TypeStore["uint64"])
         elsif type.is_a?(Types::ListType)
-          msg = TypeStore["KRPC.List"].ruby_type.new
-          msg.items = obj.map{|x| encode( TypeStore.coerce_to(x, type.value_type), type.value_type )}.to_a
-          msg.serialize_to_string
+          ruby_type = TypeStore["KRPC.List"].ruby_type
+          items = obj.map{|x| encode(TypeStore.coerce_to(x, type.value_type), type.value_type)}.to_a
+          msg = ruby_type.new(:items => items)
+          ruby_type.encode(msg)
         elsif type.is_a?(Types::DictionaryType)
+          ruby_type = TypeStore["KRPC.Dictionary"].ruby_type
           entry_type = TypeStore["KRPC.DictionaryEntry"].ruby_type
-          msg = TypeStore["KRPC.Dictionary"].ruby_type.new
-          msg.entries = obj.map do |k,v|
-            entry = entry_type.new
-            entry.key = encode( TypeStore.coerce_to(k, type.key_type), type.key_type )
-            entry.value = encode( TypeStore.coerce_to(v, type.value_type), type.value_type )
-            entry
+          entries = obj.map do |k,v|
+            key = encode(TypeStore.coerce_to(k, type.key_type), type.key_type)
+            value = encode(TypeStore.coerce_to(v, type.value_type), type.value_type)
+            entry_type.new(:key => key, :value => value)
           end
-          msg.serialize_to_string
+          msg = ruby_type.new(:entries => entries)
+          ruby_type.encode(msg)
         elsif type.is_a?(Types::SetType)
-          msg = TypeStore["KRPC.Set"].ruby_type.new
-          msg.items = obj.map{|x| encode( TypeStore.coerce_to(x, type.value_type), type.value_type )}.to_a
-          msg.serialize_to_string
+          ruby_type = TypeStore["KRPC.Set"].ruby_type
+          items = obj.map{|x| encode( TypeStore.coerce_to(x, type.value_type), type.value_type )}.to_a
+          msg = ruby_type.new(:items => items)
+          ruby_type.encode(msg)
         elsif type.is_a?(Types::TupleType)
-          msg = TypeStore["KRPC.Tuple"].ruby_type.new
-          msg.items = obj.zip(type.value_types).map{|x,t| encode( TypeStore.coerce_to(x, t), t )}.to_a
-          msg.serialize_to_string
+          ruby_type = TypeStore["KRPC.Tuple"].ruby_type
+          items = obj.zip(type.value_types).map{|x,t| encode( TypeStore.coerce_to(x, t), t )}.to_a
+          msg = ruby_type.new(:items => items)
+          ruby_type.encode(msg)
         else raise(RuntimeError, "Cannot encode object #{obj} of type #{type}")
         end
       end
@@ -49,7 +53,7 @@ module KRPC
       end
       
       def encode_request(req)
-        data = req.serialize_to_string
+        data = PB::Request.encode(req)
         length = ProtobufUtils::Encoder.encode_nonnegative_varint(data.length)
         length + data
       end

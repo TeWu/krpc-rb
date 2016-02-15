@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>kRPC</name>
+        <name>KRPC</name>
     </assembly>
     <members>
         <member name="T:KRPC.CompatibilityChecker">
@@ -1252,13 +1252,9 @@
             <summary>
             Which game scene(s) the service should be active during
             </summary></member>
-        <member name="P:KRPC.Service.Scanner.ProcedureSignature.ParameterBuilders">
+        <member name="P:KRPC.Service.Scanner.ProcedureSignature.Attributes">
             <summary>
             Protocol buffer builder objects, used to deserialize parameter values.
-            </summary></member>
-        <member name="P:KRPC.Service.Scanner.ProcedureSignature.ReturnBuilder">
-            <summary>
-            Protocol buffer builder objects, used to serialize the return value.
             </summary></member>
         <member name="P:KRPC.Service.Scanner.ServiceSignature.Name">
             <summary>
@@ -1276,7 +1272,7 @@
             <summary>
             The names of all classes defined in this service
             </summary></member>
-        <member name="P:KRPC.Service.Scanner.ServiceSignature.Enums">
+        <member name="P:KRPC.Service.Scanner.ServiceSignature.Enumerations">
             <summary>
             The names of all C# defined enums defined in this service, and their allowed values
             </summary></member>
@@ -1353,11 +1349,11 @@
             <summary>
             Decode the arguments for a procedure from a serialized request
             </summary></member>
-        <member name="M:KRPC.Service.Services.Decode(KRPC.Service.Scanner.ProcedureSignature,System.Int32,System.Type,Google.ProtocolBuffers.ByteString)">
+        <member name="M:KRPC.Service.Services.Decode(KRPC.Service.Scanner.ProcedureSignature,System.Int32,System.Type,Google.Protobuf.ByteString)">
             <summary>
             Decode a serialized value
             </summary></member>
-        <member name="M:KRPC.Service.Services.DecodeCollection(KRPC.Service.Scanner.ProcedureSignature,System.Int32,System.Type,Google.ProtocolBuffers.ByteString)">
+        <member name="M:KRPC.Service.Services.DecodeCollection(KRPC.Service.Scanner.ProcedureSignature,System.Int32,System.Type,Google.Protobuf.ByteString)">
             <summary>
             Decode a serialized collection
             </summary></member>
@@ -1877,10 +1873,6 @@
             Return the string name of the Protocol Buffer message type (with the package name prefixing it).
             E.g. "KRPC.Request"
             </summary></member>
-        <member name="M:KRPC.Utils.ProtocolBuffers.GetEnumTypeName(System.Type)">
-            <summary>
-            Return the string name of the Protocol Buffer enumeration type (with the package name prefixing it).
-            </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.GetValueTypeName(System.Type)">
             <summary>
             Return the string name of the Protocol Buffer message type corresponding to the given type.
@@ -1888,20 +1880,16 @@
             </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.GetTypeName(System.Type)">
             <summary>
-            Return the string name of the Protocol Buffer message, enumeration or value type.
+            Return the string name of the Protocol Buffer message or value type.
             </summary></member>
-        <member name="M:KRPC.Utils.ProtocolBuffers.BuilderForMessageType(System.Type)">
+        <member name="M:KRPC.Utils.ProtocolBuffers.ParseFrom(System.Type,Google.Protobuf.ByteString)">
             <summary>
-            Return a builder object for the given Protocol Buffer message type.
+            Parse the given data into a message object of the given type.
             The type must be derived from IMessage.
             </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.IsAMessageType(System.Type)">
             <summary>
             Returns true if the given type is a Protocol Buffer message type.
-            </summary></member>
-        <member name="M:KRPC.Utils.ProtocolBuffers.IsAnEnumType(System.Type)">
-            <summary>
-            Returns true if the given type is a Protocol Buffer enumeration type.
             </summary></member>
         <member name="M:KRPC.Utils.ProtocolBuffers.IsAValueType(System.Type)">
             <summary>
@@ -1911,11 +1899,11 @@
             <summary>
             Returns true if the given type is a Protocol Buffer message or value type.
             </summary></member>
-        <member name="M:KRPC.Utils.ProtocolBuffers.WriteMessage(Google.ProtocolBuffers.IMessage)">
+        <member name="M:KRPC.Utils.ProtocolBuffers.WriteMessage(Google.Protobuf.IMessage)">
             <summary>
             Convert a Protocol Buffer message to a byte string.
             </summary></member>
-        <member name="M:KRPC.Utils.ProtocolBuffers.ReadValue(Google.ProtocolBuffers.ByteString,System.Type)">
+        <member name="M:KRPC.Utils.ProtocolBuffers.ReadValue(Google.Protobuf.ByteString,System.Type)">
             <summary>
             Convert a Protocol Buffer value type, encoded as a byte string, to a C# value.
             </summary></member>
@@ -2204,5 +2192,133 @@
             <summary>
             Construct a tuple with 8 elements
             </summary></member>
+        <member name="T:KRPC.Schema.KRPC.KrpcReflection">
+            <summary>Holder for reflection information generated from protobuf/krpc.proto</summary></member>
+        <member name="P:KRPC.Schema.KRPC.KrpcReflection.Descriptor">
+            <summary>File descriptor for protobuf/krpc.proto</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Request.ServiceFieldNumber">
+            <summary>Field number for the "service" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Request.ProcedureFieldNumber">
+            <summary>Field number for the "procedure" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Request.ArgumentsFieldNumber">
+            <summary>Field number for the "arguments" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Argument.PositionFieldNumber">
+            <summary>Field number for the "position" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Argument.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Response.TimeFieldNumber">
+            <summary>Field number for the "time" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Response.HasErrorFieldNumber">
+            <summary>Field number for the "has_error" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Response.ErrorFieldNumber">
+            <summary>Field number for the "error" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Response.HasReturnValueFieldNumber">
+            <summary>Field number for the "has_return_value" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Response.ReturnValueFieldNumber">
+            <summary>Field number for the "return_value" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.StreamMessage.ResponsesFieldNumber">
+            <summary>Field number for the "responses" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.StreamResponse.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.StreamResponse.ResponseFieldNumber">
+            <summary>Field number for the "response" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Services.Services_FieldNumber">
+            <summary>Field number for the "services" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Service.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Service.ProceduresFieldNumber">
+            <summary>Field number for the "procedures" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Service.ClassesFieldNumber">
+            <summary>Field number for the "classes" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Service.EnumerationsFieldNumber">
+            <summary>Field number for the "enumerations" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Service.DocumentationFieldNumber">
+            <summary>Field number for the "documentation" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Procedure.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Procedure.ParametersFieldNumber">
+            <summary>Field number for the "parameters" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Procedure.HasReturnTypeFieldNumber">
+            <summary>Field number for the "has_return_type" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Procedure.ReturnTypeFieldNumber">
+            <summary>Field number for the "return_type" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Procedure.AttributesFieldNumber">
+            <summary>Field number for the "attributes" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Procedure.DocumentationFieldNumber">
+            <summary>Field number for the "documentation" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Parameter.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Parameter.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Parameter.HasDefaultArgumentFieldNumber">
+            <summary>Field number for the "has_default_argument" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Parameter.DefaultArgumentFieldNumber">
+            <summary>Field number for the "default_argument" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Class.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Class.DocumentationFieldNumber">
+            <summary>Field number for the "documentation" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Enumeration.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Enumeration.ValuesFieldNumber">
+            <summary>Field number for the "values" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Enumeration.DocumentationFieldNumber">
+            <summary>Field number for the "documentation" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.EnumerationValue.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.EnumerationValue.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.EnumerationValue.DocumentationFieldNumber">
+            <summary>Field number for the "documentation" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.List.ItemsFieldNumber">
+            <summary>Field number for the "items" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Dictionary.EntriesFieldNumber">
+            <summary>Field number for the "entries" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.DictionaryEntry.KeyFieldNumber">
+            <summary>Field number for the "key" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.DictionaryEntry.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Set.ItemsFieldNumber">
+            <summary>Field number for the "items" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Tuple.ItemsFieldNumber">
+            <summary>Field number for the "items" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.VersionFieldNumber">
+            <summary>Field number for the "version" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.BytesReadFieldNumber">
+            <summary>Field number for the "bytes_read" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.BytesWrittenFieldNumber">
+            <summary>Field number for the "bytes_written" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.BytesReadRateFieldNumber">
+            <summary>Field number for the "bytes_read_rate" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.BytesWrittenRateFieldNumber">
+            <summary>Field number for the "bytes_written_rate" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.RpcsExecutedFieldNumber">
+            <summary>Field number for the "rpcs_executed" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.RpcRateFieldNumber">
+            <summary>Field number for the "rpc_rate" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.OneRpcPerUpdateFieldNumber">
+            <summary>Field number for the "one_rpc_per_update" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.MaxTimePerUpdateFieldNumber">
+            <summary>Field number for the "max_time_per_update" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.AdaptiveRateControlFieldNumber">
+            <summary>Field number for the "adaptive_rate_control" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.BlockingRecvFieldNumber">
+            <summary>Field number for the "blocking_recv" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.RecvTimeoutFieldNumber">
+            <summary>Field number for the "recv_timeout" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.TimePerRpcUpdateFieldNumber">
+            <summary>Field number for the "time_per_rpc_update" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.PollTimePerRpcUpdateFieldNumber">
+            <summary>Field number for the "poll_time_per_rpc_update" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.ExecTimePerRpcUpdateFieldNumber">
+            <summary>Field number for the "exec_time_per_rpc_update" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.StreamRpcsFieldNumber">
+            <summary>Field number for the "stream_rpcs" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.StreamRpcsExecutedFieldNumber">
+            <summary>Field number for the "stream_rpcs_executed" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.StreamRpcRateFieldNumber">
+            <summary>Field number for the "stream_rpc_rate" field.</summary></member>
+        <member name="F:KRPC.Schema.KRPC.Status.TimePerStreamUpdateFieldNumber">
+            <summary>Field number for the "time_per_stream_update" field.</summary></member>
     </members>
 </doc>

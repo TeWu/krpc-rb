@@ -1,12 +1,11 @@
-require 'krpc/KRPC.pb'
+require 'krpc/krpc.pb'
 
 module KRPC
   module ProtobufUtils
     class << self
       def create_PB_to_PB_message_class_hash(package)
         protobuf_module = Kernel.const_get(package.gsub(".","::") + "::PB")
-        msg_classes_names = protobuf_module.constants.select{|c| protobuf_module.const_get(c,false).superclass == ::Protobuf::Message}
-        msg_classes_names.map do |name|
+        protobuf_module.constants.map do |name|
           [package + "." + name.to_s, protobuf_module.const_get(name,false)]
         end.to_h
       end    
@@ -60,11 +59,11 @@ module KRPC
         end
         def decode_string(bytes)
           size, pos = decode_varint_pos(bytes)
-          bytes[pos..(pos+size)]
+          bytes[pos..(pos+size)].force_encoding(Encoding::UTF_8)
         end
         def decode_bytes(bytes)
           size, pos = decode_varint_pos(bytes)
-          bytes[pos..(pos+size)]
+          bytes[pos..(pos+size)].bytes
         end
         
       end

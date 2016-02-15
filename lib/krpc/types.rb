@@ -37,7 +37,6 @@ module KRPC
             elsif type_string.start_with? "Dictionary(" || type_string == "Dictionary" then DictionaryType.new(type_string)
             elsif type_string.start_with? "Set("   || type_string == "Set"   then SetType.new(type_string)
             elsif type_string.start_with? "Tuple(" || type_string == "Tuple" then TupleType.new(type_string)
-            elsif type_string == "Test.TestEnum" then ValueType.new("int32")
             else # A message type (eg. type_string = "KRPC.List" or "KRPC.Services")
               raise(ValueError, "\"#{type_string}\" is not a valid type string") unless /^[A-Za-z0-9_\.]+$/ =~ type_string
               if PROTOBUF_TO_MESSAGE_TYPE.has_key? type_string

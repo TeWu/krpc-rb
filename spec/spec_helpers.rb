@@ -4,8 +4,8 @@ require 'krpc'
 shared_context "test server support" do
   before :all do
     @test_server = {rpc_port: 50011, stream_port: 50012, }
-    @test_server[:io] = IO.popen("bin/TestServer/TestServer.exe #{@test_server[:rpc_port]} #{@test_server[:stream_port]}")
-    until @test_server[:io].readline.include? "[kRPC] TCPServer(StreamServer): started successfully" do
+    @test_server[:io] = IO.popen("bin/TestServer/TestServer.exe --rpc-port #{@test_server[:rpc_port]} --stream-port #{@test_server[:stream_port]}")
+    until @test_server[:io].readline.include? "[kRPC] [Info] TCPServer(StreamServer): started successfully" do
     end
     @test_server[:pid] = @test_server[:io].pid
   end
