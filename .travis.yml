@@ -1,4 +1,10 @@
 sudo: required
+dist: trusty
+
+addons:
+  apt:
+    packages:
+      - mono-devel
 
 language: ruby
 rvm:
@@ -13,8 +19,7 @@ matrix:
     - rvm: rbx-2
 
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq mono-devel
+  - gem install bundler
   - chmod +x bin/TestServer/TestServer.exe
 
 script:
