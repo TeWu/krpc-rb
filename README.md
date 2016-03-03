@@ -1,7 +1,7 @@
 kRPC-rb [![Gem Version](https://badge.fury.io/rb/krpc.svg)](http://badge.fury.io/rb/krpc) [![Build Status](https://travis-ci.org/TeWu/krpc-rb.svg?branch=master)](https://travis-ci.org/TeWu/krpc-rb)
 =======
 
-kRPC-rb is a Ruby client library for [kRPC](http://forum.kerbalspaceprogram.com/threads/69313), a Kerbal Space Program mod that allows you to control KSP from external scripts running outside of the game.
+kRPC-rb is a Ruby client library for [kRPC](http://forum.kerbalspaceprogram.com/threads/69313), a [Kerbal Space Program](https://kerbalspaceprogram.com/) mod that allows you to control KSP from external scripts running outside of the game.
 
 ![kRPC-rb image](http://drive.google.com/uc?export=view&id=0B2PFP23spNJwXzFCbmR0eDF5TVE "This is kRPC-rb!")
 
@@ -27,7 +27,7 @@ client.close
 ```
 
 Most of the API is *very* similar to what can be found in (official) Python client library.
-So official documentation at http://djungelorm.github.io/krpc/docs/ is definitely a good read.
+So official documentation at http://krpc.github.io/krpc/ is definitely a good read.
 The rest of this file describes few differences there are between Ruby and Python client libraries.
 
 Connecting and disconnecting
@@ -132,7 +132,7 @@ pos_stream.remove #note: dead code - just as an example
 
 Want to know more?
 -------
-* Read official **kRPC documentation** at http://djungelorm.github.io/krpc/docs, with many great [tutorials and examples](http://djungelorm.github.io/krpc/docs/tutorials.html).
+* Read official **kRPC documentation** at http://krpc.github.io/krpc/, with many great [tutorials and examples](http://krpc.github.io/krpc/tutorials.html).
 * Refer to **kRPC-rb documentation** at http://tewu.github.io/krpc-rb/doc
 * See official **kRPC forum thread** at http://forum.kerbalspaceprogram.com/threads/69313
 
