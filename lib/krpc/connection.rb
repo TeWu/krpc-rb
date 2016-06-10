@@ -51,7 +51,7 @@ module KRPC
     
     def send(msg) @socket.send(msg, 0) end
     def recv(maxlen = 1)
-      maxlen == 0 ? "" : @socket.recv(maxlen)
+      maxlen == 0 ? "" : @socket.read(maxlen)
     end
     
     def recv_varint
