@@ -48,8 +48,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_message "krpc.schema.Parameter" do
     optional :name, :string, 1
     optional :type, :string, 2
-    optional :has_default_argument, :bool, 3
-    optional :default_argument, :bytes, 4
+    optional :has_default_value, :bool, 3
+    optional :default_value, :bytes, 4
   end
   add_message "krpc.schema.Class" do
     optional :name, :string, 1
