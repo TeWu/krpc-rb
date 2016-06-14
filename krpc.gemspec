@@ -32,4 +32,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "bundler", "~> 1.11"
   s.add_development_dependency "pry", "~> 0.10"
   s.add_development_dependency "rspec", "~> 3.4"
+  s.add_development_dependency "rake", "~> 11.1"
 end
