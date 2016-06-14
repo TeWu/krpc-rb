@@ -129,7 +129,7 @@ describe KRPC::Client do
     expect { obj.object_to_string(obj, 2) }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(2 for 1\)/)
 
     expect { KRPC::Gen::TestService::TestClass.static_method }.to raise_error(KRPC::ArgumentErrorSig, /missing argument for parameter "client"/)
-    expect { KRPC::Gen::TestService::TestClass.static_method(2) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "client" must be a KRPC::Client -- got 2 of type Fixnum/)
+    expect { KRPC::Gen::TestService::TestClass.static_method(2) }.to raise_error(KRPC::ArgumentErrorSig, /argument for parameter "client" must be a KRPC::Client -- got 2 of type /)
     expect { KRPC::Gen::TestService::TestClass.static_method(@test_client, "str", "str2", "str3") }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(4 for 1\.\.3\)/)
 
     expect { @test_service.optional_arguments("1", "2", "3", "4", "5") }.to raise_error(KRPC::ArgumentsNumberErrorSig, /wrong number of arguments \(5 for 1\.\.4\)/)
