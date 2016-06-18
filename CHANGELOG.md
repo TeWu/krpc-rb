@@ -1,3 +1,8 @@
+v0.3.1  (18 Jun 2016)
+========
++ Fixed receiving of chunked responses
++ Updated protocol buffers schema
+
 v0.3.0  (15 Feb 2016)
 ========
 + **Updated to work with kRPC server version 0.2.x** (#6):
