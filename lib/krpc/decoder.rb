@@ -3,10 +3,6 @@ require 'set'
 
 module KRPC
   module Decoder
-    OK_LENGTH = 2
-    OK_MESSAGE = "\x4F\x4B"
-    GUID_LENGTH = 16
-    
     class << self
     
       # Given a type object, and serialized data, decode the ruby value/object

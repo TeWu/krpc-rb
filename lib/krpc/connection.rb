@@ -49,11 +49,23 @@ module KRPC
     def handshake; end
     def cleanup; end
     
-    def send(msg) @socket.send(msg, 0) end
+    def protobuf_handshake(type, **attrs)
+      send_message PB::ConnectionRequest.new(type: type, **attrs)
+      resp = receive_message PB::ConnectionResponse
+      raise(ConnectionError, "#{resp.status} -- #{resp.message}") unless resp.status == :OK
+      resp
+    end
+    
+    def send(data)
+      @socket.send(data, 0)
+    end
+    def send_message(msg)
+      send Encoder.encode_message(msg)
+    end
+    
     def recv(maxlen = 1)
       maxlen == 0 ? "" : @socket.read(maxlen)
     end
-    
     def recv_varint
       int_val = 0
       shift = 0
@@ -65,30 +77,27 @@ module KRPC
         raise(RuntimeError, "too many bytes when decoding varint") if shift >= 64
       end
     end
-    
-    protected #----------------------------------
-    
-    def trim_fill(str, len, fill_char = "\x00")
-      str = str.encode("UTF-8")[0, len]
-      str + fill_char*(len-str.length)
+    def receive_message(msg_type)
+      msg_length = recv_varint
+      msg_data = recv(msg_length)
+      msg_type.decode(msg_data)
     end
   end
 
   ##
-  # TCP connection for sending RPC calls and retrieving it's results.
+  # TCP connection for sending RPC calls and retrieving its results.
   class RPCConnection < Connection
     attr_reader :name, :client_id
     
-    def initialize(name, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_RPC_PORT)
+    def initialize(name = Client::DEFAULT_NAME, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_RPC_PORT)
       super host, port
       @name = name
     end
 
     # Perform handshake with kRPC server, obtaining `@client_id`.
     def handshake
-      send Encoder::RPC_HELLO_MESSAGE
-      send trim_fill(name, Encoder::NAME_LENGTH)
-      @client_id = recv Decoder::GUID_LENGTH
+      resp = protobuf_handshake(:RPC, client_name: name)
+      @client_id = resp.client_identifier
     end
     
     # Clean up - sets `@client_id` to `nil`.
@@ -110,10 +119,7 @@ module KRPC
     # Perform handshake with kRPC server, sending `client_id` retrieved from `rpc_connection`.
     def handshake
       raise(ConnectionError, "RPC connection must obtain client_id before stream connection can perform valid handshake - closing stream connection") if rpc_connection.client_id.nil? 
-      send Encoder::STREAM_HELLO_MESSAGE
-      send rpc_connection.client_id
-      resp = recv Decoder::OK_LENGTH
-      raise ConnectionError unless resp == Decoder::OK_MESSAGE
+      protobuf_handshake(:STREAM, client_identifier: rpc_connection.client_id)
     end
   end
   

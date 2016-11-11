@@ -3,10 +3,6 @@ require 'krpc/types'
 
 module KRPC
   module Encoder
-    RPC_HELLO_MESSAGE = "\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00"
-    STREAM_HELLO_MESSAGE = "\x48\x45\x4C\x4C\x4F\x2D\x53\x54\x52\x45\x41\x4D"
-    NAME_LENGTH = 32
-    
     class << self
       
       # Given a type object, and ruby object, encode the ruby object
@@ -51,13 +47,13 @@ module KRPC
         else raise(RuntimeError, "Cannot encode object #{obj} of type #{type}")
         end
       end
-            
+      
       def encode_value(value, type)
         ProtobufUtils::Encoder.encode(value, type.protobuf_type)
       end
       
-      def encode_request(req)
-        data = PB::Request.encode(req)
+      def encode_message(msg)
+        data = msg.class.encode(msg)
         length = ProtobufUtils::Encoder.encode_nonnegative_varint(data.length)
         length + data
       end

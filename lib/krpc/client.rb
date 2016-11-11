@@ -132,7 +132,7 @@ module KRPC
     # Execute an RPC.
     def execute_rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
       send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
-      resp = receive_response
+      resp = rpc_connection.receive_message PB::Response
       raise(RPCError, resp.error) if resp.has_error
       unless return_type.nil?
         Decoder.decode(resp.return_value, return_type, self)
@@ -196,13 +196,7 @@ module KRPC
 
     def send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
       req = build_request(service, procedure, args, kwargs, param_names, param_types, param_default)
-      rpc_connection.send Encoder.encode_request(req)
-    end
-    
-    def receive_response
-      resp_length = rpc_connection.recv_varint
-      resp_data = rpc_connection.recv resp_length
-      resp = PB::Response.decode(resp_data)
+      rpc_connection.send_message req
     end
     
     def call_block_and_close(block)
