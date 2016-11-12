@@ -17,12 +17,12 @@ module KRPC
         
         # Create service' classes
         service_msg.classes.map(&:name).each do |sc_name|
-          TypeStore["Class(#{service_name}.#{sc_name})"]
+          TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: sc_name)]
         end
         
         # Create service' enums
         service_msg.enumerations.each do |enum|
-          enum_type = TypeStore["Enum(#{service_name}.#{enum.name})"]
+          enum_type = TypeStore[PB::Type.new(code: :ENUMERATION, service: service_name, name: enum.name)]
           enum_type.set_values(enum.values)
         end
         
@@ -30,7 +30,7 @@ module KRPC
         service_msg.procedures.each do |proc|
           if Attributes.is_a_class_method_or_property_accessor(proc.attributes)
             class_name  = Attributes.get_class_name(proc.attributes)
-            class_cls = TypeStore["Class(#{service_name}.#{class_name})"].ruby_type
+            class_cls = TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: class_name)].ruby_type
             method_name = Attributes.get_class_method_or_property_name(proc.attributes)
             if Attributes.is_a_class_property_accessor(proc.attributes)  # service' class property
               if Attributes.is_a_class_property_getter(proc.attributes)

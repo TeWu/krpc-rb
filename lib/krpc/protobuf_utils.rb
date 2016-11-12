@@ -2,17 +2,9 @@ require 'krpc/krpc.pb'
 
 module KRPC
   module ProtobufUtils
-    class << self
-      def create_PB_to_PB_message_class_hash(package)
-        protobuf_module = Kernel.const_get(package.gsub(".","::") + "::PB")
-        protobuf_module.constants.map do |name|
-          [package + "." + name.to_s, protobuf_module.const_get(name,false)]
-        end.to_h
-      end    
-    end
-
     module Decoder
       class << self
+      
         def decode(bytes, type)
           meth_name = "decode_" + type
           raise RuntimeError.new("Unsupported type #{type}") unless respond_to?(meth_name)
@@ -71,6 +63,7 @@ module KRPC
     
     module Encoder
       class << self
+      
         def encode(value, type)
           meth_name = "encode_" + type
           raise(RuntimeError, "Unsupported type #{type}") unless respond_to?(meth_name)

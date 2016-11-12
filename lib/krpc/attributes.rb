@@ -62,19 +62,7 @@ module KRPC
         end
         raise(ValueError, "Procedure attributes are not a class method or class property accessor")
       end
-      
-      def get_parameter_type_attrs(pos, attrs)
-        attrs.map do |a| 
-          (/^ParameterType\(#{pos}\).(.+)$/ =~ a) ? $1 : nil
-        end.compact
-      end
-      
-      def get_return_type_attrs(attrs)
-        attrs.map do |a| 
-          (/^ReturnType.(.+)$/ =~ a) ? $1 : nil
-        end.compact
-      end
-      
+    
     end
   end
 end

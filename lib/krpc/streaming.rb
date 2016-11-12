@@ -53,19 +53,18 @@ module KRPC
         stop_streaming_thread
         @streaming_thread = Thread.new do
           connection = client.stream_connection
-          stream_message_type = TypeStore["KRPC.StreamMessage"]
           loop do
             size = connection.recv_varint
             data = connection.recv(size)
-            stream_msg = Decoder.decode(data, stream_message_type, client)
+            stream_msg = PB::StreamUpdate.decode(data)
             @streams_mutex.synchronize do
-              stream_msg.responses.each do |stream_resp|
-                next unless @streams.include? stream_resp.id
-                stream = @streams[stream_resp.id]
-                if stream_resp.response.field_empty? :error
-                  stream.value = Decoder.decode(stream_resp.response.return_value, stream.return_type, client)
+              stream_msg.results.each do |result|
+                next unless @streams.include? result.id
+                stream = @streams[result.id]
+                if result.result.field_empty? :error
+                  stream.value = Decoder.decode(result.result.return_value, stream.return_type, client)
                 else
-                  stream.value = RPCError.new(stream_resp.response.error)
+                  stream.value = RPCError.new(result.result.error)
                 end
               end
             end

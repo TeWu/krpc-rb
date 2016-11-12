@@ -92,16 +92,16 @@ module KRPC
       end
       
       def parse_procedure(proc)
-        param_names = proc.parameters.map{|p| p.name.underscore}
-        param_types = proc.parameters.map.with_index do |p,i|
-          TypeStore.get_parameter_type(i, p.type, proc.attributes)
-        end
+        param_names = proc.parameters.map{|p| p.name.underscore }
+        param_types = proc.parameters.map{|p| TypeStore[p.type] }
         param_default = proc.parameters.zip(param_types).map do |param, type|
           param.field_empty?(:default_value) ? :no_default_value : Decoder.decode(param.default_value, type, :clientless)
         end
-        return_type = if proc.has_return_type
-                        TypeStore.get_return_type(proc.return_type, proc.attributes)
-                      else nil end
+        return_type = if proc.field_empty?(:return_type) || proc.return_type.code == :NONE
+                        nil
+                      else
+                        TypeStore[proc.return_type]
+                      end
         [param_names, param_types, param_default, return_type]
       end
     end
