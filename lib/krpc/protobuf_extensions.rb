@@ -2,15 +2,20 @@ require 'krpc/krpc.pb'
 
 module KRPC
   module ProtobufExtensions
-
     module MessageExtensions
+
       def ==(other)
         super
       rescue TypeError
         false
       end
-    end
 
+      def field_empty?(field)
+        val = self.send(field)
+        val == "" || val == [] || val.nil?
+      end
+
+    end
   end
 end
 

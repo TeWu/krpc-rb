@@ -133,7 +133,7 @@ module KRPC
     def execute_rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
       send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
       resp = rpc_connection.receive_message PB::Response
-      raise(RPCError, resp.error) if resp.has_error
+      raise(RPCError, resp.error) unless resp.field_empty? :error
       unless return_type.nil?
         Decoder.decode(resp.return_value, return_type, self)
       else

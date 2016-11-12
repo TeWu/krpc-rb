@@ -97,10 +97,7 @@ module KRPC
           TypeStore.get_parameter_type(i, p.type, proc.attributes)
         end
         param_default = proc.parameters.zip(param_types).map do |param, type|
-          if param.has_default_value
-            Decoder.decode(param.default_value, type, :clientless)
-          else :no_default_value
-          end
+          param.field_empty?(:default_value) ? :no_default_value : Decoder.decode(param.default_value, type, :clientless)
         end
         return_type = if proc.has_return_type
                         TypeStore.get_return_type(proc.return_type, proc.attributes)
