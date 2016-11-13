@@ -28,14 +28,13 @@ module KRPC
             raise(RuntimeError, "too many bytes when decoding varint") if shift >= 64
           end
         end
-        def decode_signed_varint(bytes)
-          result = decode_varint(bytes) 
-          result -= (1 << 64) if result > 0x7fffffffffffffff
-          result
+        def decode_zigzaged_varint(bytes)
+          zigzaged = decode_varint(bytes)
+          (zigzaged >> 1) ^ -(zigzaged & 1)
         end
         
-        alias_method :decode_int32, :decode_signed_varint
-        alias_method :decode_int64, :decode_signed_varint
+        alias_method :decode_sint32, :decode_zigzaged_varint
+        alias_method :decode_sint64, :decode_zigzaged_varint
         alias_method :decode_uint32, :decode_varint
         alias_method :decode_uint64, :decode_varint
         
@@ -84,20 +83,24 @@ module KRPC
             end
           end
         end
-        def encode_signed_varint(value)
-          value += (1 << 64) if value < 0
-          encode_varint(value)
-        end
         def encode_nonnegative_varint(value)
           raise(RangeError, "Value must be non-negative, got #{value}") if value < 0
           encode_varint(value)
         end
-      
-        alias_method :encode_int32, :encode_signed_varint
-        alias_method :encode_int64, :encode_signed_varint
+        def encode_zigzaged_varint_32(value)
+          zigzaged = (value << 1) ^ (value >> 31)
+          encode_varint(zigzaged)
+        end
+        def encode_zigzaged_varint_64(value)
+          zigzaged = (value << 1) ^ (value >> 63)
+          encode_varint(zigzaged)
+        end
+        
+        alias_method :encode_sint32, :encode_zigzaged_varint_32
+        alias_method :encode_sint64, :encode_zigzaged_varint_64
         alias_method :encode_uint32, :encode_nonnegative_varint
         alias_method :encode_uint64, :encode_nonnegative_varint
-      
+        
         def encode_float(value)
           [value].pack('e')
         end
