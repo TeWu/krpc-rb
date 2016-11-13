@@ -28,26 +28,26 @@ module KRPC
         
         # Create service' procedures
         service_msg.procedures.each do |proc|
-          if Attributes.is_a_class_method_or_property_accessor(proc.attributes)
-            class_name  = Attributes.get_class_name(proc.attributes)
+          if Attributes.is_a_class_member(proc.name)
+            class_name  = Attributes.get_class_name(proc.name)
             class_cls = TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: class_name)].ruby_type
-            method_name = Attributes.get_class_method_or_property_name(proc.attributes)
-            if Attributes.is_a_class_property_accessor(proc.attributes)  # service' class property
-              if Attributes.is_a_class_property_getter(proc.attributes)
+            method_name = Attributes.get_class_member_name(proc.name)
+            if Attributes.is_a_class_property_accessor(proc.name)  # service' class property
+              if Attributes.is_a_class_property_getter(proc.name)
                 Gen.add_rpc_method(class_cls, method_name, service_name, proc, :prepend_self_to_args)
               else
                 Gen.add_rpc_method(class_cls, method_name + '=', service_name, proc, :prepend_self_to_args, :no_stream)
               end
-            elsif Attributes.is_a_class_method(proc.attributes)  # service' class method
+            elsif Attributes.is_a_class_method(proc.name)  # service' class method
               Gen.add_rpc_method(class_cls, method_name, service_name, proc, :prepend_self_to_args)
             else  # service' static class method
               Gen.add_rpc_method(class_cls, method_name, service_name, proc, :static)
             end
-          elsif Attributes.is_a_property_accessor(proc.attributes)  # service' property
-            property_name = Attributes.get_property_name(proc.attributes)
-            if Attributes.is_a_property_getter(proc.attributes)
+          elsif Attributes.is_a_property_accessor(proc.name)  # service' property
+            property_name = Attributes.get_property_name(proc.name)
+            if Attributes.is_a_property_getter(proc.name)
               Gen.add_rpc_method(service_class, property_name, service_name, proc)
-            elsif Attributes.is_a_property_setter(proc.attributes)
+            elsif Attributes.is_a_property_setter(proc.name)
               Gen.add_rpc_method(service_class, property_name + '=', service_name, proc, :no_stream)
             end
           else  # plain procedure = method available to service class and its instance

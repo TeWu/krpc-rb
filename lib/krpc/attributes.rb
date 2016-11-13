@@ -4,65 +4,42 @@ module KRPC
   module Attributes
     class << self
 
-      def is_any_start_with?(attrs, prefix)
-        attrs.any?{|a| a.start_with? prefix }
+      def is_a_property_accessor(name) name.start_with?('get_') || name.start_with?('set_') end
+      def is_a_property_getter(name) name.start_with?('get_') end
+      def is_a_property_setter(name) name.start_with?('set_') end
+      def is_a_class_member(name)
+        !(name.start_with?('get_') || name.start_with?('set_')) and name.include?('_')
       end
-      alias_method :asw?, :is_any_start_with?
-      
-      def is_a_property_accessor(attrs) asw?(attrs,"Property.")  end
-      def is_a_property_getter(attrs) asw?(attrs,"Property.Get(") end
-      def is_a_property_setter(attrs) asw?(attrs,"Property.Set(") end
-      def is_a_class_method_or_property_accessor(attrs) asw?(attrs,"Class.") end
-      def is_a_class_method(attrs) asw?(attrs,"Class.Method(") end
-      def is_a_class_static_method(attrs) asw?(attrs,"Class.StaticMethod(") end    
-      def is_a_class_property_accessor(attrs) asw?(attrs,"Class.Property.") end
-      def is_a_class_property_getter(attrs) asw?(attrs,"Class.Property.Get(") end
-      def is_a_class_property_setter(attrs) asw?(attrs,"Class.Property.Set(") end
-      
-      def get_service_name(attrs)
-        if is_a_class_method(attrs) || is_a_class_static_method(attrs)
-          attrs.each do |a| 
-            return $1 if /^Class\.(?:Static)?Method\(([^,\.]+)\.[^,]+,[^,]+\)$/ =~ a
-          end
-        elsif is_a_class_property_accessor(attrs)
-          attrs.each do |a| 
-            return $1 if /^Class\.Property.(?:Get|Set)\(([^,\.]+)\.[^,]+,[^,]+\)$/ =~ a
-          end
+      def is_a_class_method(name)
+        is_a_class_member(name) && begin
+          type = name.split('_')[1]
+          not ['get','set','static'].include? type
         end
-        raise(ValueError, "Procedure attributes are not a class method or property accessor")
+      end
+      def is_a_class_static_method(name) name.split('_')[1] == 'static' end
+      def is_a_class_property_accessor(name)
+        type = name.split('_')[1]
+        type == 'get' || type == 'set'
+      end
+      def is_a_class_property_getter(name) name.split('_')[1] == 'get' end
+      def is_a_class_property_setter(name) name.split('_')[1] == 'set' end
+      
+      
+      def get_class_name(name)
+        raise(ValueError, "Procedure is not a class method or property") unless is_a_class_member(name)
+        name.partition('_')[0]
       end
       
-      def get_class_name(attrs)
-        if is_a_class_method(attrs) || is_a_class_static_method(attrs)
-          attrs.each do |a| 
-            return $1 if /^Class\.(?:Static)?Method\([^,\.]+\.([^,\.]+),[^,]+\)$/ =~ a
-          end
-        elsif is_a_class_property_accessor(attrs)
-          attrs.each do |a| 
-            return $1 if /^Class\.Property.(?:Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$/ =~ a
-          end
-        end
-        raise(ValueError, "Procedure attributes are not a class method or property accessor")
+      def get_class_member_name(name)
+        raise(ValueError, "Procedure is not a class method or property") unless is_a_class_member(name)
+        name.rpartition('_').last
       end
       
-      def get_property_name(attrs)
-        if is_a_property_accessor(attrs)
-          attrs.each do |a| 
-            return $1 if /^Property\.(?:Get|Set)\((.+)\)$/ =~ a
-          end
-        end
-        raise(ValueError, "Procedure attributes are not a property accessor")
+      def get_property_name(name)
+        raise(ValueError, "Procedure is not a property") unless is_a_property_accessor(name)
+        name[4..-1] # Strip 'get_' or 'set_' off of the start of the name
       end
       
-      def get_class_method_or_property_name(attrs)
-        if is_a_class_method(attrs) || is_a_class_static_method(attrs) || is_a_class_property_accessor(attrs)
-          attrs.each do |a| 
-            return $1 if /^Class\.(?:(?:Static)?Method|Property\.(?:Get|Set))\([^,]+,([^,]+)\)$/ =~ a
-          end
-        end
-        raise(ValueError, "Procedure attributes are not a class method or class property accessor")
-      end
-    
     end
   end
 end
