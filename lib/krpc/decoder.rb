@@ -9,7 +9,7 @@ module KRPC
       def decode(data, type, client)
         if type.is_a?(Types::MessageType) then decode_message(data, type)
         elsif type.is_a?(Types::ValueType) then decode_value(data, type)
-        elsif type.is_a?(Types::EnumType) 
+        elsif type.is_a?(Types::EnumType)
           v = decode_value(data, 'sint32')
           type.ruby_type.key(v)
         elsif type.is_a?(Types::ClassType)

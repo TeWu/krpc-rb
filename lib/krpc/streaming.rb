@@ -16,9 +16,10 @@ module KRPC
     
       # Send a streaming request, create related Stream object and return it. If identical Stream
       # already exists, doesn't create new Stream and return the existing one.
-      def create_stream(request, return_type, method, *args, **kwargs)
+      def create_stream(call, return_type, method, *args, **kwargs)
         raise RuntimeError("Cannot stream a property setter") if method.name.to_s.end_with? '='
-        id = client.krpc.add_stream(request)
+        stream_msg = client.krpc.add_stream(call)
+        id = stream_msg.id
         @streams_mutex.synchronize do
           if @streams.include? id
             @streams[id]
@@ -62,7 +63,7 @@ module KRPC
                 next unless @streams.include? result.id
                 stream = @streams[result.id]
                 if result.result.field_empty? :error
-                  stream.value = Decoder.decode(result.result.return_value, stream.return_type, client)
+                  stream.value = Decoder.decode(result.result.value, stream.return_type, client)
                 else
                   stream.value = RPCError.new(result.result.error)
                 end

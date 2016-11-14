@@ -16,6 +16,7 @@ module KRPC
           decode_varint_pos(bytes)[0]
         end
         def decode_varint_pos(bytes)
+          raise(RuntimeError, "can't decode varint from empty byte buffer") if bytes.empty?
           pos = 0
           result = 0
           shift = 0

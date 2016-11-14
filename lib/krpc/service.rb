@@ -16,9 +16,10 @@ module KRPC
         const_set(service_name, service_class)
         
         # Create service' classes
-        service_msg.classes.map(&:name).each do |sc_name|
-          TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: sc_name)]
+        classes_types_by_name = Hash.new do |h,k|
+          TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: k)]
         end
+        service_msg.classes.map(&:name).each {|cn| classes_types_by_name[cn] }
         
         # Create service' enums
         service_msg.enumerations.each do |enum|
@@ -30,7 +31,7 @@ module KRPC
         service_msg.procedures.each do |proc|
           if Attributes.is_a_class_member(proc.name)
             class_name  = Attributes.get_class_name(proc.name)
-            class_cls = TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: class_name)].ruby_type
+            class_cls = classes_types_by_name[class_name].ruby_type
             method_name = Attributes.get_class_member_name(proc.name)
             if Attributes.is_a_class_property_accessor(proc.name)  # service' class property
               if Attributes.is_a_class_property_getter(proc.name)
@@ -82,10 +83,10 @@ module KRPC
       def initialize(client)
         super(client)
         unless respond_to? :get_status
-          include_rpc_method("get_status", "KRPC", "GetStatus", return_type: "KRPC.Status", xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>", options: :no_stream)
-          include_rpc_method("get_services", "KRPC", "GetServices", return_type: "KRPC.Services", xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>", options: :no_stream)
-          include_rpc_method("add_stream", "KRPC", "AddStream", params: [PB::Parameter.new(name: "request", type: "KRPC.Request")], return_type: "uint32", xmldoc: "<doc><summary>Add a streaming request. Returns it's identifier.</summary></doc>", options: :no_stream)
-          include_rpc_method("remove_stream", "KRPC", "RemoveStream", params: [PB::Parameter.new(name: "id", type: "uint32")], xmldoc: "<doc><summary>Remove a streaming request</summary></doc>", options: :no_stream)
+          include_rpc_method("get_status", "KRPC", "GetStatus", return_type: PB::Type.new(code: :STATUS), xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>", options: :no_stream)
+          include_rpc_method("get_services", "KRPC", "GetServices", return_type: PB::Type.new(code: :SERVICES), xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>", options: :no_stream)
+          include_rpc_method("add_stream", "KRPC", "AddStream", params: [PB::Parameter.new(name: "request", type: PB::Type.new(code: :PROCEDURE_CALL))], return_type: PB::Type.new(code: :STREAM), xmldoc: "<doc><summary>Add a streaming request. Returns it's identifier.</summary></doc>", options: :no_stream)
+          include_rpc_method("remove_stream", "KRPC", "RemoveStream", params: [PB::Parameter.new(name: "id", type: PB::Type.new(code: :UINT64))], xmldoc: "<doc><summary>Remove a streaming request</summary></doc>", options: :no_stream)
         end
       end
     end

@@ -132,10 +132,10 @@ module KRPC
     # Execute an RPC.
     def execute_rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
       send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
-      resp = rpc_connection.receive_message PB::Response
-      raise(RPCError, resp.error) unless resp.field_empty? :error
+      result = receive_result
+      raise(RPCError, result.error) unless result.field_empty? :error
       unless return_type.nil?
-        Decoder.decode(resp.return_value, return_type, self)
+        Decoder.decode(result.value, return_type, self)
       else
         nil
       end
@@ -146,16 +146,22 @@ module KRPC
 
     # Build a PB::Request object.
     def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[])
+      call = build_procedure_call(service, procedure, args, kwargs, param_names, param_types, param_default)
+      PB::Request.new(calls: [call])
+    end
+
+    # Build a PB::ProcedureCall object.
+    def build_procedure_call(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[])
       begin
         raise(ArgumentError, "param_names and param_types should be equal length\n\tparam_names = #{param_names}\n\tparam_types = #{param_types}") unless param_names.length == param_types.length
         raise(ArgumentError, "param_names and param_default should be equal length\n\tparam_names = #{param_names}\n\tparam_default = #{param_default}") unless param_names.length == param_default.length
         required_params_count = param_default.take_while{|pd| pd == :no_default_value}.count
         raise ArgumentsNumberErrorSig.new(args.count, required_params_count..param_names.count) unless args.count <= param_names.count
-        req_args = construct_arguments(args, kwargs, param_names, param_types, param_default, required_params_count)
+        call_args = construct_arguments(args, kwargs, param_names, param_types, param_default, required_params_count)
       rescue ArgumentErrorSig => err
         raise err.with_signature(Doc.docstring_for_procedure(service, procedure, false))
       end
-      PB::Request.new(service: service, procedure: procedure, arguments: req_args)
+      PB::ProcedureCall.new(service: service, procedure: procedure, arguments: call_args)
     end
 
     protected #----------------------------------
@@ -164,7 +170,7 @@ module KRPC
       param_names_symbols = param_names.map(&:to_sym)
       kwargs_remaining = kwargs.count
       
-      req_args = param_names_symbols.map.with_index do |name, i|
+      call_args = param_names_symbols.map.with_index do |name, i|
         is_kwarg = kwargs.has_key? name
         kwargs_remaining -= 1 if is_kwarg
         raise ArgumentErrorSig.new("there are both positional and keyword arguments for parameter \"#{name}\"") if is_kwarg && i < args.count
@@ -191,12 +197,18 @@ module KRPC
       end.compact
       
       raise ArgumentErrorSig.new("keyword arguments for non existing parameters: #{(kwargs.keys - param_names_symbols).join(", ")}") unless kwargs_remaining == 0
-      req_args
+      call_args
     end
 
     def send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
       req = build_request(service, procedure, args, kwargs, param_names, param_types, param_default)
       rpc_connection.send_message req
+    end
+    
+    def receive_result
+      resp = rpc_connection.receive_message PB::Response
+      raise(RPCError, resp.error) unless resp.field_empty? :error
+      resp.results[0]
     end
     
     def call_block_and_close(block)

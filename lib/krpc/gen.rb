@@ -85,8 +85,8 @@ module KRPC
         cls.stream_constructors[method_name] = Proc.new do |this, *args, **kwargs|
           Gen.transform_exceptions(this, method_name, prepend_self_to_args) do
             req_args = prepend_self_to_args ? [this] + args : args
-            request = this.client.build_request(service_name, proc.name, req_args, kwargs, param_names, param_types, param_default)
-            this.client.streams_manager.create_stream(request, return_type, this.method(method_name), *args, **kwargs)
+            call = this.client.build_procedure_call(service_name, proc.name, req_args, kwargs, param_names, param_types, param_default)
+            this.client.streams_manager.create_stream(call, return_type, this.method(method_name), *args, **kwargs)
           end
         end
       end
@@ -108,7 +108,7 @@ module KRPC
     
     module RPCMethodGenerator
       def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, xmldoc: "", options: [])
-        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, has_return_type: return_type != nil, return_type: return_type != nil ? return_type : "", documentation: xmldoc), options)
+        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, return_type: return_type, documentation: xmldoc), options)
       end
     end
     
