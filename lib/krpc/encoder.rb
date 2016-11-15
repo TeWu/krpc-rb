@@ -49,7 +49,11 @@ module KRPC
         length = ProtobufUtils::Encoder.encode_nonnegative_varint(data.length)
         length + data
       end
-      
+
+      def hash_to_enumeration_values(hash)
+        hash.map {|k,v| PB::EnumerationValue.new(name: k.to_s, value: v)}
+      end
+
     end
   end
 end

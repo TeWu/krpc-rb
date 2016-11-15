@@ -83,26 +83,42 @@ module KRPC
       def initialize(client)
         super(client)
         unless respond_to? :get_status
-          include_rpc_method("get_status", "KRPC", "GetStatus",
+          # Generate enumerations
+          TypeStore[PB::Type.new(code: :ENUMERATION, service: 'Core', name: 'GameScene')].set_values(
+            Encoder.hash_to_enumeration_values(
+              space_center: 0, flight: 1, tracking_station: 2, editor_vab: 3, editor_sph: 4
+            )
+          )
+
+          # Generate procedures
+          include_rpc_method('get_status', 'KRPC', 'GetStatus',
                              return_type: PB::Type.new(code: :STATUS),
                              xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>",
-                             switches: [:static], options: {doc_service_name: "Core"})
-          include_rpc_method("get_services", "KRPC", "GetServices",
+                             switches: [:static], options: {doc_service_name: 'Core'})
+          include_rpc_method('get_services', 'KRPC', 'GetServices',
                              return_type: PB::Type.new(code: :SERVICES),
-                             xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>",
-                             switches: [:static, :no_stream], options: {doc_service_name: "Core"})
-          include_rpc_method("add_stream", "KRPC", "AddStream",
-                             params: [PB::Parameter.new(name: "request", type: PB::Type.new(code: :PROCEDURE_CALL))],
+                             xmldoc: "<doc><summary>Returns information on all services, procedures, classes, properties etc. provided by the server.\nCan be used by client libraries to automatically create functionality such as stubs.</summary></doc>",
+                             switches: [:static, :no_stream], options: {doc_service_name: 'Core'})
+          include_rpc_method('add_stream', 'KRPC', 'AddStream',
+                             params: [PB::Parameter.new(name: 'call', type: PB::Type.new(code: :PROCEDURE_CALL))],
                              return_type: PB::Type.new(code: :STREAM),
-                             xmldoc: "<doc><summary>Add a streaming request. Returns it's identifier.</summary></doc>",
-                             switches: [:static, :no_stream], options: {doc_service_name: "Core"})
-          include_rpc_method("remove_stream", "KRPC", "RemoveStream",
-                             params: [PB::Parameter.new(name: "id", type: PB::Type.new(code: :UINT64))],
-                             xmldoc: "<doc><summary>Remove a streaming request</summary></doc>",
-                             switches: [:static, :no_stream], options: {doc_service_name: "Core"})
+                             xmldoc: "<doc><summary>Add a streaming request and return its identifier.</summary></doc>",
+                             switches: [:static, :no_stream], options: {doc_service_name: 'Core'})
+          include_rpc_method('remove_stream', 'KRPC', 'RemoveStream',
+                             params: [PB::Parameter.new(name: 'id', type: PB::Type.new(code: :UINT64))],
+                             xmldoc: "<doc><summary>Remove a streaming request.</summary></doc>",
+                             switches: [:static, :no_stream], options: {doc_service_name: 'Core'})
+          include_rpc_method('clients', 'KRPC', 'get_Clients',
+                             return_type: PB::Type.new(code: :LIST, types: [PB::Type.new(code: :TUPLE, types: [PB::Type.new(code: :BYTES), PB::Type.new(code: :STRING), PB::Type.new(code: :STRING)])]),
+                             xmldoc: "<doc><summary>A list of RPC clients that are currently connected to the server.\nEach entry in the list is a clients identifier, name and address.</summary></doc>",
+                             switches: [:static], options: {doc_service_name: 'Core'})
+          include_rpc_method('current_game_scene', 'KRPC', 'get_CurrentGameScene',
+                             return_type: PB::Type.new(code: :ENUMERATION, service: 'Core', name: 'GameScene'),
+                             xmldoc: "<doc><summary>Get the current game scene.</summary></doc>",
+                             switches: [:static], options: {doc_service_name: 'Core'})
         end
       end
     end
-    
+
   end
 end
