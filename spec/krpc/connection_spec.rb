@@ -42,13 +42,6 @@ describe KRPC::Connection do
       expect(@connection.close).to be true
       expect(@connection.close).to be false
     end
-
-    specify "#trim_fill" do
-      trim_fill = @connection.method(:trim_fill)
-      expect(trim_fill.call("", 5)).to eq "\x00"*5
-      expect(trim_fill.call("abc", 10)).to eq "abc" + "\x00"*7
-      expect(trim_fill.call("abc"*4, 10)).to eq "abc"*3 + "a"
-    end
   end
     
     
