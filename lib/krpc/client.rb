@@ -32,7 +32,7 @@ module KRPC
 
     include Doc::SuffixMethods
 
-    attr_reader :name, :rpc_connection, :stream_connection, :streams_manager, :krpc
+    attr_reader :name, :rpc_connection, :stream_connection, :streams_manager, :core
 
     # Create new Client object, optionally specifying IP address and port numbers on witch kRPC 
     # server is listening and the name for this client (up to 32 bytes of UTF-8 encoded text).
@@ -42,8 +42,8 @@ module KRPC
       @stream_connection = StreamConnection.new(rpc_connection, host, stream_port)
       @streams_manager = Streaming::StreamsManager.new(self)
       @services = {}
-      @krpc = Services::KRPC.new(self)
-      Doc.add_docstring_info(false, self.class, "krpc", return_type: @krpc.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code.</summary></doc>")
+      @core = Services::Core.new(self)
+      Doc.add_docstring_info(false, self.class, "core", return_type: @core.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code. This service is hardcoded (in kRPC Ruby client) version of 'krpc' service, so 1) it is available even before services API is generated, but 2) can be out of sync with 'krpc' service.</summary></doc>")
     end
     
     # Connect to a kRPC server on the IP address and port numbers specified during this client
@@ -109,9 +109,8 @@ module KRPC
       return self if services_api_generated?
       raise(Exception, "Can't generate services API while not connected to server -- call Client#connect! to connect to server and generate services API in one call") if not connected?
       
-      resp = krpc.get_services
+      resp = core.get_services
       resp.services.each do |service_msg|
-        next if service_msg.name == "KRPC"
         service_class = Services.create_service(service_msg)
         method_name = service_class.class_name.underscore
         self.class.instance_eval do

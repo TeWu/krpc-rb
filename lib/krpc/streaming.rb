@@ -18,7 +18,7 @@ module KRPC
       # already exists, doesn't create new Stream and return the existing one.
       def create_stream(call, return_type, method, *args, **kwargs)
         raise RuntimeError("Cannot stream a property setter") if method.name.to_s.end_with? '='
-        stream_msg = client.krpc.add_stream(call)
+        stream_msg = client.core.add_stream(call)
         id = stream_msg.id
         @streams_mutex.synchronize do
           if @streams.include? id
@@ -36,7 +36,7 @@ module KRPC
         return false unless stream.active?
         @streams_mutex.synchronize do
           return false unless @streams.include? stream.id
-          client.krpc.remove_stream stream.id
+          client.core.remove_stream stream.id
           @streams.delete stream.id
         end
         stream.value = RuntimeError.new("Stream has been removed")
