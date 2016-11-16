@@ -144,7 +144,7 @@ describe "protocol buffer encoding" do
       calls: [PB::ProcedureCall.new(service: "ServiceName", procedure: "ProcedureName")]
     )
     data = "1e0a1c0a0b536572766963654e616d65120d50726f6365647572654e616d65"
-    expect(hexlify(Encoder.encode_message(msg))).to eq data
+    expect(hexlify(Encoder.encode_message_with_size(msg))).to eq data
   end
 
 

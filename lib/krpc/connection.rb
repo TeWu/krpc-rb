@@ -60,7 +60,7 @@ module KRPC
       @socket.send(data, 0)
     end
     def send_message(msg)
-      send Encoder.encode_message(msg)
+      send Encoder.encode_message_with_size(msg)
     end
     
     def recv(maxlen = 1)

@@ -31,7 +31,7 @@ module KRPC
       class << self
       
         def [](protobuf_type)
-          @cache[protobuf_type.inspect.hash] ||= PROTOBUF_TYPE_CODE_TO_TYPE_TYPE[protobuf_type.code].new(protobuf_type)
+          @cache[protobuf_type.to_proto.hash] ||= PROTOBUF_TYPE_CODE_TO_TYPE_TYPE[protobuf_type.code].new(protobuf_type)
         end
         
         def coerce_to(value, type)

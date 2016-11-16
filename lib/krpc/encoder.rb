@@ -44,7 +44,7 @@ module KRPC
         ProtobufUtils::Encoder.encode(value, type_string)
       end
       
-      def encode_message(msg)
+      def encode_message_with_size(msg)
         data = msg.class.encode(msg)
         length = ProtobufUtils::Encoder.encode_nonnegative_varint(data.length)
         length + data
