@@ -1,5 +1,4 @@
 require 'krpc/gen'
-require 'krpc/attributes'
 require 'krpc/doc'
 require 'krpc/streaming'
 
@@ -16,10 +15,10 @@ module KRPC
         const_set(service_name, service_class)
         
         # Create service' classes
-        classes_types_by_name = Hash.new do |h,k|
+        class_types_by_name = Hash.new do |h,k|
           TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: k)]
         end
-        service_msg.classes.map(&:name).each {|cn| classes_types_by_name[cn] }
+        service_msg.classes.map(&:name).each {|cn| class_types_by_name[cn] }
         
         # Create service' enums
         service_msg.enumerations.each do |enum|
@@ -29,31 +28,12 @@ module KRPC
         
         # Create service' procedures
         service_msg.procedures.each do |proc|
-          if Attributes.is_a_class_member(proc.name)
-            class_name  = Attributes.get_class_name(proc.name)
-            class_cls = classes_types_by_name[class_name].ruby_type
-            method_name = Attributes.get_class_member_name(proc.name)
-            if Attributes.is_a_class_property_accessor(proc.name)  # service' class property
-              if Attributes.is_a_class_property_getter(proc.name)
-                Gen.add_rpc_method(class_cls, method_name, service_name, proc, :prepend_self_to_args)
-              else
-                Gen.add_rpc_method(class_cls, method_name + '=', service_name, proc, :prepend_self_to_args, :no_stream)
-              end
-            elsif Attributes.is_a_class_method(proc.name)  # service' class method
-              Gen.add_rpc_method(class_cls, method_name, service_name, proc, :prepend_self_to_args)
-            else  # service' static class method
-              Gen.add_rpc_method(class_cls, method_name, service_name, proc, :static)
-            end
-          elsif Attributes.is_a_property_accessor(proc.name)  # service' property
-            property_name = Attributes.get_property_name(proc.name)
-            if Attributes.is_a_property_getter(proc.name)
-              Gen.add_rpc_method(service_class, property_name, service_name, proc)
-            elsif Attributes.is_a_property_setter(proc.name)
-              Gen.add_rpc_method(service_class, property_name + '=', service_name, proc, :no_stream)
-            end
-          else  # plain procedure = method available to service class and its instance
-            Gen.add_rpc_method(service_class, proc.name, service_name, proc, :static)
-          end
+          cls = if proc.class_member?
+                  class_types_by_name[proc.class_name].ruby_type
+                else
+                  service_class
+                end
+          Gen.add_rpc_method(cls, service_name, proc)
         end
         
         # Return service class
@@ -91,31 +71,33 @@ module KRPC
           )
 
           # Generate procedures
-          include_rpc_method('get_status', 'KRPC', 'GetStatus',
+          opts = {doc_service_name: 'Core'}
+
+          include_rpc_method 'KRPC', 'GetStatus',
                              return_type: PB::Type.new(code: :STATUS),
                              xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>",
-                             switches: [:static], options: {doc_service_name: 'Core'})
-          include_rpc_method('get_services', 'KRPC', 'GetServices',
+                             **opts
+          include_rpc_method 'KRPC', 'GetServices',
                              return_type: PB::Type.new(code: :SERVICES),
                              xmldoc: "<doc><summary>Returns information on all services, procedures, classes, properties etc. provided by the server.\nCan be used by client libraries to automatically create functionality such as stubs.</summary></doc>",
-                             switches: [:static, :no_stream], options: {doc_service_name: 'Core'})
-          include_rpc_method('add_stream', 'KRPC', 'AddStream',
+                             **opts
+          include_rpc_method 'KRPC', 'AddStream',
                              params: [PB::Parameter.new(name: 'call', type: PB::Type.new(code: :PROCEDURE_CALL))],
                              return_type: PB::Type.new(code: :STREAM),
                              xmldoc: "<doc><summary>Add a streaming request and return its identifier.</summary></doc>",
-                             switches: [:static, :no_stream], options: {doc_service_name: 'Core'})
-          include_rpc_method('remove_stream', 'KRPC', 'RemoveStream',
+                             **opts
+          include_rpc_method 'KRPC', 'RemoveStream',
                              params: [PB::Parameter.new(name: 'id', type: PB::Type.new(code: :UINT64))],
                              xmldoc: "<doc><summary>Remove a streaming request.</summary></doc>",
-                             switches: [:static, :no_stream], options: {doc_service_name: 'Core'})
-          include_rpc_method('clients', 'KRPC', 'get_Clients',
+                             **opts
+          include_rpc_method 'KRPC', 'get_Clients',
                              return_type: PB::Type.new(code: :LIST, types: [PB::Type.new(code: :TUPLE, types: [PB::Type.new(code: :BYTES), PB::Type.new(code: :STRING), PB::Type.new(code: :STRING)])]),
                              xmldoc: "<doc><summary>A list of RPC clients that are currently connected to the server.\nEach entry in the list is a clients identifier, name and address.</summary></doc>",
-                             switches: [:static], options: {doc_service_name: 'Core'})
-          include_rpc_method('current_game_scene', 'KRPC', 'get_CurrentGameScene',
+                             **opts
+          include_rpc_method 'KRPC', 'get_CurrentGameScene',
                              return_type: PB::Type.new(code: :ENUMERATION, service: 'Core', name: 'GameScene'),
                              xmldoc: "<doc><summary>Get the current game scene.</summary></doc>",
-                             switches: [:static], options: {doc_service_name: 'Core'})
+                             **opts
         end
       end
     end

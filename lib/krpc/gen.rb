@@ -27,16 +27,18 @@ module KRPC
         end
       end
 
-      def add_rpc_method(cls, method_name, service_name, proc, *switches, **options)
-        is_static = switches.include? :static
-        prepend_self_to_args = switches.include? :prepend_self_to_args
+      def add_rpc_method(cls, service_name, proc, **options)
+        method_name = proc.member_name.underscore
+        method_name += '=' if proc.setter?
+
         param_names, param_types, param_default, return_type = parse_procedure(proc)
-        method_name = method_name.underscore
+        is_static = proc.type == :class_static_method || proc.type == :plain_procedure
+        prepend_self_to_args = proc.class_member? && proc.type != :class_static_method
         args = [cls, method_name, param_default, param_names, param_types, prepend_self_to_args, proc, return_type, service_name]
 
         define_rpc_method(*args)
         define_static_rpc_method(*args) if is_static
-        add_stream_constructing_proc(*args) unless switches.include? :no_stream
+        add_stream_constructing_proc(*args) unless proc.setter?
         Doc.add_docstring_info(is_static, cls, method_name, options[:doc_service_name] || service_name, proc.name, param_names, param_types, param_default, return_type: return_type, xmldoc: proc.documentation)
       end
 
@@ -107,8 +109,8 @@ module KRPC
     end
     
     module RPCMethodGenerator
-      def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, xmldoc: "", switches: [], options: {})
-        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, return_type: return_type, documentation: xmldoc), *switches, **options)
+      def include_rpc_method(service_name, procedure_name, params: [], return_type: nil, xmldoc: "", **options)
+        Gen.add_rpc_method(self.class, service_name, PB::Procedure.new(name: procedure_name, parameters: params, return_type: return_type, documentation: xmldoc), **options)
       end
     end
     

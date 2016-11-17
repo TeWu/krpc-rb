@@ -7,7 +7,6 @@ describe "protocol buffer encoding" do
   Encoder = KRPC::Encoder
   Decoder = KRPC::Decoder
   TypeStore = KRPC::TypeStore
-  PB = KRPC::PB
 
 
   it "encodes float" do

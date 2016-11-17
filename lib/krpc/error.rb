@@ -4,6 +4,7 @@ module KRPC
   class ConnectionError < Exception; end
   class RPCError < Exception; end
   class ValueError < Exception; end
+  class ProcedureNameParserError < Exception; end
 
 
   class ArgumentErrorSig < ArgumentError

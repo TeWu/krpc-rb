@@ -1,6 +1,8 @@
 require 'krpc'
 
 
+PB = KRPC::PB
+
 shared_context "test server support" do
   before :all do
     @test_server = {rpc_port: 50011, stream_port: 50012, }

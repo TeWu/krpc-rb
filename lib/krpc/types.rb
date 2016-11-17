@@ -1,5 +1,4 @@
 require 'krpc/gen'
-require 'krpc/attributes'
 require 'krpc/protobuf_utils'
 require 'krpc/error'
 require 'krpc/core_extensions'
