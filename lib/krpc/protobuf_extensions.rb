@@ -3,7 +3,7 @@ require 'krpc/procedure_name_parser'
 
 module KRPC
   module ProtobufExtensions
-    module MessageExtensions
+    module SafeEquals
 
       def ==(other)
         super
@@ -11,9 +11,13 @@ module KRPC
         false
       end
 
+    end
+    module MessageExtensions
+      include SafeEquals
+
       def field_empty?(field)
         val = self.send(field)
-        val == "" || val == [] || val.nil?
+        "" == val || [] == val || val.nil?
       end
 
     end
@@ -29,6 +33,7 @@ module KRPC
   end
 end
 
+Google::Protobuf::RepeatedField.prepend KRPC::ProtobufExtensions::SafeEquals
 KRPC::PB.constants(false).map {|const_name| KRPC::PB.const_get(const_name,true)}.each do |msgclass|
   msgclass.prepend KRPC::ProtobufExtensions::MessageExtensions
 end
