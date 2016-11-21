@@ -14,12 +14,12 @@ module KRPC
   # A kRPC client, through which all Remote Procedure Calls are made. To make RPC calls client 
   # must first connect to server. This can be achieved by calling Client#connect or Client#connect!
   # methods. Client object can connect and disconnect from the server many times during it's 
-  # lifetime. RPCs can be made by calling Client#execute_rpc method. After generating services API (with
-  # Client#generate_services_api! call), RPCs can be also made using
+  # lifetime. RPCs can be made by calling Client#execute_rpc method. After generating the services API
+  # (with Client#generate_services_api! call), RPCs can be also made using
   # `client.service_name.procedure_name(parameter, ...)`
   #
   # ### Example:
-  #     client = KRPC::Client.new(name: "my client").connect!
+  #     client = KRPC::Client.new(name: "my client").connect! # Notice that Client#connect! is shorthand for calling Client#connect and Client#generate_services_api! subsequently
   #     ctrl = client.space_center.active_vessel.control
   #     ctrl.activate_next_stage
   #     ctrl.throttle = 1 # Full ahead!
@@ -35,7 +35,7 @@ module KRPC
     attr_reader :name, :rpc_connection, :stream_connection, :streams_manager, :core
 
     # Create new Client object, optionally specifying IP address and port numbers on witch kRPC 
-    # server is listening and the name for this client (up to 32 bytes of UTF-8 encoded text).
+    # server is listening and the name for this client.
     def initialize(name: DEFAULT_NAME, host: Connection::DEFAULT_SERVER_HOST, rpc_port: Connection::DEFAULT_SERVER_RPC_PORT, stream_port: Connection::DEFAULT_SERVER_STREAM_PORT)
       @name = name
       @rpc_connection = RPCConnection.new(name, host, rpc_port)
@@ -43,7 +43,7 @@ module KRPC
       @streams_manager = Streaming::StreamsManager.new(self)
       @services = {}
       @core = Services::Core.new(self)
-      Doc.add_docstring_info(false, self.class, "core", return_type: @core.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code. This service is hardcoded (in kRPC Ruby client) version of 'krpc' service, so 1) it is available even before services API is generated, but 2) can be out of sync with 'krpc' service.</summary></doc>")
+      Doc.add_docstring_info(false, self.class, "core", return_type: @core.class, xmldoc: "<doc><summary>Core kRPC service, e.g. for querying for the available services. Most of this functionality is used internally by the Ruby client and therefore does not need to be used directly from application code. This service is hardcoded (in kRPC Ruby client) version of 'krpc' service, so 1) it is available even before the services API is generated, but 2) can be out of sync with 'krpc' service.</summary></doc>")
     end
     
     # Connect to a kRPC server on the IP address and port numbers specified during this client
@@ -58,7 +58,7 @@ module KRPC
       self
     end
     
-    # Connect to a kRPC server, generate services API and return `self`. Shorthand for calling 
+    # Connect to a kRPC server, generate the services API and return `self`. Shorthand for calling
     # Client#connect and Client#generate_services_api! subsequently. If the block is given, then 
     # it's called passing `self` and the connection to kRPC server is closed at the end of the block.
     def connect!(&block)
@@ -83,19 +83,19 @@ module KRPC
     end
       
     # Interrogates the server to find out what functionality it provides and dynamically creates 
-    # all of the classes and methods that form services API. For each service that server provides:
+    # all of the classes and methods that form the services API. For each service that server provides:
     # 
     # 1. Class `KRPC::Services::{service name here}`, and module `KRPC::Gen::{service name here}`
     #    are created.
     # 2. `KRPC::Gen::{service name here}` module is filled with dynamically created classes.
-    # 3. Those classes in turn are filled with dynamically created methods, that form API for 
+    # 3. Those classes in turn are filled with dynamically created methods, which form the API for
     #    this service.
     # 4. Instance method `{service name here}` is created in this client object that returns 
     #    `KRPC::Services::{service name here}` object. This object is entry point for accessing
     #    functionality provided by `{service name here}` service.
     #
-    # Returns `self`. Invoking this method the second and subsequent times doesn't regenerate API.
-    # To regenerate API create new Client object and call #generate_services_api! on it.
+    # Returns `self`. Invoking this method the second and subsequent times doesn't regenerate the API.
+    # To regenerate the API create new Client object and call #generate_services_api! on it.
     #
     # ### Example
     #       client = KRPC::Client.new(name: "my client").connect # Notice that it is 'Client#connect' being called, not 'Client#connect!'
@@ -107,7 +107,7 @@ module KRPC
     #       client.close
     def generate_services_api!
       return self if services_api_generated?
-      raise(Exception, "Can't generate services API while not connected to server -- call Client#connect! to connect to server and generate services API in one call") if not connected?
+      raise(Exception, "Can't generate the services API while not connected to a server -- call Client#connect! to connect to server and generate the services API in one call") if not connected?
       
       resp = core.get_services
       resp.services.each do |service_msg|
@@ -123,7 +123,7 @@ module KRPC
       self
     end
     
-    # Returns `true` if services API has been already generated, `false` otherwise.
+    # Returns `true` if the services API has been already generated, `false` otherwise.
     def services_api_generated?
       respond_to? :space_center or respond_to? :test_service
     end
@@ -139,7 +139,7 @@ module KRPC
         nil
       end
     rescue IOError => e
-      raise(Exception, "RPC call attempt while not connected to server -- call Client#connect first") if not connected?
+      raise(Exception, "RPC call attempt while not connected to a server -- call Client#connect first") if not connected?
       raise e
     end
 

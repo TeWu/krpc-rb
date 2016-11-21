@@ -56,7 +56,7 @@ module KRPC
     end
     
     ##
-    # Hardcoded version of 'krpc' service - The core kRPC service, e.g. for querying for the available services.
+    # Hardcoded version of `krpc` service - The core kRPC service, e.g. for querying for the available services.
     class Core < ServiceBase
       include Gen::RPCMethodGenerator
 

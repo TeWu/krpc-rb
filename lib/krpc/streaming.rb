@@ -14,7 +14,7 @@ module KRPC
         @streaming_thread = Thread.new {}
       end
     
-      # Send a streaming request, create related Stream object and return it. If identical Stream
+      # Send the streaming request, create related Stream object and return it. If identical Stream
       # already exists, doesn't create new Stream and return the existing one.
       def create_stream(call, return_type, method, *args, **kwargs)
         raise RuntimeError("Cannot stream a property setter") if method.name.to_s.end_with? '='
@@ -30,8 +30,8 @@ module KRPC
         end
       end
       
-      # Remove a streaming request and deactivate the Stream object. Returns `true` if
-      # streaming request is removed or `false` if passed Stream object is already inactive.
+      # Remove the streaming request and deactivate the Stream object. Returns `true` if the
+      # streaming request has been removed or `false` if passed Stream object is already inactive.
       def remove_stream(stream)
         return false unless stream.active?
         @streams_mutex.synchronize do

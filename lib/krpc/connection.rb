@@ -100,7 +100,6 @@ module KRPC
       @client_id = resp.client_identifier
     end
     
-    # Clean up - sets `@client_id` to `nil`.
     def cleanup
       @client_id = nil
     end
