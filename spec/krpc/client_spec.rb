@@ -5,8 +5,8 @@ describe KRPC::Client do
   include_context "test client support"
 
   specify "error handling" do
-    expect { @test_service.throw_argument_exception }.to raise_error(KRPC::RPCError, "Invalid argument")
-    expect { @test_service.throw_invalid_operation_exception }.to raise_error(KRPC::RPCError, "Invalid operation")
+    expect { @test_service.throw_argument_exception }.to raise_error(KRPC::RPCError, /Invalid argument/)
+    expect { @test_service.throw_invalid_operation_exception }.to raise_error(KRPC::RPCError, /Invalid operation/)
   end
 
   specify "value parameters handling" do
@@ -87,27 +87,33 @@ describe KRPC::Client do
   end
 
   specify "optional arguments handling" do
-    expect(@test_service.optional_arguments("jeb")).to eq "jebfoobarbaz"
-    expect(@test_service.optional_arguments("jeb", "bob", "bill")).to eq "jebbobbillbaz"
+    expect(@test_service.optional_arguments("jeb")).to eq "jebfoobarnull"
+    expect(@test_service.optional_arguments("jeb", "bob", "bill")).to eq "jebbobbillnull"
   end
 
   specify "named parameters handling" do
-    expect(@test_service.optional_arguments(x: "1", y: "2", z: "3", another_parameter: "4")).to eq "1234"
-    expect(@test_service.optional_arguments(y: "4", z: "1", x: "2", another_parameter: "3")).to eq "2413"
-    expect(@test_service.optional_arguments("1", "2", another_parameter: "3", z: "4")).to eq "1243"
-    expect(@test_service.optional_arguments("1", "2", z: "3")).to eq "123baz"
-    expect(@test_service.optional_arguments("1", "2", another_parameter: "3")).to eq "12bar3"
-    expect { @test_service.optional_arguments("1", "2", "3", "4", another_parameter: "5") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "another_parameter"/)
+    obj4 = @test_service.create_test_object('4')
+    obj7 = @test_service.create_test_object('7')
+    objobj = @test_service.create_test_object('obj')
+
+    expect(@test_service.optional_arguments(x: "1", y: "2", z: "3", obj: obj4)).to eq "1234"
+    expect(@test_service.optional_arguments(y: "4", z: "1", x: "2", obj: obj7)).to eq "2417"
+    expect(@test_service.optional_arguments("1", "2", obj: objobj, z: "4")).to eq "124obj"
+    expect(@test_service.optional_arguments("1", "2", z: "3")).to eq "123null"
+    expect(@test_service.optional_arguments("1", "2", obj: obj7)).to eq "12bar7"
+    expect(@test_service.optional_arguments("v", z: "x")).to eq "vfooxnull"
+    expect { @test_service.optional_arguments("1", "2", "3", "4", obj: "5") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "obj"/)
     expect { @test_service.optional_arguments("1", "2", "3", y: "4") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "y"/)
     expect { @test_service.optional_arguments("1", foo: "4") }.to raise_error(KRPC::ArgumentErrorSig, /keyword arguments for non existing parameters: foo/)
 
     obj = @test_service.create_test_object("jeb")
-    expect(obj.optional_arguments(x: "1", y: "2", z: "3", another_parameter: "4")).to eq "1234"
-    expect(obj.optional_arguments(z: "1", x: "2", another_parameter: "3", y: "4")).to eq "2413"
-    expect(obj.optional_arguments("1", "2", another_parameter: "3", z: "4")).to eq "1243"
-    expect(obj.optional_arguments("1", "2", z: "3")).to eq "123baz"
-    expect(obj.optional_arguments("1", "2", another_parameter: "3")).to eq "12bar3"
-    expect { obj.optional_arguments("1", "2", "3", "4", another_parameter: "5") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "another_parameter"/)
+    expect(obj.optional_arguments(x: "1", y: "2", z: "3", obj: obj4)).to eq "1234"
+    expect(obj.optional_arguments(obj: obj7, y: "4", z: "1", x: "2")).to eq "2417"
+    expect(obj.optional_arguments("1", "2", obj: objobj, z: "4")).to eq "124obj"
+    expect(obj.optional_arguments("1", "2", z: "3")).to eq "123null"
+    expect(obj.optional_arguments("1", "2", obj: obj7)).to eq "12bar7"
+    expect(obj.optional_arguments("v", z: "x")).to eq "vfooxnull"
+    expect { obj.optional_arguments("1", "2", "3", "4", obj: "5") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "obj"/)
     expect { obj.optional_arguments("1", "2", "3", y: "4") }.to raise_error(KRPC::ArgumentErrorSig, /there are both positional and keyword arguments for parameter "y"/)
     expect { obj.optional_arguments("1", foo: "4") }.to raise_error(KRPC::ArgumentErrorSig, /keyword arguments for non existing parameters: foo/)
   end

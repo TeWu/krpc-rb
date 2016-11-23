@@ -17,8 +17,8 @@ describe KRPC::Streaming do
   
 
   specify "error handling" do
-    expect { @test_service.throw_argument_exception_stream }.to raise_error(KRPC::RPCError, "Invalid argument")
-    expect { @test_service.throw_invalid_operation_exception_stream }.to raise_error(KRPC::RPCError, "Invalid operation")
+    expect { @test_service.throw_argument_exception_stream }.to raise_error(KRPC::RPCError, /Invalid argument/)
+    expect { @test_service.throw_invalid_operation_exception_stream }.to raise_error(KRPC::RPCError, /Invalid operation/)
   end
 
   specify "value parameters handling" do
@@ -50,8 +50,9 @@ describe KRPC::Streaming do
   
   specify "named parameters handling" do
     obj = @test_service.create_test_object("jeb")
-    expect(obj.optional_arguments_stream(z: "1", x: "2", another_parameter: "3", y: "4").get).to eq "2413"
-    expect(obj.optional_arguments_stream("1", "2", another_parameter: "3").get).to eq "12bar3"
+    obj8 = @test_service.create_test_object("8")
+    expect(obj.optional_arguments_stream(z: "1", x: "2", obj: obj8, y: "4").get).to eq "2418"
+    expect(obj.optional_arguments_stream("1", "2", obj: obj8).get).to eq "12bar8"
   end
   
   specify "KRPC::Streaming::Stream object info" do
@@ -60,13 +61,13 @@ describe KRPC::Streaming do
     expect(stream.method).to eq obj.method(:float_to_string)
     expect(stream.args).to eq [3.14159]
     expect(stream.kwargs).to eq ({})
-    expect(stream.return_type).to eq KRPC::TypeStore["string"]
-    
+    expect(stream.return_type).to eq KRPC::TypeStore[PB::Type.new(code: :STRING)]
+
     stream2 = @test_service.optional_arguments_stream(z: "bob", x: "foo")
     expect(stream2.method).to eq @test_service.method(:optional_arguments)
     expect(stream2.args).to eq []
     expect(stream2.kwargs).to eq ({z: "bob", x: "foo"})
-    expect(stream2.return_type).to eq KRPC::TypeStore["string"]
+    expect(stream2.return_type).to eq KRPC::TypeStore[PB::Type.new(code: :STRING)]
   end
 
   specify "KRPC::Streaming::Stream#active?" do
