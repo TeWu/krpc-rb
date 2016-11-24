@@ -3,8 +3,11 @@ dist: trusty
 
 addons:
   apt:
+    sources:
+      - mono
     packages:
       - mono-devel
+      - p7zip-full
 
 language: ruby
 rvm:
@@ -22,14 +25,9 @@ matrix:
 
 before_install:
   - gem install bundler
-  - chmod +x bin/TestServer/TestServer.exe
 
 script:
   - bundle exec rspec --color --format documentation spec
 
 cache:
   - apt
-
-branches:
-  only:
-    - master
