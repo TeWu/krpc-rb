@@ -1,12 +1,20 @@
 
 module KRPC
 
-  class ConnectionError < Exception; end
-  class RPCError < Exception; end
-  class ValueError < Exception; end
-  class ProcedureNameParserError < Exception; end
+  class Error < Exception; end
+  class UTF8MessageError < Error
+    def initialize(msg = nil)
+      super(msg.nil? ? msg : msg.encode(Encoding::UTF_8, invalid: :replace, undef: :replace))
+    end
+  end
+
+  class ConnectionError < UTF8MessageError; end
+  class RPCError < UTF8MessageError; end
+  class ValueError < Error; end
+  class ProcedureNameParserError < Error; end
 
 
+  class ArgumentError < Error; end
   class ArgumentErrorSig < ArgumentError
     attr_reader :message_without_signature, :signature
 

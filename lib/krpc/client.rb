@@ -107,7 +107,7 @@ module KRPC
     #       client.close
     def generate_services_api!
       return self if services_api_generated?
-      raise(Exception, "Can't generate the services API while not connected to a server -- call Client#connect! to connect to server and generate the services API in one call") if not connected?
+      raise(Error, "Can't generate the services API while not connected to a server -- call Client#connect! to connect to server and generate the services API in one call") if not connected?
       
       resp = core.get_services
       resp.services.each do |service_msg|
@@ -139,7 +139,7 @@ module KRPC
         nil
       end
     rescue IOError => e
-      raise(Exception, "RPC call attempt while not connected to a server -- call Client#connect first") if not connected?
+      raise(Error, "RPC call attempt while not connected to a server -- call Client#connect first") if not connected?
       raise e
     end
 
