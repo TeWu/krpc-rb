@@ -14,11 +14,14 @@ describe KRPC::Streaming do
     end
     expect(actual_getter).to eq expected
   end
-  
+
 
   specify "error handling" do
-    expect { @test_service.throw_argument_exception_stream }.to raise_error(KRPC::RPCError, /Invalid argument/)
-    expect { @test_service.throw_invalid_operation_exception_stream }.to raise_error(KRPC::RPCError, /Invalid operation/)
+    expect { @test_service.throw_argument_exception_stream }.to raise_error(KRPC::RPCError, /^KRPC.ArgumentException: Invalid argument/)
+    expect { @test_service.throw_invalid_operation_exception_stream }.to raise_error(KRPC::RPCError, /^KRPC.InvalidOperationException: Invalid operation/)
+    expect { @test_service.throw_argument_null_exception_stream("") }.to raise_error(KRPC::RPCError, /^KRPC.ArgumentNullException: Value cannot be null.\nParameter name: foo/)
+    expect { @test_service.throw_argument_out_of_range_exception_stream(0) }.to raise_error(KRPC::RPCError, /^KRPC.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.\nParameter name: foo/)
+    expect { @test_service.throw_custom_exception_stream }.to raise_error(KRPC::RPCError, /^TestService.CustomException: A custom kRPC exception/)
   end
 
   specify "value parameters handling" do
