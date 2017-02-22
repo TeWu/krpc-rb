@@ -37,12 +37,18 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :value, :bytes, 2
   end
   add_message "krpc.schema.Response" do
-    optional :error, :string, 1
+    optional :error, :message, 1, "krpc.schema.Error"
     repeated :results, :message, 2, "krpc.schema.ProcedureResult"
   end
   add_message "krpc.schema.ProcedureResult" do
-    optional :error, :string, 1
+    optional :error, :message, 1, "krpc.schema.Error"
     optional :value, :bytes, 2
+  end
+  add_message "krpc.schema.Error" do
+    optional :service, :string, 1
+    optional :name, :string, 2
+    optional :description, :string, 3
+    optional :stack_trace, :string, 4
   end
   add_message "krpc.schema.StreamUpdate" do
     repeated :results, :message, 1, "krpc.schema.StreamResult"
@@ -59,7 +65,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     repeated :procedures, :message, 2, "krpc.schema.Procedure"
     repeated :classes, :message, 3, "krpc.schema.Class"
     repeated :enumerations, :message, 4, "krpc.schema.Enumeration"
-    optional :documentation, :string, 5
+    repeated :exceptions, :message, 5, "krpc.schema.Exception"
+    optional :documentation, :string, 6
   end
   add_message "krpc.schema.Procedure" do
     optional :name, :string, 1
@@ -85,6 +92,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :name, :string, 1
     optional :value, :int32, 2
     optional :documentation, :string, 3
+  end
+  add_message "krpc.schema.Exception" do
+    optional :name, :string, 1
+    optional :documentation, :string, 2
   end
   add_message "krpc.schema.Type" do
     optional :code, :enum, 1, "krpc.schema.Type.TypeCode"
@@ -167,6 +178,7 @@ module KRPC
     Argument = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Argument").msgclass
     Response = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Response").msgclass
     ProcedureResult = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.ProcedureResult").msgclass
+    Error = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Error").msgclass
     StreamUpdate = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.StreamUpdate").msgclass
     StreamResult = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.StreamResult").msgclass
     Services = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Services").msgclass
@@ -176,6 +188,7 @@ module KRPC
     Class = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Class").msgclass
     Enumeration = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Enumeration").msgclass
     EnumerationValue = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.EnumerationValue").msgclass
+    Exception = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Exception").msgclass
     Type = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Type").msgclass
     Type::TypeCode = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Type.TypeCode").enummodule
     Tuple = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Tuple").msgclass
