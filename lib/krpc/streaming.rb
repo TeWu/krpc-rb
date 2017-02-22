@@ -65,7 +65,7 @@ module KRPC
                 if result.result.field_empty? :error
                   stream.value = Decoder.decode(result.result.value, stream.return_type, client)
                 else
-                  stream.value = RPCError.new(result.result.error)
+                  stream.value = client.build_exception(result.result.error)
                 end
               end
             end

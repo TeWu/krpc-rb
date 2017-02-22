@@ -132,7 +132,7 @@ module KRPC
     def execute_rpc(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[], return_type: nil)
       send_request(service, procedure, args, kwargs, param_names, param_types, param_default)
       result = receive_result
-      raise(RPCError, result.error) unless result.field_empty? :error
+      raise build_exception(result.error) unless result.field_empty? :error
       unless return_type.nil?
         Decoder.decode(result.value, return_type, self)
       else
@@ -143,13 +143,13 @@ module KRPC
       raise e
     end
 
-    # Build a PB::Request object.
+    # Build an PB::Request object.
     def build_request(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[])
       call = build_procedure_call(service, procedure, args, kwargs, param_names, param_types, param_default)
       PB::Request.new(calls: [call])
     end
 
-    # Build a PB::ProcedureCall object.
+    # Build an PB::ProcedureCall object.
     def build_procedure_call(service, procedure, args=[], kwargs={}, param_names=[], param_types=[], param_default=[])
       begin
         raise(ArgumentError, "param_names and param_types should be equal length\n\tparam_names = #{param_names}\n\tparam_types = #{param_types}") unless param_names.length == param_types.length
@@ -161,6 +161,14 @@ module KRPC
         raise err.with_signature(Doc.docstring_for_procedure(service, procedure, false))
       end
       PB::ProcedureCall.new(service: service, procedure: procedure, arguments: call_args)
+    end
+
+    # Build an exception from an PB::Error object.
+    def build_exception(error)
+      msg = error.description
+      msg = "#{error.service}.#{error.name}: #{msg}" unless error.field_empty?(:service) || error.field_empty?(:name)
+      msg += "\nServer stack trace:\n#{error.stack_trace}" unless error.field_empty?(:stack_trace)
+      RPCError.new(msg)
     end
 
     protected #----------------------------------
@@ -206,7 +214,7 @@ module KRPC
     
     def receive_result
       resp = rpc_connection.receive_message PB::Response
-      raise(RPCError, resp.error) unless resp.field_empty? :error
+      raise build_exception(resp.error) unless resp.field_empty? :error
       resp.results[0]
     end
     
