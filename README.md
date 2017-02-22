@@ -10,6 +10,8 @@ Installation
 
     gem install krpc
 
+or install the latest pre-release version (if [available](https://rubygems.org/gems/krpc/versions)): `gem install krpc --pre`
+
 Basic usage
 -------
 
