@@ -2,14 +2,9 @@
 module KRPC
 
   class Error < Exception; end
-  class UTF8MessageError < Error
-    def initialize(msg = nil)
-      super(msg.nil? ? msg : msg.encode(Encoding::UTF_8, invalid: :replace, undef: :replace))
-    end
-  end
 
-  class ConnectionError < UTF8MessageError; end
-  class RPCError < UTF8MessageError; end
+  class ConnectionError < Error; end
+  class RPCError < Error; end
   class ValueError < Error; end
   class ProcedureNameParserError < Error; end
 
