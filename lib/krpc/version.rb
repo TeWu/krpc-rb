@@ -1,5 +1,6 @@
 module KRPC
   module Version
+    # Dear krpc-rb developer: Before bumping version below, please ensure that protobuf schema is up to date.
     MAJOR = 0
     MINOR = 4
     PATCH = 0
