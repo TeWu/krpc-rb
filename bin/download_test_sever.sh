@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_VERSION="0.4.0-127-g64fcf0c"
+DEFAULT_VERSION="0.4.0-10-g379f6b2"
 
 OUT_DIR="TestServer"
 VERSION_FILE="VERSION.txt"
