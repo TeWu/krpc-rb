@@ -10,18 +10,18 @@ module KRPC
     DEFAULT_SERVER_HOST = "127.0.0.1"
     DEFAULT_SERVER_RPC_PORT = 50000
     DEFAULT_SERVER_STREAM_PORT = 50001
-    
+
     attr_reader :host, :port, :socket
-    
+
     def initialize(host, port)
       @host, @port = host, port
     end
-    
+
     # Connect and perform handshake.
     def connect
       if connected? then raise(ConnectionError, "Already connected")
-      else 
-        @socket = TCPSocket.open(host, port) 
+      else
+        @socket = TCPSocket.open(host, port)
         begin
           handshake
         rescue Exception => e
@@ -31,7 +31,7 @@ module KRPC
       end
       self
     end
-    
+
     # Close connection and clean up.
     def close
       if connected?
@@ -40,29 +40,29 @@ module KRPC
         true
       else false end
     end
-    
+
     # Return `true` if connected to a server, `false` otherwise.
     def connected?
       !socket.nil? && !socket.closed?
     end
-    
+
     def handshake; end
     def cleanup; end
-    
+
     def protobuf_handshake(type, **attrs)
       send_message PB::ConnectionRequest.new(type: type, **attrs)
       resp = receive_message PB::ConnectionResponse
       raise(ConnectionError, "#{resp.status} -- #{resp.message}") unless resp.status == :OK
       resp
     end
-    
+
     def send(data)
       @socket.send(data, 0)
     end
     def send_message(msg)
       send Encoder.encode_message_with_size(msg)
     end
-    
+
     def recv(maxlen = 1)
       maxlen == 0 ? "" : @socket.read(maxlen)
     end
@@ -88,7 +88,7 @@ module KRPC
   # TCP connection for sending RPC calls and retrieving its results.
   class RPCConnection < Connection
     attr_reader :name, :client_id
-    
+
     def initialize(name = Client::DEFAULT_NAME, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_RPC_PORT)
       super host, port
       @name = name
@@ -99,7 +99,7 @@ module KRPC
       resp = protobuf_handshake(:RPC, client_name: name)
       @client_id = resp.client_identifier
     end
-    
+
     def cleanup
       @client_id = nil
     end
@@ -109,17 +109,17 @@ module KRPC
   # TCP connection for streaming.
   class StreamConnection < Connection
     attr_reader :rpc_connection
-    
+
     def initialize(rpc_connection, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_STREAM_PORT)
       super host, port
       @rpc_connection = rpc_connection
     end
-    
+
     # Perform handshake with kRPC server, sending `client_id` retrieved from `rpc_connection`.
     def handshake
-      raise(ConnectionError, "RPC connection must obtain client_id before stream connection can perform valid handshake - closing stream connection") if rpc_connection.client_id.nil? 
+      raise(ConnectionError, "RPC connection must obtain client_id before stream connection can perform valid handshake - closing stream connection") if rpc_connection.client_id.nil?
       protobuf_handshake(:STREAM, client_identifier: rpc_connection.client_id)
     end
   end
-  
+
 end

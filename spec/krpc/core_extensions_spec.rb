@@ -8,7 +8,7 @@ describe "core extensions" do
       expect(KRPC::Services::ServiceBase.class_name).to eq "ServiceBase"
     end
   end
-  
+
   describe String do
     it "converts to snake_case" do
       # Simple cases

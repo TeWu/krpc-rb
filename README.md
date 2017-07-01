@@ -94,7 +94,7 @@ SpaceCenter.transform_position(
 	to :ReferenceFrame - The reference frame to covert the position vector to.
 ) :Array[Float, Float, Float] - The corresponding position vector in reference frame to.
 
- Converts a position vector from one reference frame to another. 
+ Converts a position vector from one reference frame to another.
 => nil
 ```
 

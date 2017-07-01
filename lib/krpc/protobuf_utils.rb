@@ -4,14 +4,14 @@ module KRPC
   module ProtobufUtils
     module Decoder
       class << self
-      
+
         def decode(bytes, type)
           meth_name = "decode_" + type
           raise RuntimeError.new("Unsupported type #{type}") unless respond_to?(meth_name)
           send(meth_name, bytes)
         end
 
-        # based on: https://developers.google.com/protocol-buffers/docs/encoding#varints  &  http://www.rubydoc.info/gems/ruby-protocol-buffers/1.0.1/ProtocolBuffers/Varint#decode-class_method  &  https://github.com/google/protobuf/blob/master/python/google/protobuf/internal/decoder.py#L136  
+        # based on: https://developers.google.com/protocol-buffers/docs/encoding#varints  &  http://www.rubydoc.info/gems/ruby-protocol-buffers/1.0.1/ProtocolBuffers/Varint#decode-class_method  &  https://github.com/google/protobuf/blob/master/python/google/protobuf/internal/decoder.py#L136
         def decode_varint(bytes)
           decode_varint_pos(bytes)[0]
         end
@@ -33,12 +33,12 @@ module KRPC
           zigzaged = decode_varint(bytes)
           (zigzaged >> 1) ^ -(zigzaged & 1)
         end
-        
+
         alias_method :decode_sint32, :decode_zigzaged_varint
         alias_method :decode_sint64, :decode_zigzaged_varint
         alias_method :decode_uint32, :decode_varint
         alias_method :decode_uint64, :decode_varint
-        
+
         # based on: https://github.com/ruby-protobuf/protobuf/search?q=pack
         def decode_float(bytes)
           bytes.unpack('e').first
@@ -57,19 +57,19 @@ module KRPC
           size, pos = decode_varint_pos(bytes)
           bytes[pos..(pos+size)].bytes
         end
-        
+
       end
     end
-    
+
     module Encoder
       class << self
-      
+
         def encode(value, type)
           meth_name = "encode_" + type
           raise(RuntimeError, "Unsupported type #{type}") unless respond_to?(meth_name)
           send(meth_name, value)
         end
-        
+
         # based on: http://www.rubydoc.info/gems/ruby-protocol-buffers/1.0.1/ProtocolBuffers/Varint#decode-class_method  &  https://github.com/google/protobuf/blob/master/python/google/protobuf/internal/encoder.py#L390
         def encode_varint(value)
           return [value].pack('C') if value < 0b1000_0000
@@ -96,12 +96,12 @@ module KRPC
           zigzaged = (value << 1) ^ (value >> 63)
           encode_varint(zigzaged)
         end
-        
+
         alias_method :encode_sint32, :encode_zigzaged_varint_32
         alias_method :encode_sint64, :encode_zigzaged_varint_64
         alias_method :encode_uint32, :encode_nonnegative_varint
         alias_method :encode_uint64, :encode_nonnegative_varint
-        
+
         def encode_float(value)
           [value].pack('e')
         end
@@ -119,9 +119,9 @@ module KRPC
           size = encode_varint(value.size)
           size + value.map(&:chr).join.b
         end
-        
+
       end
     end
-    
+
   end
 end

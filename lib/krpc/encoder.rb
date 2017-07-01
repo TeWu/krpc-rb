@@ -4,7 +4,7 @@ require 'krpc/types'
 module KRPC
   module Encoder
     class << self
-      
+
       # Given a type object, and ruby object, encode the ruby object
       def encode(obj, type)
         if type.is_a?(Types::MessageType) then type.ruby_type.encode(obj)
@@ -38,12 +38,12 @@ module KRPC
         else raise(RuntimeError, "Cannot encode object #{obj} of type #{type}")
         end
       end
-      
+
       def encode_value(value, type)
         type_string = type.is_a?(String) ? type : type.protobuf_type.code.to_s.downcase
         ProtobufUtils::Encoder.encode(value, type_string)
       end
-      
+
       def encode_message_with_size(msg)
         data = msg.class.encode(msg)
         length = ProtobufUtils::Encoder.encode_nonnegative_varint(data.length)

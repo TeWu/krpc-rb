@@ -5,27 +5,27 @@ require 'krpc/streaming'
 module KRPC
   module Services
     class << self
-    
+
       # Generate classes and methods for the service - see documentation for Client#generate_services_api!
       def create_service(service_msg)
         service_name = service_msg.name
-        
+
         # Create service class
         service_class = Class.new(ServiceBase)
         const_set(service_name, service_class)
-        
+
         # Create service' classes
         class_types_by_name = Hash.new do |h,k|
           TypeStore[PB::Type.new(code: :CLASS, service: service_name, name: k)]
         end
         service_msg.classes.map(&:name).each {|cn| class_types_by_name[cn] }
-        
+
         # Create service' enums
         service_msg.enumerations.each do |enum|
           enum_type = TypeStore[PB::Type.new(code: :ENUMERATION, service: service_name, name: enum.name)]
           enum_type.set_values(enum.values)
         end
-        
+
         # Create service' procedures
         service_msg.procedures.each do |proc|
           cls = if proc.class_member?
@@ -35,26 +35,26 @@ module KRPC
                 end
           Gen.add_rpc_method(cls, service_name, proc)
         end
-        
+
         # Return service class
         service_class
       end
-      
+
     end
-    
+
     ##
     # Base class for service objects, created at runtime using information received from the server.
     class ServiceBase
       include Doc::SuffixMethods
       include Streaming::StreamConstructors
-      
+
       attr_reader :client
-  
+
       def initialize(client)
         @client = client
       end
     end
-    
+
     ##
     # Hardcoded version of `krpc` service - The core kRPC service, e.g. for querying for the available services.
     class Core < ServiceBase

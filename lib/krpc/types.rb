@@ -23,23 +23,23 @@ module KRPC
       STATUS: PB::Status,
       SERVICES: PB::Services
     }
-    
-    
+
+
     class TypeStore
       @cache = {}
       class << self
-      
+
         def [](protobuf_type)
           @cache[protobuf_type.to_proto.hash] ||= PROTOBUF_TYPE_CODE_TO_TYPE_TYPE[protobuf_type.code].new(protobuf_type)
         end
-        
+
         def coerce_to(value, type)
           return value if type.is_a?(EnumType) && value.class == Symbol # Enum handling
           return value if value.is_a?(type.ruby_type)
           # A NilClass can be coerced to a ClassType
           return nil if type.is_a?(ClassType) && value.nil?
           # Handle service' class instance
-          if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) && 
+          if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) &&
              type.ruby_type == value.class
             return value
           end
@@ -69,11 +69,11 @@ module KRPC
           end
           raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")
         end
-      
+
       end
     end
-    
-    
+
+
     class TypeBase
       attr_reader :protobuf_type, :ruby_type
       def initialize(protobuf_type, ruby_type)
@@ -81,13 +81,13 @@ module KRPC
         @ruby_type = ruby_type
       end
     end
-    
+
     class ValueType < TypeBase
       def initialize(pb_type)
         super(pb_type, PROTOBUF_TO_RUBY_VALUE_TYPES[pb_type.code] || raise(ValueError, "#{pb_type.code} is not a valid type code for a value type"))
       end
     end
-    
+
     class ClassType < TypeBase
       attr_reader :service_name, :class_name
       def initialize(pb_type)
@@ -95,7 +95,7 @@ module KRPC
         super(pb_type, Gen.generate_class(service_name, class_name))
       end
     end
-    
+
     class EnumType < TypeBase
       attr_reader :service_name, :enum_name
       def initialize(pb_type)
@@ -103,12 +103,12 @@ module KRPC
         # Sets ruby_type to nil, set_values must be called to set the ruby_type
         super(pb_type, nil)
       end
-      
+
       def set_values(values)
         @ruby_type = Gen.generate_enum(service_name, enum_name, values)
       end
     end
-    
+
     class ListType < TypeBase
       attr_reader :value_type
       def initialize(pb_type)
@@ -116,7 +116,7 @@ module KRPC
         super(pb_type, Array)
       end
     end
-    
+
     class SetType < TypeBase
       attr_reader :value_type
       def initialize(pb_type)
@@ -124,7 +124,7 @@ module KRPC
         super(pb_type, Set)
       end
     end
-    
+
     class TupleType < TypeBase
       attr_reader :value_types
       def initialize(pb_type)
@@ -132,7 +132,7 @@ module KRPC
         super(pb_type, Array)
       end
     end
-    
+
     class DictionaryType < TypeBase
       attr_reader :key_type, :value_type
       def initialize(pb_type)
@@ -140,13 +140,13 @@ module KRPC
         super(pb_type, Hash)
       end
     end
-    
+
     class MessageType < TypeBase
       def initialize(pb_type)
         super(pb_type, PROTOBUF_TO_RUBY_MESSAGE_TYPES[pb_type.code] || raise(ValueError, "\"#{pb_type.code}\" is not a valid type code for a message type"))
       end
     end
-    
+
     PROTOBUF_TYPE_CODE_TO_TYPE_TYPE =
       PROTOBUF_TO_RUBY_VALUE_TYPES.keys.inject({}) {|a,e| a[e] = ValueType; a }.merge(
       PROTOBUF_TO_RUBY_MESSAGE_TYPES.keys.inject({}) {|a,e| a[e] = MessageType; a }).merge(
@@ -154,6 +154,6 @@ module KRPC
         LIST: ListType, SET: SetType, TUPLE: TupleType, DICTIONARY: DictionaryType
       )
   end
-  
+
   TypeStore = Types::TypeStore
 end

@@ -4,7 +4,7 @@ require 'set'
 module KRPC
   module Decoder
     class << self
-    
+
       # Given a type object, and serialized data, decode the ruby value/object
       def decode(data, type, client)
         if type.is_a?(Types::MessageType) then type.ruby_type.decode(data)
@@ -33,12 +33,12 @@ module KRPC
         else raise(RuntimeError, "Cannot decode type #{type} from data: #{data}")
         end
       end
-      
+
       def decode_value(data, type)
         type_string = type.is_a?(String) ? type : type.protobuf_type.code.to_s.downcase
-        ProtobufUtils::Decoder.decode(data, type_string) 
+        ProtobufUtils::Decoder.decode(data, type_string)
       end
-      
+
     end
   end
 end
