@@ -27,7 +27,7 @@ before_install:
   - gem install bundler
 
 script:
-  - bundle exec rspec --color --format documentation spec
+  - bundle exec rspec
 
 cache:
   - apt

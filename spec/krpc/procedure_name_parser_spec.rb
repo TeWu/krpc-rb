@@ -1,7 +1,4 @@
-require_relative '../spec_helpers'
-
-
-describe KRPC::ProcedureNameParser do
+RSpec.describe KRPC::ProcedureNameParser do
   ValueError = KRPC::ValueError
   ProcedureNameParserError = KRPC::ProcedureNameParserError
 

@@ -1,16 +1,13 @@
-require_relative '../spec_helpers'
 require "socket"
 
+RSpec.describe KRPC::Connection do
 
-describe KRPC::Connection do
-
-  before :each do @connection = connect end
-  after  :each do @connection.close end
-
+  before(:example) { @connection = connect }
+  after(:example)  { @connection.close }
 
   context "with default server" do
-    before :all do start_server end
-    after  :all do stop_server end
+    before(:context) { start_server }
+    after(:context)  { stop_server }
 
     specify "send & receive" do
       @connection.send "foo"
@@ -46,8 +43,8 @@ describe KRPC::Connection do
 
 
   context "when responses are received in chunks" do
-    before :all do start_server(:chunking) end
-    after  :all do stop_server end
+    before(:context) { start_server(:chunking) }
+    after(:context)  { stop_server }
 
     specify "send & receive" do
       @connection.send "foo"

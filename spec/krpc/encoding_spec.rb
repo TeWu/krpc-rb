@@ -1,9 +1,7 @@
-require_relative '../spec_helpers'
-
 require "krpc/encoder"
 require "krpc/decoder"
 
-describe "protocol buffer encoding" do
+RSpec.describe "protocol buffer encoding" do
   Encoder = KRPC::Encoder
   Decoder = KRPC::Decoder
   TypeStore = KRPC::TypeStore

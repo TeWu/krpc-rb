@@ -1,8 +1,7 @@
-require_relative '../spec_helpers'
 require 'google/protobuf'
 
 
-describe KRPC::ProtobufExtensions do
+RSpec.describe KRPC::ProtobufExtensions do
 
   describe KRPC::ProtobufExtensions::SafeEquals do
     specify "#==" do

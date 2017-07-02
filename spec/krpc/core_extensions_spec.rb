@@ -1,6 +1,6 @@
 require "krpc"
 
-describe "core extensions" do
+RSpec.describe "core extensions" do
 
   describe Module do
     it "returns simple class name" do

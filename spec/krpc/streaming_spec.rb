@@ -1,8 +1,7 @@
-require_relative '../spec_helpers'
 require 'krpc/types'
 
 
-describe KRPC::Streaming do
+RSpec.describe KRPC::Streaming do
   include_context "test client support"
 
   def expect_equal_allow_delay(actual_getter, expected, retry_delay=0.1, max_retries=16)

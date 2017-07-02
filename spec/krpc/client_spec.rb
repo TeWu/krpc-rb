@@ -1,7 +1,4 @@
-require_relative '../spec_helpers'
-
-
-describe KRPC::Client do
+RSpec.describe KRPC::Client do
   include_context "test client support"
 
   specify "error handling" do
