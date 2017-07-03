@@ -16,7 +16,7 @@ module KRPC
           construct_docstring(*@docstr_infos[key], true, is_static, is_print_xmldoc_summary)
         else
           "No docstring for #{class_cls.name}#{calc_separator(is_static)}#{method_name.to_s} method" +
-            (method_owner.respond_to?(method_name) ? "" : "\nThere is no such method -- maybe a typo")
+            (method_owner.respond_to?(method_name) ? "" : "\nThere is no such method -- maybe a typo?")
         end
       end
 
@@ -138,7 +138,7 @@ module KRPC
                   elem.text.gsub("null","nil").colorize(value_color)
                 else elem.to_s.colorize(error_color)
               end
-            rescue RuntimeException => exc
+            rescue RuntimeException
               elem.to_s.colorize(error_color)
             end
           end
@@ -163,12 +163,7 @@ module KRPC
       DOCSTRING_SUFFIX_REGEX = /^(.+)(?:#{DOCSTRING_SUFFIX}(=)?)$/
 
       def self.included(base)
-        base.extend self
-        class << base
-          def krpc_name
-            class_name
-          end
-        end
+        base.extend self, ClassMethods
       end
 
       def method_missing(method, *args, &block)
@@ -186,6 +181,12 @@ module KRPC
           return true if respond_to? ($1 + $2.to_s).to_sym
         end
         super
+      end
+
+      module ClassMethods
+        def krpc_name
+          class_name
+        end
       end
     end
 
