@@ -110,8 +110,8 @@ module KRPC
     end
 
     module RPCMethodGenerator
-      def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, xmldoc: "", switches: [], options: {})
-        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, has_return_type: return_type != nil, return_type: return_type != nil ? return_type : "", documentation: xmldoc), *switches, **options)
+      def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, attributes: [], xmldoc: "", switches: [], options: {})
+        Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, has_return_type: return_type != nil, return_type: return_type != nil ? return_type : "", attributes: attributes, documentation: xmldoc), *switches, **options)
       end
     end
 

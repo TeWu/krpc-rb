@@ -1,5 +1,7 @@
 require 'krpc/gen'
 require 'krpc/attributes'
+require 'krpc/encoder'
+require 'krpc/types'
 require 'krpc/doc'
 require 'krpc/streaming'
 
@@ -82,6 +84,14 @@ module KRPC
       def initialize(client)
         super(client)
         unless respond_to? :get_status
+          # Generate enumerations
+          TypeStore['Enum(Core.GameScene)'].set_values(
+            Encoder.hash_to_enumeration_values(
+              space_center: 0, flight: 1, tracking_station: 2, editor_vab: 3, editor_sph: 4
+            )
+          )
+
+          # Generate procedures
           opts = {doc_service_name: 'Core'}
 
           include_rpc_method 'get_status', 'KRPC', 'GetStatus',
@@ -101,6 +111,16 @@ module KRPC
                              params: [PB::Parameter.new(name: 'id', type: 'uint32')],
                              xmldoc: "<doc><summary>Remove a streaming request</summary></doc>",
                              switches: [:static, :no_stream], options: opts
+          include_rpc_method 'clients', 'KRPC', 'get_Clients',
+                             return_type: 'KRPC.List',
+                             attributes: ['Property.Get(Clients)', 'ReturnType.List(Tuple(bytes,string,string))'],
+                             xmldoc: "<doc><summary>A list of RPC clients that are currently connected to the server.\nEach entry in the list is a clients identifier, name and address.</summary></doc>",
+                             switches: [:static], options: opts
+          include_rpc_method 'current_game_scene', 'KRPC', 'get_CurrentGameScene',
+                             return_type: 'int32',
+                             attributes: ['Property.Get(CurrentGameScene)', 'ReturnType.Enum(Core.GameScene)'],
+                             xmldoc: "<doc><summary>Get the current game scene.</summary></doc>",
+                             switches: [:static], options: opts
         end
       end
     end

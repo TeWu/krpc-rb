@@ -62,6 +62,10 @@ module KRPC
         length + data
       end
 
+      def hash_to_enumeration_values(hash)
+        hash.map {|k,v| PB::EnumerationValue.new(name: k.to_s, value: v) }
+      end
+
     end
   end
 end
