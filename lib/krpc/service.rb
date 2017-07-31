@@ -75,17 +75,32 @@ module KRPC
     end
 
     ##
-    # Core kRPC service, e.g. for querying for the available services.
-    class KRPC < ServiceBase
+    # Hardcoded version of `krpc` service - The core kRPC service, e.g. for querying for the available services.
+    class Core < ServiceBase
       include Gen::RPCMethodGenerator
 
       def initialize(client)
         super(client)
         unless respond_to? :get_status
-          include_rpc_method("get_status", "KRPC", "GetStatus", return_type: "KRPC.Status", xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>", options: :no_stream)
-          include_rpc_method("get_services", "KRPC", "GetServices", return_type: "KRPC.Services", xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>", options: :no_stream)
-          include_rpc_method("add_stream", "KRPC", "AddStream", params: [PB::Parameter.new(name: "request", type: "KRPC.Request")], return_type: "uint32", xmldoc: "<doc><summary>Add a streaming request. Returns it's identifier.</summary></doc>", options: :no_stream)
-          include_rpc_method("remove_stream", "KRPC", "RemoveStream", params: [PB::Parameter.new(name: "id", type: "uint32")], xmldoc: "<doc><summary>Remove a streaming request</summary></doc>", options: :no_stream)
+          opts = {doc_service_name: 'Core'}
+
+          include_rpc_method 'get_status', 'KRPC', 'GetStatus',
+                             return_type: 'KRPC.Status',
+                             xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>",
+                             switches: [:static], options: opts
+          include_rpc_method 'get_services', 'KRPC', 'GetServices',
+                             return_type: 'KRPC.Services',
+                             xmldoc: "<doc><summary>Gets available services and procedures.</summary></doc>",
+                             switches: [:static, :no_stream], options: opts
+          include_rpc_method 'add_stream', 'KRPC', 'AddStream',
+                             params: [PB::Parameter.new(name: 'request', type: 'KRPC.Request')],
+                             return_type: 'uint32',
+                             xmldoc: "<doc><summary>Add a streaming request. Returns it's identifier.</summary></doc>",
+                             switches: [:static, :no_stream], options: opts
+          include_rpc_method 'remove_stream', 'KRPC', 'RemoveStream',
+                             params: [PB::Parameter.new(name: 'id', type: 'uint32')],
+                             xmldoc: "<doc><summary>Remove a streaming request</summary></doc>",
+                             switches: [:static, :no_stream], options: opts
         end
       end
     end
