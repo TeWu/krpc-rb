@@ -6,14 +6,14 @@ module KRPC
     OK_LENGTH = 2
     OK_MESSAGE = "\x4F\x4B"
     GUID_LENGTH = 16
-    
+
     class << self
-    
+
       # Given a type object, and serialized data, decode the ruby value/object
       def decode(data, type, client)
         if type.is_a?(Types::MessageType) then decode_message(data, type)
         elsif type.is_a?(Types::ValueType) then decode_value(data, type)
-        elsif type.is_a?(Types::EnumType) 
+        elsif type.is_a?(Types::EnumType)
           v = decode_value(data, TypeStore["int32"])
           type.ruby_type.key(v)
         elsif type.is_a?(Types::ClassType)
@@ -41,11 +41,11 @@ module KRPC
       def decode_value(data, type)
         ProtobufUtils::Decoder.decode(data, type.protobuf_type)
       end
-      
+
       def decode_message(data, type)
         type.ruby_type.decode(data.to_s)
       end
-      
+
     end
   end
 end

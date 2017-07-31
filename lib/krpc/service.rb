@@ -6,26 +6,26 @@ require 'krpc/streaming'
 module KRPC
   module Services
     class << self
-    
+
       # Generate classes and methods for the service - see documentation for Client#generate_services_api!
       def create_service(service_msg)
         service_name = service_msg.name
-        
+
         # Create service class
         service_class = Class.new(ServiceBase)
         const_set(service_name, service_class)
-        
+
         # Create service' classes
         service_msg.classes.map(&:name).each do |sc_name|
           TypeStore["Class(#{service_name}.#{sc_name})"]
         end
-        
+
         # Create service' enums
         service_msg.enumerations.each do |enum|
           enum_type = TypeStore["Enum(#{service_name}.#{enum.name})"]
           enum_type.set_values(enum.values)
         end
-        
+
         # Create service' procedures
         service_msg.procedures.each do |proc|
           if Attributes.is_a_class_method_or_property_accessor(proc.attributes)
@@ -54,26 +54,26 @@ module KRPC
             Gen.add_rpc_method(service_class, proc.name, service_name, proc, :static)
           end
         end
-        
+
         # Return service class
         service_class
       end
-      
+
     end
-    
+
     ##
     # Base class for service objects, created at runtime using information received from the server.
     class ServiceBase
       include Doc::SuffixMethods
       include Streaming::StreamConstructors
-      
+
       attr_reader :client
-  
+
       def initialize(client)
         @client = client
       end
     end
-    
+
     ##
     # Core kRPC service, e.g. for querying for the available services.
     class KRPC < ServiceBase
@@ -89,6 +89,6 @@ module KRPC
         end
       end
     end
-    
+
   end
 end

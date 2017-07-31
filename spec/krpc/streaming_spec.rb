@@ -4,7 +4,7 @@ require 'krpc/types'
 
 describe KRPC::Streaming do
   include_context "test client support"
-  
+
   def expect_equal_allow_delay(actual_getter, expected, retry_delay=0.1, max_retries=16)
     i = 0
     while i<max_retries do
@@ -14,7 +14,7 @@ describe KRPC::Streaming do
     end
     expect(actual_getter).to eq expected
   end
-  
+
 
   specify "error handling" do
     expect { @test_service.throw_argument_exception_stream }.to raise_error(KRPC::RPCError, "Invalid argument")
@@ -26,7 +26,7 @@ describe KRPC::Streaming do
   end
 
   specify "multiple value parameters handling" do
-    expect(@test_service.add_multiple_values_stream(0.14159, 1, 2).value).to match(/3[\.,]14159/)  
+    expect(@test_service.add_multiple_values_stream(0.14159, 1, 2).value).to match(/3[\.,]14159/)
   end
 
   specify "incorrect parameter type handling" do
@@ -47,13 +47,13 @@ describe KRPC::Streaming do
     @test_service.object_property = obj2
     expect_equal_allow_delay(lambda{stream2.get}, obj2)
   end
-  
+
   specify "named parameters handling" do
     obj = @test_service.create_test_object("jeb")
     expect(obj.optional_arguments_stream(z: "1", x: "2", another_parameter: "3", y: "4").get).to eq "2413"
     expect(obj.optional_arguments_stream("1", "2", another_parameter: "3").get).to eq "12bar3"
   end
-  
+
   specify "KRPC::Streaming::Stream object info" do
     obj = @test_service.create_test_object("bob")
     stream = obj.float_to_string_stream(3.14159)
@@ -61,7 +61,7 @@ describe KRPC::Streaming do
     expect(stream.args).to eq [3.14159]
     expect(stream.kwargs).to eq ({})
     expect(stream.return_type).to eq KRPC::TypeStore["string"]
-    
+
     stream2 = @test_service.optional_arguments_stream(z: "bob", x: "foo")
     expect(stream2.method).to eq @test_service.method(:optional_arguments)
     expect(stream2.args).to eq []

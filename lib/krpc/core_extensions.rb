@@ -3,7 +3,7 @@ class Module
   def class_name
     name.rpartition("::").last
   end
-  
+
   def const_get_or_create(module_name, value = nil, &block)
     return const_get(module_name) if const_defined?(module_name, false)
     value = block.call if block_given?
@@ -26,9 +26,9 @@ class String
   end
 
   def integer?
-    Integer(self) != nil rescue false 
+    Integer(self) != nil rescue false
   end
-  
+
   def numeric?
     Float(self) != nil rescue false
   end

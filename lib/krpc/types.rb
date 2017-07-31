@@ -21,14 +21,14 @@ module KRPC
       "bytes"  => Array
     }
     PROTOBUF_TO_MESSAGE_TYPE = ProtobufUtils.create_PB_to_PB_message_class_hash("KRPC")
-    
+
     class TypeStore
       @cache = {}
       class << self
-      
+
         def [](type_string)
           return @cache[type_string] if @cache.include? type_string
-          
+
           type =
             if PROTOBUF_VALUE_TYPES.include? type_string then ValueType.new(type_string)
             elsif type_string.start_with? "Class(" || type_string == "Class" then ClassType.new(type_string)
@@ -47,9 +47,9 @@ module KRPC
             end
 
           @cache[type_string] = type
-          type      
+          type
         end
-        
+
         def get_parameter_type(pos, type, attrs)
           type_attrs = Attributes.get_parameter_type_attrs(pos, attrs)
           type_attrs.each do |ta|
@@ -71,14 +71,14 @@ module KRPC
           end
           self[type]
         end
-        
+
         def coerce_to(value, type)
           return value if type.is_a?(EnumType) && value.class == Symbol # Enum handling
           return value if value.is_a?(type.ruby_type)
           # A NilClass can be coerced to a ClassType
           return nil if type.is_a?(ClassType) && value.nil?
           # Handle service' class instance
-          if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) && 
+          if type.is_a?(ClassType) && value.is_a?(Gen::ClassBase) &&
              type.ruby_type == value.class
             return value
           end
@@ -108,20 +108,20 @@ module KRPC
           end
           raise(ValueError, "Failed to coerce value #{value.to_s} of type #{value.class} to type #{type}")
         end
-      
+
       end
     end
-    
-    
+
+
     class TypeBase
       attr_reader :protobuf_type, :ruby_type
       def initialize(protobuf_type, ruby_type)
         @protobuf_type = protobuf_type
         @ruby_type = ruby_type
       end
-      
+
       protected
-      
+
       def parse_type_string(type)
         raise ValueError.new if type.nil?
         result = ""
@@ -138,14 +138,14 @@ module KRPC
         [result, type[(result.length+1)..-1]]
       end
     end
-    
+
     class ValueType < TypeBase
       def initialize(type_string)
         raise(ValueError, "\"#{type_string}\" is not a valid type string for a value type") unless PROTOBUF_TO_RUBY_VALUE_TYPE.has_key? type_string
         super(type_string, PROTOBUF_TO_RUBY_VALUE_TYPE[type_string])
       end
     end
-    
+
     class MessageType < TypeBase
       def initialize(type_string)
         if PROTOBUF_TO_MESSAGE_TYPE.has_key? type_string
@@ -155,7 +155,7 @@ module KRPC
         end
       end
     end
-    
+
     class ClassType < TypeBase
       attr_reader :service_name, :class_name
       def initialize(type_string)
@@ -165,7 +165,7 @@ module KRPC
         super(type_string, Gen.generate_class(service_name, class_name))
       end
     end
-    
+
     class EnumType < TypeBase
       attr_reader :service_name, :enum_name
       def initialize(type_string)
@@ -175,12 +175,12 @@ module KRPC
         # Sets ruby_type to nil, set_values must be called to set the ruby_type
         super(type_string, nil)
       end
-      
+
       def set_values(values)
         @ruby_type = Gen.generate_enum(service_name, enum_name, values)
       end
     end
-    
+
     class ListType < TypeBase
       attr_reader :value_type
       def initialize(type_string)
@@ -190,7 +190,7 @@ module KRPC
         super(type_string, Array)
       end
     end
-    
+
     class DictionaryType < TypeBase
       attr_reader :key_type, :value_type
       def initialize(type_string)
@@ -206,7 +206,7 @@ module KRPC
         super(type_string, Hash)
       end
     end
-    
+
     class SetType < TypeBase
       attr_reader :value_type
       def initialize(type_string)
@@ -216,25 +216,25 @@ module KRPC
         super(type_string, Set)
       end
     end
-    
+
     class TupleType < TypeBase
       attr_reader :value_types
       def initialize(type_string)
         m = /^Tuple\((.+)\)$/.match type_string
         raise(ValueError, "\"#{type_string}\" is not a valid type string for a tuple type") unless m
-        
+
         @value_types = []
         type = m[1]
         until type.nil?
           value_type, type = parse_type_string(type)
           @value_types << TypeStore[value_type]
         end
-        
+
         super(type_string, Array)
       end
     end
-        
+
   end
-  
+
   TypeStore = Types::TypeStore
 end

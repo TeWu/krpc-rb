@@ -6,14 +6,14 @@ module KRPC
 
     class StreamsManager
       attr_reader :client
-      
+
       def initialize(client)
         @client = client
         @streams = {}
         @streams_mutex = Mutex.new
         @streaming_thread = Thread.new {}
       end
-    
+
       # Send a streaming request, create related Stream object and return it. If identical Stream
       # already exists, doesn't create new Stream and return the existing one.
       def create_stream(request, return_type, method, *args, **kwargs)
@@ -28,7 +28,7 @@ module KRPC
           end
         end
       end
-      
+
       # Remove a streaming request and deactivate the Stream object. Returns `true` if
       # streaming request is removed or `false` if passed Stream object is already inactive.
       def remove_stream(stream)
@@ -47,7 +47,7 @@ module KRPC
       def remove_all_streams
         @streams.each {|_,stream| remove_stream(stream)}
       end
-      
+
       # Start streaming thread. It receives stream data, and updates Stream object's `value` attribute.
       def start_streaming_thread
         stop_streaming_thread
@@ -72,17 +72,17 @@ module KRPC
           end
         end
       end
-      
+
       # Stop streaming thread.
       def stop_streaming_thread
         @streaming_thread.terminate
       end
     end
-    
+
     class Stream
       attr_reader :id, :method, :args, :kwargs, :return_type, :manager
       attr_writer :value
-      
+
       def initialize(manager, id, return_type, value, method, *args, **kwargs)
         @manager = manager
         @id = id
@@ -90,7 +90,7 @@ module KRPC
         @method, @args, @kwargs = method, args, kwargs
         @active = true
       end
-      
+
       # Get the current stream value. Has alias method `value`.
       def get
         raise @value if @value.is_a?(Exception)
@@ -103,18 +103,18 @@ module KRPC
         manager.remove_stream self
       end
       alias_method :close, :remove
-      
+
       # Check if stream is active (i.e. not removed).
       def active?; @active end
 
       # Mark stream as inactive.
       # WARNING: This method does not remove the stream. To remove the stream call Stream#remove instead.
       def mark_as_inactive; @active = false end
-      
+
       def to_s
         inspect.gsub(/\n|\t/," ").squeeze(" ").uncolorize
       end
-      
+
       def inspect
         def coderay(x)
           require 'coderay'
@@ -134,11 +134,11 @@ module KRPC
             ">".green
       end
     end
-  
+
     module StreamConstructors
       STREAM_METHOD_SUFFIX = "_stream"
       STREAM_METHOD_REGEX = /^(.+)(?:#{STREAM_METHOD_SUFFIX})$/
-      
+
       module ClassMethods
         def stream_constructors
           @stream_constructors ||= {}
@@ -149,7 +149,7 @@ module KRPC
         base.extend ClassMethods
         base.extend self
       end
-      
+
       def method_missing(method, *args, **kwargs, &block)
         if STREAM_METHOD_REGEX =~ method.to_s
           if respond_to? $1.to_sym
@@ -159,7 +159,7 @@ module KRPC
         end
         super
       end
-      
+
       def respond_to_missing?(method, *)
         if STREAM_METHOD_REGEX =~ method.to_s
           if respond_to? $1.to_sym
@@ -169,8 +169,8 @@ module KRPC
         end
         super
       end
-      
+
     end
-    
+
   end
 end

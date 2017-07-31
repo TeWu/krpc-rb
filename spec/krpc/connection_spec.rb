@@ -6,8 +6,8 @@ describe KRPC::Connection do
 
   before :each do @connection = connect end
   after  :each do @connection.close end
-  
-  
+
+
   context "with default server" do
     before :all do start_server end
     after  :all do stop_server end
@@ -29,7 +29,7 @@ describe KRPC::Connection do
       @connection.send msg
       expect(@connection.recv_varint).to eq int
     end
-  
+
     specify "#connected?" do
       expect(@connection.connected?).to be true
       expect(@connection.connected?).to be true
@@ -50,12 +50,12 @@ describe KRPC::Connection do
       expect(trim_fill.call("abc"*4, 10)).to eq "abc"*3 + "a"
     end
   end
-    
-    
+
+
   context "when responses are received in chunks" do
     before :all do start_server(:chunking) end
     after  :all do stop_server end
-  
+
     specify "send & receive" do
       @connection.send "foo"
       expect(@connection.recv(3)).to eq "foo"
@@ -74,8 +74,8 @@ describe KRPC::Connection do
       expect(@connection.recv_varint).to eq int
     end
   end
-  
-  
+
+
   def start_server(type = :default)
     @server = TCPServer.open(0)
     @server_port = @server.addr[1]

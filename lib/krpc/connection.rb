@@ -10,18 +10,18 @@ module KRPC
     DEFAULT_SERVER_HOST = "127.0.0.1"
     DEFAULT_SERVER_RPC_PORT = 50000
     DEFAULT_SERVER_STREAM_PORT = 50001
-    
+
     attr_reader :host, :port, :socket
-    
+
     def initialize(host, port)
       @host, @port = host, port
     end
-    
+
     # Connect and perform handshake.
     def connect
       if connected? then raise(ConnectionError, "Already connected")
-      else 
-        @socket = TCPSocket.open(host, port) 
+      else
+        @socket = TCPSocket.open(host, port)
         begin
           handshake
         rescue Exception => e
@@ -31,7 +31,7 @@ module KRPC
       end
       self
     end
-    
+
     # Close connection and clean up.
     def close
       if connected?
@@ -40,20 +40,20 @@ module KRPC
         true
       else false end
     end
-    
+
     # Return `true` if connected to a server, `false` otherwise.
     def connected?
       !socket.nil? && !socket.closed?
     end
-    
+
     def handshake; end
     def cleanup; end
-    
+
     def send(msg) @socket.send(msg, 0) end
     def recv(maxlen = 1)
       maxlen == 0 ? "" : @socket.read(maxlen)
     end
-    
+
     def recv_varint
       int_val = 0
       shift = 0
@@ -65,9 +65,9 @@ module KRPC
         raise(RuntimeError, "too many bytes when decoding varint") if shift >= 64
       end
     end
-    
+
     protected #----------------------------------
-    
+
     def trim_fill(str, len, fill_char = "\x00")
       str = str.encode("UTF-8")[0, len]
       str + fill_char*(len-str.length)
@@ -78,7 +78,7 @@ module KRPC
   # TCP connection for sending RPC calls and retrieving it's results.
   class RPCConnection < Connection
     attr_reader :name, :client_id
-    
+
     def initialize(name, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_RPC_PORT)
       super host, port
       @name = name
@@ -90,7 +90,7 @@ module KRPC
       send trim_fill(name, Encoder::NAME_LENGTH)
       @client_id = recv Decoder::GUID_LENGTH
     end
-    
+
     # Clean up - sets `@client_id` to `nil`.
     def cleanup
       @client_id = nil
@@ -101,20 +101,20 @@ module KRPC
   # TCP connection for streaming.
   class StreamConnection < Connection
     attr_reader :rpc_connection
-    
+
     def initialize(rpc_connection, host = DEFAULT_SERVER_HOST, port = DEFAULT_SERVER_STREAM_PORT)
       super host, port
       @rpc_connection = rpc_connection
     end
-    
+
     # Perform handshake with kRPC server, sending `client_id` retrieved from `rpc_connection`.
     def handshake
-      raise(ConnectionError, "RPC connection must obtain client_id before stream connection can perform valid handshake - closing stream connection") if rpc_connection.client_id.nil? 
+      raise(ConnectionError, "RPC connection must obtain client_id before stream connection can perform valid handshake - closing stream connection") if rpc_connection.client_id.nil?
       send Encoder::STREAM_HELLO_MESSAGE
       send rpc_connection.client_id
       resp = recv Decoder::OK_LENGTH
       raise ConnectionError unless resp == Decoder::OK_MESSAGE
     end
   end
-  
+
 end

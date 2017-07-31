@@ -7,7 +7,7 @@ module KRPC
     @docstr_infos = {}
     @procedure_docstr_infos = {}
     class << self
-      
+
       def docstring_for_method(method_owner, method_name, is_print_xmldoc_summary = true)
         is_static, class_cls = method_owner.class == Class ? [true, method_owner] : [false, method_owner.class]
         service_module_name, class_name = ruby_class_to_pb_module_class_pair(class_cls)
@@ -19,7 +19,7 @@ module KRPC
             (method_owner.respond_to?(method_name) ? "" : "\nThere is no such method -- maybe a typo")
         end
       end
-      
+
       def docstring_for_procedure(service_name, procedure_name, is_print_xmldoc_summary = true)
         key = [service_name, procedure_name].hash
         if @procedure_docstr_infos.has_key? key
@@ -40,30 +40,30 @@ module KRPC
           @docstr_infos[key2] = val
         end
       end
-      
+
       def add_special_docstring_info(key, value)
         @docstr_infos[key] = value
       end
-      
+
       private #----------------------------------
-      
+
       def ruby_class_to_pb_module_class_pair(ruby_class)
         return ["", Client.class_name] if ruby_class == Client
         rest, _, pb_class_name = ruby_class.name.rpartition("::")
         _, _, pb_service_name = rest.rpartition("::")
         [pb_service_name, pb_class_name]
       end
-      
+
       def calc_separator(is_static)
         is_static ? '.' : '#'
       end
-      
+
       def construct_docstring(namespace, separator, name, param_names, param_types, param_default, return_type, xmldoc, is_hide_this_param, is_prepend_client_param,  is_print_xmldoc_summary)
         xmldoc = Nokogiri::XML(xmldoc)
         xmldoc_summary = xmlElements2str(xmldoc.xpath("doc/summary").children, :light_blue, :light_green, :light_red)
 
         xmldoc_returns = xmlElements2str(xmldoc.xpath("doc/returns").children, :blue, :green, :light_red)
-        xmldoc_returns = "- ".blue + xmldoc_returns unless xmldoc_returns.empty? 
+        xmldoc_returns = "- ".blue + xmldoc_returns unless xmldoc_returns.empty?
 
         xmldoc_params = {}
         xmldoc.xpath("doc/param").each do |e|
@@ -76,10 +76,10 @@ module KRPC
             end
           end
         end
-        
+
         param_infos = param_names.zip(param_types.map{|x| type2str(x)}, param_default)
         param_infos.shift if is_hide_this_param && param_names[0] == "this"
-        param_infos.unshift ["client", "Client", :no_default_value] if is_prepend_client_param 
+        param_infos.unshift ["client", "Client", :no_default_value] if is_prepend_client_param
         if param_infos.empty?
           params = ""
         else
@@ -92,14 +92,14 @@ module KRPC
         "#{namespace.cyan}#{separator.cyan}#{name.bold}(#{params}) :#{type2str(return_type).light_red} #{xmldoc_returns}" \
           + (is_print_xmldoc_summary ? "\n\n#{xmldoc_summary}" : "")
       end
-      
+
       def type2str(type)
         return "nil" if type.nil?
         return type.class_name if type.class == Class
         rt = type.ruby_type
         if type.is_a?(Types::EnumType) then "Enum" + rt.keys.to_s
         elsif type.is_a?(Types::ListType) ||
-              type.is_a?(Types::SetType) 
+              type.is_a?(Types::SetType)
           "#{rt.class_name}[#{type2str(type.value_type)}]"
         elsif type.is_a?(Types::DictionaryType)
           %Q{#{rt.class_name}[#{type2str(type.key_type)} => #{type2str(type.value_type)}]}
@@ -107,7 +107,7 @@ module KRPC
           %Q{#{rt.class_name}[#{type.value_types.map{|x| type2str(x)}.join(", ")}]}
         else rt.class_name end
       end
-        
+
       def xmlElements2str(elements, main_color, paramref_color, value_color, error_color = :red)
         elements.map do |elem|
           if elem.is_a?(Nokogiri::XML::Text)
@@ -144,7 +144,7 @@ module KRPC
           end
         end.join.gsub("\n"," ").gsub("!n!","\n").squeeze(' ').strip.gsub("!s!"," ")
       end
-      
+
       def is_method_defined(path_array)
         method_name = path_array[-1].underscore
         begin
@@ -154,14 +154,14 @@ module KRPC
           false
         end
       end
-      
+
     end
-    
-    
+
+
     module SuffixMethods
       DOCSTRING_SUFFIX = "_doc"
       DOCSTRING_SUFFIX_REGEX = /^(.+)(?:#{DOCSTRING_SUFFIX}(=)?)$/
-      
+
       def self.included(base)
         base.extend self
         class << base
@@ -170,7 +170,7 @@ module KRPC
           end
         end
       end
-      
+
       def method_missing(method, *args, &block)
         if DOCSTRING_SUFFIX_REGEX =~ method.to_s
           documented_method_name = $1 + $2.to_s
@@ -180,7 +180,7 @@ module KRPC
         end
         super
       end
-      
+
       def respond_to_missing?(method, *)
         if DOCSTRING_SUFFIX_REGEX =~ method.to_s
           return true if respond_to? ($1 + $2.to_s).to_sym
@@ -188,6 +188,6 @@ module KRPC
         super
       end
     end
-    
+
   end
 end

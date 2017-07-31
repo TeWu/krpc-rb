@@ -6,10 +6,10 @@ require 'colorize'
 module KRPC
   module Gen
     class << self
-      def service_gen_module(service_name) 
+      def service_gen_module(service_name)
         const_get_or_create(service_name, Module.new)
       end
-    
+
       def generate_class(service_name, class_name)
         mod = service_gen_module(service_name)
         mod.const_get_or_create(class_name) do
@@ -19,7 +19,7 @@ module KRPC
           end
         end
       end
-      
+
       def generate_enum(service_name, enum_name, values)
         mod = service_gen_module(service_name)
         mod.const_get_or_create(enum_name) do
@@ -52,9 +52,9 @@ module KRPC
           raise err.with_signature(Doc.docstring_for_method(method_owner, method_name, false))
         end
       end
-      
+
       private #----------------------------------
-      
+
       def define_static_rpc_method(cls, method_name, param_default, param_names, param_types, prepend_self_to_args, proc, return_type, service_name)
         cls.instance_eval do
           define_singleton_method method_name do |*args|
@@ -90,7 +90,7 @@ module KRPC
           end
         end
       end
-      
+
       def parse_procedure(proc)
         param_names = proc.parameters.map{|p| p.name.underscore}
         param_types = proc.parameters.map.with_index do |p,i|
@@ -108,29 +108,29 @@ module KRPC
         [param_names, param_types, param_default, return_type]
       end
     end
-    
+
     module RPCMethodGenerator
       def include_rpc_method(method_name, service_name, procedure_name, params: [], return_type: nil, xmldoc: "", options: [])
         Gen.add_rpc_method(self.class, method_name, service_name, PB::Procedure.new(name: procedure_name, parameters: params, has_return_type: return_type != nil, return_type: return_type != nil ? return_type : "", documentation: xmldoc), options)
       end
     end
-    
+
     ##
     # Base class for service-defined class types.
     class ClassBase
       include Doc::SuffixMethods
       include Streaming::StreamConstructors
-      
+
       attr_reader :client, :remote_oid
-      
+
       def self.krpc_name
         name[11..-1]
       end
-      
+
       def initialize(client, remote_oid)
         @client, @remote_oid = client, remote_oid
       end
-      
+
       alias_method :eql?, :==
       def ==(other)
         other.class == self.class and other.remote_oid == remote_oid
@@ -138,15 +138,15 @@ module KRPC
       def hash
         remote_oid.hash
       end
-      
+
       def to_s
         "#<#{self.class} @remote_oid=#{remote_oid}>"
       end
-      
+
       def inspect
         "#<#{self.class} ".green + "@remote_oid" + "=".green + remote_oid.to_s.bold.blue + ">".green
       end
     end
-    
-  end    
+
+  end
 end
