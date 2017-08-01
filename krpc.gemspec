@@ -15,11 +15,10 @@ Gem::Specification.new do |s|
   s.homepage      = "https://github.com/TeWu/krpc-rb"
   s.license       = "GPL-3.0"
 
-  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(doc|test|spec|features|bin/TestServer)/}) || f.start_with?('.') }
+  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(doc|test|spec|features|bin/TestServer)/|Rakefile|CHANGELOG}) || f.start_with?('.') }
   s.require_paths = ["lib"]
   s.extra_rdoc_files = ["README.md"]
   s.rdoc_options << "--markup" << "markdown" <<
-                    "--format" << "hanna" <<
                     "--title"  << "kRPC-rb API Docs" <<
                     "--main"   << "README.md"
 
@@ -28,9 +27,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "google-protobuf", "~> 3.3"
   s.add_runtime_dependency "colorize", "~> 0.8"
   s.add_runtime_dependency "nokogiri", "~> 1.8"
-  s.add_runtime_dependency "hanna-nouveau", "~> 1.0"
   s.add_development_dependency "bundler", "~> 1.15"
   s.add_development_dependency "pry", "~> 0.10"
   s.add_development_dependency "rspec", "~> 3.6"
   s.add_development_dependency "rake", "~> 12.0"
+  s.add_development_dependency "hanna-nouveau", "~> 1.0"
 end
