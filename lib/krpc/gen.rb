@@ -60,7 +60,7 @@ module KRPC
           define_singleton_method method_name do |*args|
             Gen.transform_exceptions(cls, method_name, prepend_self_to_args) do
               raise ArgumentErrorSig.new("missing argument for parameter \"client\"") if args.count < 1
-              raise ArgumentErrorSig.new("argument for parameter \"client\" must be a #{KRPC::Client.name} -- got #{args.first.inspect} of type #{args.first.class}") unless args.first.is_a?(KRPC::Client)
+              raise ArgumentErrorSig.new("argument for parameter \"client\" must be a #{::KRPC::Client.name} -- got #{args.first.inspect} of type #{args.first.class}") unless args.first.is_a?(::KRPC::Client)
               client = args.shift
               kwargs = args.extract_kwargs!
               client.execute_rpc(service_name, proc.name, args, kwargs, param_names, param_types, param_default, return_type: return_type)
