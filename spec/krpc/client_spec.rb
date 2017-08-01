@@ -187,7 +187,13 @@ describe KRPC::Client do
   end
 
   specify "krpc service members" do
-    expect(@test_client.krpc.methods).to include(:get_services, :get_status, :add_stream, :remove_stream)
+    expect(@test_client.krpc.class.instance_methods(false)).to include(:get_services, :get_status, :add_stream, :remove_stream, :clients, :current_game_scene)
+  end
+
+  specify "hardcoded core service members should be in sync with generated krpc service members" do
+    core_service_members = @test_client.core.class.instance_methods(false)
+    krpc_service_members = @test_client.krpc.class.instance_methods(false)
+    expect(core_service_members).to match_array krpc_service_members
   end
 
   specify "test service generated members" do
