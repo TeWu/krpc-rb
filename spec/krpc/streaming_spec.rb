@@ -17,8 +17,8 @@ describe KRPC::Streaming do
 
 
   specify "error handling" do
-    expect { @test_service.throw_argument_exception_stream }.to raise_error(KRPC::RPCError, "Invalid argument")
-    expect { @test_service.throw_invalid_operation_exception_stream }.to raise_error(KRPC::RPCError, "Invalid operation")
+    expect { @test_service.throw_argument_exception_stream }.to raise_error(KRPC::RPCError, /Invalid argument/)
+    expect { @test_service.throw_invalid_operation_exception_stream }.to raise_error(KRPC::RPCError, /Invalid operation/)
   end
 
   specify "value parameters handling" do
