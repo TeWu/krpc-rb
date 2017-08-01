@@ -1,6 +1,7 @@
 *.*~
 doc/**/*~.html
 bin/TestServer*
+spec/examples.txt
 
 *.gem
 Gemfile.lock
