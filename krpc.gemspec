@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage      = "https://github.com/TeWu/krpc-rb"
   s.license       = "GPL-3.0"
 
-  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(doc|test|spec|features|bin/TestServer)/|Rakefile|CHANGELOG}) || f.start_with?('.') }
+  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(doc|test|spec|features|bin)/|Rakefile|CHANGELOG}) || f.start_with?('.') }
   s.require_paths = ["lib"]
   s.extra_rdoc_files = ["README.md"]
   s.rdoc_options << "--markup" << "markdown" <<
