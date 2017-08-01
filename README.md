@@ -134,7 +134,7 @@ pos_stream.remove #note: dead code - just as an example
 
 Want to know more?
 -------
-* Read official **kRPC documentation** at http://krpc.github.io/krpc/, with many great [tutorials and examples](http://krpc.github.io/krpc/tutorials.html).
-* Refer to **kRPC-rb documentation** at http://tewu.github.io/krpc-rb/doc
+* Read official **kRPC documentation** at https://krpc.github.io/krpc, with many great [tutorials and examples](https://krpc.github.io/krpc/tutorials.html).
+* Refer to **kRPC-rb documentation** at https://tewu.github.io/krpc-rb-apidocs
 * See official **kRPC forum thread** at http://forum.kerbalspaceprogram.com/threads/69313
 
