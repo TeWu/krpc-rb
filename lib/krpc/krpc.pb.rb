@@ -102,6 +102,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :service, :string, 2
     optional :name, :string, 3
     repeated :types, :message, 4, "krpc.schema.Type"
+    optional :nullable, :bool, 5
   end
   add_enum "krpc.schema.Type.TypeCode" do
     value :NONE, 0
