@@ -98,6 +98,14 @@ module KRPC
                              return_type: PB::Type.new(code: :ENUMERATION, service: 'Core', name: 'GameScene'),
                              xmldoc: "<doc><summary>Get the current game scene.</summary></doc>",
                              **opts
+          include_rpc_method 'KRPC', 'GetClientID',
+                             return_type: PB::Type.new(code: :BYTES),
+                             xmldoc: "<doc>\n<summary>\nReturns the identifier for the current client.\n</summary>\n</doc>",
+                             **opts
+          include_rpc_method 'KRPC', 'GetClientName',
+                             return_type: PB::Type.new(code: :STRING),
+                             xmldoc: "<doc>\n<summary>\nReturns the name of the current client.\nThis is an empty string if the client has no name.\n</summary>\n</doc>",
+                             **opts
         end
       end
     end
