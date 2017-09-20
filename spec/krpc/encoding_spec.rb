@@ -1,7 +1,13 @@
+# encoding: utf-8
+
 require "krpc/encoder"
 require "krpc/decoder"
 
 RSpec.describe "protocol buffer encoding" do
+  SERVER_STRING_ENCODING = Encoding::UTF_8
+  NOT_SERVER_STRING_ENCODING_1 = Encoding::UTF_16
+  NOT_SERVER_STRING_ENCODING_2 = Encoding::UTF_32
+
   Encoder = KRPC::Encoder
   Decoder = KRPC::Decoder
   TypeStore = KRPC::TypeStore
@@ -72,8 +78,15 @@ RSpec.describe "protocol buffer encoding" do
     c.( "", "00" )
     c.( "testing", "0774657374696e67" )
     c.( "One small step for Kerbal-kind!", "1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421" )
+    c.( "ZaŻółć gęŚlą jaźń", "1a5a61c5bbc3b3c582c4872067c499c59a6cc485206a61c5bac584" )
+    c.( "¡Un pequeño paso para Kerbal!", "1fc2a1556e207065717565c3b16f207061736f2070617261204b657262616c21" )
+    c.( "ケルバ種のための小さな一歩！", "2ae382b1e383abe38390e7a8aee381aee3819fe38281e381aee5b08fe38195e381aae4b880e6ada9efbc81" )
     c.( "\xe2\x84\xa2", "03e284a2" )
     c.( "Mystery Goo\xe2\x84\xa2 Containment Unit", "1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974" )
+    # Characters from ASCII charset below are important - they cause strings with different character encodings to have different String#bytesize (e.g "πćgß種↓…³€łəżvæś" string have the same bytesize in both UTF-8 and UTF-16)
+    c.( "πćgß種↓…³6€łəżvæś ASCII chars are here", "36cf80c48767c39fe7a8aee28693e280a6c2b336e282acc582c999c5bc76c3a6c59b204153434949206368617273206172652068657265" )
+    c.( "πćgß種↓…³6€łəżvæś ASCII chars are here".encode(NOT_SERVER_STRING_ENCODING_1), "36cf80c48767c39fe7a8aee28693e280a6c2b336e282acc582c999c5bc76c3a6c59b204153434949206368617273206172652068657265" )
+    c.( "πćgß種↓…³6€łəżvæś ASCII chars are here".encode(NOT_SERVER_STRING_ENCODING_2), "36cf80c48767c39fe7a8aee28693e280a6c2b336e282acc582c999c5bc76c3a6c59b204153434949206368617273206172652068657265" )
   end
 
   it "encodes bytes" do
@@ -158,19 +171,30 @@ RSpec.describe "protocol buffer encoding" do
     s.scan(/../).map { |x| x.hex.chr }.join
   end
 
+  def pb(v)
+    PB::Argument.new(value: v).value # Pass value through protobuf library for processing (e.g. string transcoding)
+  end
+
   def create_checker(method_name, type)
     type = get_type(type) if type.is_a? Symbol
     method(method_name).to_proc.curry.(type)
   end
 
   def check_close(type, value, data, delta = 0.0001)
-    expect(hexlify(Encoder.encode(value, type))).to eq data
-    expect(Decoder.decode(unhexlify(data), type, :clientless)).to be_within(delta).of(value)
+    encoded_value = pb Encoder.encode(value, type)
+    expect(hexlify(encoded_value)).to eq data
+
+    decoded_value = Decoder.decode(pb(unhexlify(data)), type, :clientless)
+    expect(decoded_value).to be_within(delta).of(value)
   end
 
   def check_equal(type, value, data)
-    expect(hexlify(Encoder.encode(value, type))).to eq data
-    expect(Decoder.decode(unhexlify(data), type, :clientless)).to eq value
+    encoded_value = pb Encoder.encode(value, type)
+    expect(hexlify(encoded_value)).to eq data
+
+    decoded_value = Decoder.decode(pb(unhexlify(data)), type, :clientless)
+    expected_decoded_value = value.is_a?(String) ? value.encode(SERVER_STRING_ENCODING) : value
+    expect(decoded_value).to eq expected_decoded_value
   end
 
 end
