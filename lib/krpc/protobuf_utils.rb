@@ -112,8 +112,9 @@ module KRPC
           encode_varint(value ? 1 : 0)
         end
         def encode_string(value)
-          size = encode_varint(value.bytesize)
-          size + value.bytes.map(&:chr).join.b
+          data = value.encode(Encoding::UTF_8).b
+          size = encode_varint(data.bytesize)
+          size + data
         end
         def encode_bytes(value)
           size = encode_varint(value.size)
