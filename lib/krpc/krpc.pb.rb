@@ -72,7 +72,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :name, :string, 1
     repeated :parameters, :message, 2, "krpc.schema.Parameter"
     optional :return_type, :message, 3, "krpc.schema.Type"
-    optional :documentation, :string, 4
+    optional :return_is_nullable, :bool, 4
+    optional :documentation, :string, 5
   end
   add_message "krpc.schema.Parameter" do
     optional :name, :string, 1
@@ -102,7 +103,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :service, :string, 2
     optional :name, :string, 3
     repeated :types, :message, 4, "krpc.schema.Type"
-    optional :nullable, :bool, 5
   end
   add_enum "krpc.schema.Type.TypeCode" do
     value :NONE, 0
