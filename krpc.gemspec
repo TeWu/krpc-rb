@@ -24,12 +24,12 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 2.1.0"
 
-  s.add_runtime_dependency "google-protobuf", "~> 3.3"
+  s.add_runtime_dependency "google-protobuf", "~> 3.4"
   s.add_runtime_dependency "colorize", "~> 0.8"
   s.add_runtime_dependency "nokogiri", "~> 1.8"
   s.add_development_dependency "bundler", "~> 1.15"
-  s.add_development_dependency "pry", "~> 0.10"
+  s.add_development_dependency "pry", "~> 0.11"
   s.add_development_dependency "rspec", "~> 3.6"
-  s.add_development_dependency "rake", "~> 12.0"
+  s.add_development_dependency "rake", "~> 12.1"
   s.add_development_dependency "hanna-nouveau", "~> 1.0"
 end
