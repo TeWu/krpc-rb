@@ -1,3 +1,14 @@
+v0.3.2  (3 Aug 2017)
+========
++ Changes introduced in this version are backported form v0.4.0.beta3
++ **Changes to `krpc` and `core` services**:
+  + Renamed hardcoded `krpc` service to `core`
+  + Allowed `krpc` service to be dynamically generated during services API generation
+  + Updated `core` service
++ Started testing against Ruby v2.3 and Ruby v2.4
++ Turned runtime dependency on *hanna-nouveau* into development dependency
++ Cleaned up Git repository - moved generated HTML API docs, and TestServer binaries out of the repository
+
 v0.3.1  (18 Jun 2016)
 ========
 + Fixed receiving of chunked responses
