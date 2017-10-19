@@ -117,10 +117,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     value :BYTES, 9
     value :CLASS, 100
     value :ENUMERATION, 101
-    value :PROCEDURE_CALL, 200
-    value :STREAM, 201
-    value :STATUS, 202
-    value :SERVICES, 203
+    value :EVENT, 200
+    value :PROCEDURE_CALL, 201
+    value :STREAM, 202
+    value :STATUS, 203
+    value :SERVICES, 204
     value :TUPLE, 300
     value :LIST, 301
     value :SET, 302
@@ -144,6 +145,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   end
   add_message "krpc.schema.Stream" do
     optional :id, :uint64, 1
+  end
+  add_message "krpc.schema.Event" do
+    optional :stream, :message, 1, "krpc.schema.Stream"
   end
   add_message "krpc.schema.Status" do
     optional :version, :string, 1
@@ -198,6 +202,7 @@ module KRPC
     Dictionary = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Dictionary").msgclass
     DictionaryEntry = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.DictionaryEntry").msgclass
     Stream = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Stream").msgclass
+    Event = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Event").msgclass
     Status = Google::Protobuf::DescriptorPool.generated_pool.lookup("krpc.schema.Status").msgclass
   end
 end
