@@ -18,6 +18,7 @@ module KRPC
       BYTES: Array
     }
     PROTOBUF_TO_RUBY_MESSAGE_TYPES = {
+      EVENT: PB::Event,
       PROCEDURE_CALL: PB::ProcedureCall,
       STREAM: PB::Stream,
       STATUS: PB::Status,
