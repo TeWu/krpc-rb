@@ -75,28 +75,35 @@ module KRPC
 
           include_rpc_method 'KRPC', 'GetStatus',
                              return_type: PB::Type.new(code: :STATUS),
-                             xmldoc: "<doc><summary>Gets a status message from the server containing information including the server’s version string and performance statistics.</summary></doc>",
+                             xmldoc: "<doc>\n<summary>\nReturns some information about the server, such as the version.\n</summary>\n</doc>",
                              **opts
           include_rpc_method 'KRPC', 'GetServices',
                              return_type: PB::Type.new(code: :SERVICES),
-                             xmldoc: "<doc><summary>Returns information on all services, procedures, classes, properties etc. provided by the server.\nCan be used by client libraries to automatically create functionality such as stubs.</summary></doc>",
+                             xmldoc: "<doc>\n<summary>\nReturns information on all services, procedures, classes, properties etc. provided by the server.\nCan be used by client libraries to automatically create functionality such as stubs.\n</summary>\n</doc>",
                              **opts
           include_rpc_method 'KRPC', 'AddStream',
-                             params: [PB::Parameter.new(name: 'call', type: PB::Type.new(code: :PROCEDURE_CALL))],
+                             params: [
+                               PB::Parameter.new(name: 'call', type: PB::Type.new(code: :PROCEDURE_CALL)),
+                               PB::Parameter.new(name: 'start', type: PB::Type.new(code: :BOOL), default_value: "\x01")
+                             ],
                              return_type: PB::Type.new(code: :STREAM),
-                             xmldoc: "<doc><summary>Add a streaming request and return its identifier.</summary></doc>",
+                             xmldoc: "<doc>\n<summary>\nAdd a streaming request and return its identifier.\n</summary>\n</doc>",
+                             **opts
+          include_rpc_method 'KRPC', 'StartStream',
+                             params: [PB::Parameter.new(name: 'id', type: PB::Type.new(code: :UINT64))],
+                             xmldoc: "<doc>\n<summary>\nStart a previously added streaming request.\n</summary>\n</doc>",
                              **opts
           include_rpc_method 'KRPC', 'RemoveStream',
                              params: [PB::Parameter.new(name: 'id', type: PB::Type.new(code: :UINT64))],
-                             xmldoc: "<doc><summary>Remove a streaming request.</summary></doc>",
+                             xmldoc: "<doc>\n<summary>\nRemove a streaming request.\n</summary>\n</doc>",
                              **opts
           include_rpc_method 'KRPC', 'get_Clients',
                              return_type: PB::Type.new(code: :LIST, types: [PB::Type.new(code: :TUPLE, types: [PB::Type.new(code: :BYTES), PB::Type.new(code: :STRING), PB::Type.new(code: :STRING)])]),
-                             xmldoc: "<doc><summary>A list of RPC clients that are currently connected to the server.\nEach entry in the list is a clients identifier, name and address.</summary></doc>",
+                             xmldoc: "<doc>\n<summary>\nA list of RPC clients that are currently connected to the server.\nEach entry in the list is a clients identifier, name and address.\n</summary>\n</doc>",
                              **opts
           include_rpc_method 'KRPC', 'get_CurrentGameScene',
                              return_type: PB::Type.new(code: :ENUMERATION, service: 'Core', name: 'GameScene'),
-                             xmldoc: "<doc><summary>Get the current game scene.</summary></doc>",
+                             xmldoc: "<doc>\n<summary>\nGet the current game scene.\n</summary>\n</doc>",
                              **opts
           include_rpc_method 'KRPC', 'GetClientID',
                              return_type: PB::Type.new(code: :BYTES),
@@ -105,6 +112,19 @@ module KRPC
           include_rpc_method 'KRPC', 'GetClientName',
                              return_type: PB::Type.new(code: :STRING),
                              xmldoc: "<doc>\n<summary>\nReturns the name of the current client.\nThis is an empty string if the client has no name.\n</summary>\n</doc>",
+                             **opts
+          include_rpc_method 'KRPC', 'get_Paused',
+                             return_type: PB::Type.new(code: :BOOL),
+                             xmldoc: "<doc>\n<summary>\nWhether the game is paused.\n</summary>\n</doc>",
+                             **opts
+          include_rpc_method 'KRPC', 'set_Paused',
+                             params: [PB::Parameter.new(name: 'value', type: PB::Type.new(code: :BOOL))],
+                             xmldoc: "<doc>\n<summary>\nWhether the game is paused.\n</summary>\n</doc>",
+                             **opts
+          include_rpc_method 'KRPC', 'AddEvent',
+                             params: [PB::Parameter.new(name: 'expression', type: PB::Type.new(code: :CLASS, service: 'KRPC', name: 'Expression'))],
+                             return_type: PB::Type.new(code: :EVENT),
+                             xmldoc: "<doc>\n<summary>\nCreate an event from a server side expression.\n</summary>\n</doc>",
                              **opts
         end
       end
