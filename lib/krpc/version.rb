@@ -4,7 +4,7 @@ module KRPC
     MAJOR = 0
     MINOR = 4
     PATCH = 0
-    LABEL = 'beta3'
+    LABEL = nil
   end
 
   VERSION = ([Version::MAJOR, Version::MINOR, Version::PATCH, Version::LABEL].compact * '.').freeze

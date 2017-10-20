@@ -1,3 +1,20 @@
+v0.4.0  (24 Oct 2017)
+========
++ **Updated to make kRPC-rb compatible with kRPC server version 0.4.0**:
+  + **Updated communication protocol in line with server changes** (for details see [krpc #325](https://github.com/krpc/krpc/pull/325))
+  + Updated `RPCError` handling logic, to properly handle `Error` protobuf message
+  + Updated `core` service
++ Added `KRPC::Version` module, to support more granular version checks
++ Improved `Encoder` - strings are now transcoded to UTF-8 before being encoded as value of protobuf message field. This allows non-UTF-8 encoded strings to be passed to RPC methods, e.g.:
+
+```ruby
+client.space_center.active_vessel.name = "µ-craft".encode('ISO-8859-1')
+```
+
++ Improved reliability - added many new specs and refactored existing ones for better maintainability and performance
++ Many minor bug fixes, refactorings and performance improvements
++ *See also changes introduced in v0.3.2, which were backported from v0.4.0.beta3*
+
 v0.3.2  (3 Aug 2017)
 ========
 + Changes introduced in this version are backported form v0.4.0.beta3
