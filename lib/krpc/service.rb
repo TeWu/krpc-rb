@@ -93,6 +93,13 @@ module KRPC
                              params: [PB::Parameter.new(name: 'id', type: PB::Type.new(code: :UINT64))],
                              xmldoc: "<doc>\n<summary>\nStart a previously added streaming request.\n</summary>\n</doc>",
                              **opts
+          include_rpc_method 'KRPC', 'SetStreamRate',
+                             params: [
+                               PB::Parameter.new(name: 'id', type: PB::Type.new(code: :UINT64)),
+                               PB::Parameter.new(name: 'rate', type: PB::Type.new(code: :FLOAT))
+                             ],
+                             xmldoc: "<doc>\n<summary>\nSet the update rate for a stream in Hz.\n</summary>\n</doc>",
+                             **opts
           include_rpc_method 'KRPC', 'RemoveStream',
                              params: [PB::Parameter.new(name: 'id', type: PB::Type.new(code: :UINT64))],
                              xmldoc: "<doc>\n<summary>\nRemove a streaming request.\n</summary>\n</doc>",
