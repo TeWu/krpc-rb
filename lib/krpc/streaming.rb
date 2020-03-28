@@ -80,7 +80,7 @@ module KRPC
     end
 
     class Stream
-      attr_reader :id, :method, :args, :kwargs, :return_type, :manager
+      attr_reader :id, :method, :args, :kwargs, :return_type, :rate, :manager
       attr_writer :value
 
       def initialize(manager, id, return_type, value, method, *args, **kwargs)
@@ -89,6 +89,7 @@ module KRPC
         @return_type, @value = return_type, value
         @method, @args, @kwargs = method, args, kwargs
         @active = true
+        @rate = 0
       end
 
       # Get the current stream value. Has alias method `value`.
@@ -111,6 +112,11 @@ module KRPC
       # WARNING: This method does not remove the stream. To remove the stream call Stream#remove instead.
       def mark_as_inactive; @active = false end
 
+      def rate=(rate)
+        manager.client.core.set_stream_rate(id, rate)
+        @rate = rate
+      end
+
       def to_s
         inspect.gsub(/\n|\t/," ").squeeze(" ").uncolorize
       end
@@ -127,6 +133,7 @@ module KRPC
         "#<#{self.class}".green +
             " @id" + "=".green + id.to_s.bold.blue +
             " @active" + "=".green + @active.to_s.bold.light_cyan +
+            " @rate" + "=".green + rate.to_s.bold.blue +
             "\n\t@method" + "=".green + method.inspect.green +
             (args.empty? ? "" : "\n\t@args" + "=".green + coderay(args)) +
             (kwargs.empty? ? "" : "\n\t@kwargs" + "=".green + coderay(kwargs)) +

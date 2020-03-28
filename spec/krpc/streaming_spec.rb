@@ -103,5 +103,14 @@ RSpec.describe KRPC::Streaming do
     expect(stream2.active?).to be false
   end
 
+  specify "Streams rate control" do
+    stream = @test_service.counter_stream
+    stream.rate = 50
+    expect(stream.rate).to eq 50
+    stream.rate = 10
+    expect(stream.rate).to eq 10
+    stream.close
+  end
+
 end
 
