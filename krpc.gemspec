@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
                     "--title"  << "kRPC-rb API Docs" <<
                     "--main"   << "README.md"
 
-  s.required_ruby_version = ">= 2.1.0"
+  s.required_ruby_version = ">= 2.3.0"
 
   s.add_runtime_dependency "google-protobuf", "~> 3.11"
   s.add_runtime_dependency "colorize", "~> 0.8"
