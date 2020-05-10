@@ -1,3 +1,8 @@
+v0.4.1  (10 May 2020)
+========
++ Add rate control for streams
++ Test against kRPC TestServer 0.4.7
+
 v0.4.0  (24 Oct 2017)
 ========
 + **Updated to make kRPC-rb compatible with kRPC server version 0.4.0**:
