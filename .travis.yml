@@ -1,5 +1,5 @@
-sudo: required
-dist: trusty
+os: linux
+dist: bionic
 
 addons:
   apt:
@@ -18,7 +18,7 @@ rvm:
   - ruby-head
   - rbx-2
 
-matrix:
+jobs:
   allow_failures:
     - rvm: ruby-head
     - rvm: rbx-2
