@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "google-protobuf", "~> 3.11"
   s.add_runtime_dependency "colorize", "~> 0.8"
   s.add_runtime_dependency "nokogiri", "~> 1.10"
-  s.add_development_dependency "bundler", "~> 1.17"
+  s.add_development_dependency "bundler", "~> 2.1"
   s.add_development_dependency "pry", "~> 0.13"
   s.add_development_dependency "rspec", "~> 3.9"
   s.add_development_dependency "rake", "~> 13.0"
