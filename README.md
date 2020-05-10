@@ -1,16 +1,16 @@
 kRPC-rb [![Gem Version](https://badge.fury.io/rb/krpc.svg)](http://badge.fury.io/rb/krpc) [![Build Status](https://travis-ci.org/TeWu/krpc-rb.svg?branch=master)](https://travis-ci.org/TeWu/krpc-rb)
 =======
 
-kRPC-rb is a Ruby client library for [kRPC](http://forum.kerbalspaceprogram.com/threads/69313), a [Kerbal Space Program](https://kerbalspaceprogram.com/) mod that allows you to control KSP from external scripts running outside of the game.
+kRPC-rb is a Ruby client library for [kRPC][krpc-github], a [Kerbal Space Program][ksp-home] mod that allows you to control KSP from external scripts running outside of the game.
 
-![kRPC-rb image](http://drive.google.com/uc?export=view&id=0B2PFP23spNJwXzFCbmR0eDF5TVE "This is kRPC-rb!")
+![kRPC-rb image](http://tewu.github.io/krpc-rb/krpc-rb_top.png "This is kRPC-rb!")
 
 Installation
 -------
 
     gem install krpc
 
-or install the latest pre-release version (if [available](https://rubygems.org/gems/krpc/versions)): `gem install krpc --pre`
+or install the latest pre-release version (if [available][rubygems-all-versions]): `gem install krpc --pre`
 
 Basic usage
 -------
@@ -105,7 +105,7 @@ If you want doc for method whose name ends with a `=` sign, you can put `_doc` b
 
 Combination of `ls`s and `_doc`s should teach you API in no time (also don't be surprised if you have a lot of fun with it too :))
 
-![kRPC-rb in-REPL documentation example](http://drive.google.com/uc?export=view&id=0B2PFP23spNJwRWNIN3c2SWlpd0E "kRPC-rb in-REPL documentation example")
+![kRPC-rb in-REPL documentation example](http://tewu.github.io/krpc-rb/krpc-rb_inREPL_doc.png "kRPC-rb in-REPL documentation example")
 
 Streaming
 -------
@@ -136,5 +136,10 @@ Want to know more?
 -------
 * Read official **kRPC documentation** at https://krpc.github.io/krpc, with many great [tutorials and examples](https://krpc.github.io/krpc/tutorials.html).
 * Refer to **kRPC-rb API documentation** at https://tewu.github.io/krpc-rb-apidocs
-* See official **kRPC forum thread** at http://forum.kerbalspaceprogram.com/threads/69313
+* See official **[kRPC forum thread][krpc-forum]**
 
+
+[krpc-github]: https://github.com/krpc/krpc
+[krpc-forum]: https://forum.kerbalspaceprogram.com/index.php?/topic/130742-15x-to-122-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v048-28th-october-2018/
+[ksp-home]: https://kerbalspaceprogram.com/
+[rubygems-all-versions]: https://rubygems.org/gems/krpc/versions
