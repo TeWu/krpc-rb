@@ -137,6 +137,7 @@ Want to know more?
 * Read official **kRPC documentation** at https://krpc.github.io/krpc, with many great [tutorials and examples](https://krpc.github.io/krpc/tutorials.html).
 * Refer to **kRPC-rb API documentation** at https://tewu.github.io/krpc-rb-apidocs
 * See official **[kRPC forum thread][krpc-forum]**
+* @nateberkopec [gave a talk at RubyConf 2017](https://www.youtube.com/watch?v=VMxct9B5S1A) about the guidance and architecture used in the Saturn V and the Apollo Guidance Computer using `krpc-rb` to illustrate.
 
 
 [krpc-github]: https://github.com/krpc/krpc
